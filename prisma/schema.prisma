@@ -1,0 +1,193 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model feeds {
+  id          Int           @id @default(autoincrement())
+  name        String?       @db.VarChar(100)
+  updatedAt   DateTime      @updatedAt
+  createdAt   DateTime      @default(now())
+  userId      Int
+  cost        Int
+  user        users         @relation(fields: [userId], references: [id])
+  ingredients ingredients[]
+
+  @@index([userId], name: "userId")
+}
+
+model ingredients {
+  id        Int       @id @default(autoincrement())
+  quantity  Int
+  updatedAt DateTime?    @updatedAt
+  createdAt DateTime  @default(now())
+  feedId    Int
+  feeds     feeds     @relation(fields: [feedId], references: [id])
+
+  @@index([feedId], name: "feedId")
+}
+
+model ponds {
+  id        Int       @id @default(autoincrement())
+  name      String?   @db.VarChar(100)
+  number    Int?
+  length    Int?
+  width     Int?
+  depth     Int?
+  description   String
+  volume    Int?
+  updatedAt DateTime?    @updatedAt
+  createdAt DateTime  @default(now())
+  userId    Int
+  user      users     @relation(fields: [userId], references: [id])
+  stocks    stocks[]
+
+  @@index([userId], name: "userId")
+}
+
+model stocks {
+  id                  Int       @id @default(autoincrement())
+  weight Int?
+  price    Int?
+  quantity Int?
+  stocking_date       String?   @db.VarChar(100)
+  stocking_month      String?   @db.VarChar(100)
+  updatedAt           DateTime?  @updatedAt
+  createdAt           DateTime  @default(now())
+  pondId              Int
+  pond                ponds     @relation(fields: [pondId], references: [id])
+  userId              Int
+  user                users     @relation(fields: [userId], references: [id])
+  reports    reports[]
+  general_reports    general_reports[]
+
+  @@index([pondId], name: "pondId")
+}
+
+model transactions {
+  id          Int       @id @default(autoincrement())
+  type        Int?      @default(0)
+  description String   @db.VarChar(100)
+  authorization_code String?
+  reference String
+  amount Int
+  createdAt   DateTime  @default(now())
+  userId      Int
+  user        users     @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "userId")
+}
+
+model users {
+  id                 Int            @id @default(autoincrement())
+  name               String?        @db.VarChar(100)
+  email              String?        @db.VarChar(100)
+  gender             String?        @db.VarChar(10)
+  phone              String?        @db.VarChar(20)
+  cityId            Int?
+  farm               Boolean        @default(false)
+  wallet             Int            @default(0)
+  password           String?        @db.VarChar(100)
+  verification_token String?        @db.VarChar(100)
+  updatedAt          DateTime?       @updatedAt
+  createdAt          DateTime       @default(now())
+  feeds              feeds[]
+  ponds              ponds[]
+  farms              farms[]
+  stocks             stocks[]
+  transactions       transactions[]
+  downloads         downloads[]
+  cards         cards[]
+}
+
+model cards {
+  id       Int     @id @default(autoincrement())
+  userId    Int
+  user      users     @relation(fields: [userId], references: [id])
+  authorization_code     String
+  card_type     String
+  last4     String
+  exp_month     String
+  exp_year     String
+  bin     String
+  bank     String
+  signature     String
+  createdAt          DateTime       @default(now())
+}
+
+model downloads {
+  id       Int     @id @default(autoincrement())
+  userId    Int
+  user      users     @relation(fields: [userId], references: [id])
+  stockId     Int
+  month     Int
+  reference     String @db.VarChar(100)
+  createdAt          DateTime       @default(now())
+}
+
+model cities {
+  id       Int     @id @default(autoincrement())
+  stateId Int
+  state      states     @relation(fields: [stateId], references: [id])
+  name     String? @db.VarChar(100)
+  farms              farms[]
+}
+
+model farms {
+  id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  name      String?   @db.VarChar(200)
+  cityId   Int
+  city      cities     @relation(fields: [cityId], references: [id])
+  location  String?   @db.VarChar(200)
+  userId    Int
+  user      users     @relation(fields: [userId], references: [id])
+  updatedAt DateTime?    @updatedAt
+  createdAt DateTime  @default(now())
+}
+
+model reports {
+  id                        Int      @id @default(autoincrement()) @db.UnsignedInt
+  stockId                   Int
+  stock                     stocks     @relation(fields: [stockId], references: [id])
+  day                       Int?
+  month                     Int?
+  present_quantity          Int?
+  daily_mortality           Int?
+  cumulative_mortality      Int?
+  average_weight            Decimal? @db.Decimal(12, 6)
+  total_weight              Decimal? @db.Decimal(12, 6)
+  feed_gift                 Decimal? @db.Decimal(12, 6)
+  feed_gift_kg              Decimal? @db.Decimal(12, 6)
+  cumulative_feed_gift      Decimal? @db.Decimal(12, 6)
+  cumulative_feed_gift_kg   Decimal? @db.Decimal(12, 6)
+  cumulative_feed_gift_bag  Decimal? @db.Decimal(12, 6)
+  feed_cost_kg                 Decimal? @db.Decimal(16, 6)
+  cumulative_feed_cost      Decimal? @db.Decimal(12, 6)
+  total_weight_gain         Decimal? @db.Decimal(12, 6)
+  createdAt                 DateTime  @default(now())
+}
+
+model general_reports {
+  id                   Int      @id @default(autoincrement()) @db.UnsignedInt
+  stockId             Int
+  stock      stocks     @relation(fields: [stockId], references: [id])
+  month                  Int?
+  feeding_day     Int
+  feeding_period         String
+  feed_brand         String
+  feed_cost    Int?
+  fcr    Decimal? @db.Decimal(10, 1)
+  body_weight_fed    Int?
+  average_weight_stocking    Decimal? @db.Decimal(10, 6)
+  createdAt   DateTime  @default(now())
+}
+
+model states {
+  id   Int     @id @default(autoincrement())
+  name String? @db.VarChar(100)
+  cities              cities[]
+}
