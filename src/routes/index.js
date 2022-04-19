@@ -1,6 +1,10 @@
 const routes = require('express').Router();
 const campaign = require('../routes/campaign')
 const budget = require('../routes/budget')
+const member = require('../routes/member')
+const user = require('../routes/user')
+const vote = require('../routes/vote')
+const fund = require('../routes/fund')
 const createError = require('http-errors')
 
 
@@ -14,6 +18,10 @@ routes.all("/", (req, res)=> {
 
 routes.use('/campaign', campaign)
 routes.use('/budget', budget)
+routes.use('/member', member)
+routes.use('/vote', vote)
+routes.use('/user', user)
+routes.use('/fund', fund)
 
 routes.use( async (req, res, next) => {
     next(createError.NotFound('Route not Found'))
