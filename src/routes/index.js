@@ -1,18 +1,19 @@
 const routes = require('express').Router();
-const auth = require('./auth')
-const post = require('./post')
+const campaign = require('../routes/campaign')
+const budget = require('../routes/budget')
 const createError = require('http-errors')
+
 
 routes.all("/", (req, res)=> {
 
     res.status(200).json({
         status: true,
-        message: "Fishmaster API v1.0"
+        message: "DAO.net API v1.0"
     })
 })
 
-routes.use('/post', post)
-routes.use('/auth', auth)
+routes.use('/campaign', campaign)
+routes.use('/budget', budget)
 
 routes.use( async (req, res, next) => {
     next(createError.NotFound('Route not Found'))
