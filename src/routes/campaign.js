@@ -14,4 +14,7 @@ routes.post('/search')
 routes.post('/:id/join')
 routes.post('/:id/leave')
 
+//members
+routes.get('/:id/members')
+
 module.exports = routes
