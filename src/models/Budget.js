@@ -30,6 +30,11 @@ const budget = new mongoose.Schema({
     Amount: {
         type: Number,
         required: true
+    },
+
+    organization: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Organization'
     }
 
 }, {

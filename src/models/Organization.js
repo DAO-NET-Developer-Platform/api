@@ -16,6 +16,12 @@ const organization = new mongoose.Schema({
         type: String,
         required: true
     },
+
+    treasury: {
+        type: Number,
+        required: true
+    },
+
 }, {
     timestamps: true
 })
