@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const database_url = process.env.MONGODB_URL || 'mongodb://localhost:27017/washjunkie';
+const database_url = process.env.MONGODB_URL || 'mongodb://localhost:27017/daocoders';
 
 mongoose.connect(database_url, {
     useNewUrlParser: true,
