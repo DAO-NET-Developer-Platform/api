@@ -10,7 +10,7 @@ routes.delete('/:id', organization.delete)
 
 
 //search
-routes.post('/search')
+routes.post('/search', organization.search)
 
 //join
 routes.post('/:id/join')
