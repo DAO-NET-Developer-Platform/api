@@ -7,18 +7,18 @@ require('./connectors/redis')
 require('./connectors/mongodb')
 
 const morgan = require('morgan')
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 const mongoose = require("mongoose")
-const multer = require('multer')
+// const multer = require('multer')
 const cors = require('cors')
 
 require('dotenv').config()
 
 // configure app to use bodyParser() and multer()s
 // this will let us get the data from a POST
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
-app.use(multer().array())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+// app.use(multer().array())
 
 app.use(fileUpload({
     limits: { fileSize: 50 * 1024 * 1024 },
