@@ -1,5 +1,5 @@
 const routes = require('express').Router();
-const campaign = require('../routes/campaign')
+const organization = require('../routes/organization')
 const budget = require('../routes/budget')
 const member = require('../routes/member')
 const user = require('../routes/user')
@@ -16,7 +16,7 @@ routes.all("/", (req, res)=> {
     })
 })
 
-routes.use('/campaign', campaign)
+routes.use('/organization', organization)
 routes.use('/budget', budget)
 routes.use('/member', member)
 routes.use('/vote', vote)
