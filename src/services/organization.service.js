@@ -18,6 +18,10 @@ class OrganizationService {
 
     }
 
+    static async search (data) {
+
+    }
+
     static async delete(id) {
 
     }
