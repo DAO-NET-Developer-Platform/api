@@ -1,18 +1,19 @@
 const mongoose = require('mongoose')
 
-const budget = new mongoose.Schema({
+
+const schema = new mongoose.Schema({
 
     title: {
         type: String,
         required: true
     },
 
-    address:{
+    description: {
         type: String,
         required: true
     },
 
-    description: {
+    address:{
         type: String,
         required: true
     },
@@ -42,8 +43,7 @@ const budget = new mongoose.Schema({
         ref: 'Organization'
     }
 
-}, {
-    timestamps: true
+
 })
 
-module.exports = mongoose.model('Budget', budget)
+module.exports = mongoose.model('Vote', schema)
