@@ -33,7 +33,7 @@ class BudgetController {
 
             return res.status(200).json({
                 status: true,
-                message: "Budget creation successful",
+                message: "Budget created successfully",
                 data
             })
 
@@ -47,13 +47,15 @@ class BudgetController {
 
     static async single(req, res, next) {
 
+        const { id } = req.params
+
         try {
 
-            const data = await budget.single(req.body)
+            const data = await budget.single(id)
 
             return res.status(200).json({
                 status: true,
-                message: "Budget creation successful",
+                message: "Single Budget",
                 data
             })
 
@@ -75,7 +77,7 @@ class BudgetController {
 
             return res.status(200).json({
                 status: true,
-                message: "Budget creation successful",
+                message: "Budget updated successfully",
                 data
             })
 
@@ -89,9 +91,43 @@ class BudgetController {
 
     static async delete(req, res, next) {
 
+        const { id } = req.params
+
+        try {
+
+            const data = await budget.delete(id)
+
+            return res.status(200).json({
+                status: true,
+                message: "Budget deleted successfully",
+                data
+            })
+
+        } catch (e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
     }
 
     static async search(req, res, next) {
+
+        try {
+
+            const data = await budget.search(req.query)
+
+            return res.status(200).json({
+                status: true,
+                message: "Search Results",
+                data
+            })
+
+        } catch (e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
 
     }
 
