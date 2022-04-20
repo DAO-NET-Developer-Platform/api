@@ -1,4 +1,5 @@
-const routes = require('express').Router()
+const routes = require('express').Router();
+const fund = require('../controllers/fund.controller');
 
 //fund
 routes.get('/:id/fund')
