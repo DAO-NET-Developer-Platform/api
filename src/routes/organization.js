@@ -1,7 +1,7 @@
 const routes = require('express').Router()
 const organization = require('../controllers/organization.controller')
 
-routes.get('/', organization.getAll)
+routes.get('/', organization.all)
 routes.post('/', organization.create)
 
 routes.get('/:id', organization.single)

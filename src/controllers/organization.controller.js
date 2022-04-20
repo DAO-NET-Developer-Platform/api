@@ -3,11 +3,11 @@ const organization = require('../services/organization.service')
 
 class OrganizationController {
 
-    static async getAll(req, res, next) {
+    static async all(req, res, next) {
 
         try {
 
-            const data = await organization.getAll()
+            const data = await organization.all()
 
             return res.status(200).json({
                 status: true,

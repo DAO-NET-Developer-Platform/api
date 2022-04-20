@@ -2,7 +2,7 @@ const Organization = require('../models/Organization');
 
 class OrganizationService {
 
-    static async getAll() {
+    static async all() {
 
     }
 
