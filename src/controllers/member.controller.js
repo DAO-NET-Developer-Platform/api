@@ -1,4 +1,5 @@
-const createError = require('http-errors')
+const createError = require('http-errors');
+const member = require('../services/member.service');
 
 class MemberController {
 
