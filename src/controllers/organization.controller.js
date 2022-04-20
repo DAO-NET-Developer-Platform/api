@@ -108,6 +108,26 @@ class OrganizationController {
 
     }
 
+    static async search(req, res, next) {
+
+        try {
+
+            const data = await organization.search(req.query)
+
+            return res.status(200).json({
+                status: true,
+                message: 'Single Organization',
+                data
+            })
+
+        } catch(e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+    }
+
 }
 
 module.exports = OrganizationController
