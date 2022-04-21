@@ -31,7 +31,7 @@ class OrganizationController {
 
             return res.status(200).json({
                 status: true,
-                message: 'Organization Created',
+                message: 'Organization Created successfully',
                 data
             })
 
@@ -75,7 +75,7 @@ class OrganizationController {
 
             return res.status(200).json({
                 status: true,
-                message: 'Single Organization',
+                message: 'Organization Updated successfully',
                 data
             })
 
@@ -97,7 +97,7 @@ class OrganizationController {
 
             return res.status(200).json({
                 status: true,
-                message: 'Single Organization',
+                message: 'Organization Deleted',
                 data
             })
 
