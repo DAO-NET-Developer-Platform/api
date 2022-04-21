@@ -12,6 +12,26 @@ const organization = new mongoose.Schema({
        required: true
     },
 
+    joinCriteria: {
+        type: mongoose.Schema.Types.id,
+        ref: 'Criteria'
+    },
+
+    budgetCriteria: {
+        type: mongoose.Schema.Types.id,
+        ref: 'Criteria'
+    },
+
+    joinCriteriaAmount: {
+        type: Number,
+        required: true
+    },
+    
+    budgetCriteriaAmount: {
+        type: Number,
+        required: true
+    },
+
     image: {
         type: String,
         required: true
@@ -19,8 +39,8 @@ const organization = new mongoose.Schema({
 
     treasury: {
         type: Number,
-        required: true
-    },
+        // required: true
+    }
 
 }, {
     timestamps: true
