@@ -33,11 +33,6 @@ const schema = new mongoose.Schema({
         required: true
     },
 
-    Amount: {
-        type: Number,
-        required: true
-    },
-
     organization: {
         type: mongoose.Types.ObjectId,
         ref: 'Organization'
