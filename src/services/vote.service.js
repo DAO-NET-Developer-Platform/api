@@ -1,6 +1,6 @@
 class VoteService {
     static async all() {
-
+        return
     }
 
     static async create(data) {
