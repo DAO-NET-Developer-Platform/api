@@ -1,4 +1,5 @@
 const routes = require('express').Router()
+
 const organization = require('../controllers/organization.controller')
 
 routes.get('/', organization.all)

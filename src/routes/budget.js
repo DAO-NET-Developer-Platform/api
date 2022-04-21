@@ -11,6 +11,4 @@ routes.delete('/single/:id', budget.delete)
 //search
 routes.post('/search', budget.search)
 
-
-
 module.exports = routes
