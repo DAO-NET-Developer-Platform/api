@@ -1,16 +1,14 @@
 const routes = require('express').Router()
+const budget = require('../controllers/budget.controller')
 
-routes.get('/')
+routes.get('/:organization_id', budget.all)
+routes.post('/:organization_id', budget.create)
 
-
-routes.post('/')
-routes.get('/:id')
-routes.put('/:id')
-routes.delete('/:id')
+routes.get('/single/:id', budget.single)
+routes.put('/single/:id', budget.update)
+routes.delete('/single/:id', budget.delete)
 
 //search
-routes.post('/search/:organization_id')
-
-
+routes.post('/search', budget.search)
 
 module.exports = routes

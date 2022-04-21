@@ -1,14 +1,17 @@
 const routes = require('express').Router()
 
-routes.get('/')
-routes.post('/')
-routes.get('/:id')
-routes.put('/:id')
-routes.delete('/:id')
+const organization = require('../controllers/organization.controller')
+
+routes.get('/', organization.all)
+routes.post('/', organization.create)
+
+routes.get('/:id', organization.single)
+routes.put('/:id', organization.update)
+routes.delete('/:id', organization.delete)
 
 
 //search
-routes.post('/search')
+routes.post('/search', organization.search)
 
 //join
 routes.post('/:id/join')

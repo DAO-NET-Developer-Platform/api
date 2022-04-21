@@ -7,6 +7,11 @@ const budget = new mongoose.Schema({
         required: true
     },
 
+    address:{
+        type: String,
+        required: true
+    },
+
     description: {
         type: String,
         required: true

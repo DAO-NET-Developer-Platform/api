@@ -1,4 +1,5 @@
-const routes = require('express').Router()
+const routes = require('express').Router();
+const user = require('../controllers/user.controller');
 
 routes.post('/register')
 
