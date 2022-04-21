@@ -4,6 +4,8 @@ class OrganizationService {
 
     static async all() {
 
+        return Organization.find({}).toObject()
+
     }
 
     static async create(data) {
