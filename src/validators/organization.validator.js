@@ -10,4 +10,5 @@ const schemas = {
         budgetCriteriaAmount: Joi.number().required(),
     })
 }
+
 module.exports = schemas;
