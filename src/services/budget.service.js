@@ -2,9 +2,9 @@ const Budget = require('../models/Budget')
 
 class BudgetService {
 
-    static async all(data) {
+    static async all(id) {
 
-        return await Budget.find({}).populate('organization').lean()
+        return await Budget.find({ organization: id }).populate('organization').lean()
 
     }
 
