@@ -13,10 +13,10 @@ const member = new mongoose.Schema({
         required: true
     },
 
-    image: {
-        type: String,
-        required: true
-    },
+    // image: {
+    //     type: String,
+    //     required: true
+    // },
 
     organization: {
         type: mongoose.Schema.Types.ObjectId,
@@ -25,7 +25,7 @@ const member = new mongoose.Schema({
 
     amountInTreasury: {
         type: Number,
-        required: true
+        // required: true
     }
 
 }, {

@@ -5,9 +5,11 @@ class MemberController {
 
     static async getMembers(req, res, next) {
 
+        const id = req.params.organization_id
+
         try {
 
-            const data = await member.getMembers()
+            const data = await member.getMembers(id)
 
             return res.status(200).json({
                 status: true,

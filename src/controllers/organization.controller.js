@@ -131,9 +131,13 @@ class OrganizationController {
 
     static async join(req, res, next) {
 
+        const { id } = req.params
+
+        req.body.organization = id
+
         try {
 
-            const data = await organization.join()
+            const data = await organization.join(req.body)
 
             return res.status(200).json({
                 status: true,
@@ -150,9 +154,11 @@ class OrganizationController {
 
     static async leave(req, res, next) {
 
+        const { id, member_id } = req.params
+
         try {
 
-            const data = await organization.leave()
+            const data = await organization.leave(id, member_id)
 
             return res.status(200).json({
                 status: true,

@@ -17,7 +17,8 @@ routes.post('/search', organization.search)
 
 //join
 routes.post('/:id/join', organization.join)
-routes.post('/:id/leave')
+
+routes.post('/:id/leave/:member_id', organization.leave)
 
 
 module.exports = routes

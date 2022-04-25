@@ -1,6 +1,6 @@
 const routes = require('express').Router();
 const user = require('../controllers/user.controller');
 
-routes.post('/register')
+routes.post('/', user.createUser)
 
 module.exports = routes
