@@ -9,8 +9,8 @@ const schema = new mongoose.Schema({
     type: {
         type: String,
         enum: {
-          values: ['Budget', 'Vote'],
-          message: '{VALUE} is not supported'
+          values: ['Budget', 'Join'],
+          message: 'Unsupported value'
         }
     }
 

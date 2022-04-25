@@ -13,12 +13,12 @@ const organization = new mongoose.Schema({
     },
 
     joinCriteria: {
-        type: mongoose.Schema.Types.id,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Criteria'
     },
 
     budgetCriteria: {
-        type: mongoose.Schema.Types.id,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Criteria'
     },
 

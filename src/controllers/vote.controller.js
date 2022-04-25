@@ -4,9 +4,12 @@ const vote = require('../services/vote.service');
 class VoteController {
 
     static async all(req, res, next) {
+
+        const { organization_id } = req.params
+
         try {
 
-            const data = await vote.all()
+            const data = await vote.all(organization_id)
 
             return res.status(200).json({
                 status: true,
@@ -20,6 +23,9 @@ class VoteController {
     }
 
     static async create(req, res, next) {
+
+        req.body.organization = req.params.organization_id
+
         try {
 
             const data = await vote.create(req.body)
