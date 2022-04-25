@@ -32,7 +32,7 @@ const budget = new mongoose.Schema({
         required: true
     },
 
-    Amount: {
+    amount: {
         type: Number,
         required: true
     },

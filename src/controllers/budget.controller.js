@@ -27,6 +27,8 @@ class BudgetController {
 
     static async create(req, res, next) {
 
+        req.body.organization = req.params.organization_id
+
         try {
 
             const data = await budget.create(req.body)
