@@ -129,6 +129,45 @@ class OrganizationController {
 
     }
 
+    static async join(req, res, next) {
+
+        try {
+
+            const data = await organization.join()
+
+            return res.status(200).json({
+                status: true,
+                message: 'Join requested successfully'
+            })
+
+        } catch(e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+    } 
+
+    static async leave(req, res, next) {
+
+        try {
+
+            const data = await organization.leave()
+
+            return res.status(200).json({
+                status: true,
+                message: 'Left organization successfully'
+            })
+
+
+        } catch (e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+    }
+
 }
 
 module.exports = OrganizationController
