@@ -53,6 +53,15 @@ class OrganizationService {
 
     static async join(data) {
 
+        //check membership status
+
+        const isMember = await this.checkMembership(data.user, data.organization)
+
+        if(isMember != null) {
+            await Member.findByIdAndDelete(isMember._id)
+            return
+        }
+
         //check organization requirement
         const criteria = await this.getJoinCriteria(data.organization)
 
@@ -109,6 +118,12 @@ class OrganizationService {
         // return
 
         return await Member.create(data)
+
+    }
+
+    static async checkMembership(user_id, org_id) {
+
+        return await Member.findOne({ $and: [ {user: user_id, organization: org_id} ] }).lean()
 
     }
 
