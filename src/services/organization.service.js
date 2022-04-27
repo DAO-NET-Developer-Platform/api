@@ -1,15 +1,23 @@
 const Organization = require('../models/Organization');
+// const LangOrganization = require('../models/LanguageOrganization')
 const Member = require('../models/Member')
 const randomString = require('randomstring')
 const createError = require('http-errors')
+const language = require('../services/language.service')
+const User = require('../models/User')
+const Budget = require('../models/Budget')
 
 class OrganizationService {
+
+    static async find(id) {
+        return Organization.findById(id).lean()
+    }
 
     static async all() {
 
         const organizations = await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
 
-        return organizations
+        return { organizations }
 
     }
 
@@ -18,10 +26,20 @@ class OrganizationService {
         data.image = `https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80`
 
         //make the creator the first member
-        await Member.create()
+        const user = await User.findOne({ address: data.creator }).select('_id').lean()
 
+        const organization = await Organization.create(data)
 
-        return await Organization.create(data)
+        const memberData = {
+            address: data.creator,
+            user: user._id,
+            organization: organization._id,
+            amountInTreasury: 0
+        }
+
+        await Member.create(memberData)
+
+        return organization
 
     }
 
@@ -47,7 +65,10 @@ class OrganizationService {
 
     static async delete(id) {
 
-        return await Organization.findByIdAndDelete(id)
+
+
+        // return await Promise.all([Organization.deleteMany(), Member.deleteMany()])
+        return await Budget.deleteMany()
 
     }
 

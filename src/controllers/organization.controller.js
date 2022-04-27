@@ -89,11 +89,11 @@ class OrganizationController {
 
     static async delete(req, res, next) {
 
-        const id = req.params.id
+        // const id = req.params.id
 
         try {
 
-            const data = await organization.delete(id)
+            const data = await organization.delete()
 
             return res.status(200).json({
                 status: true,

@@ -1,5 +1,6 @@
 const Language = require('../models/Language')
 const language_data = require('../data/languages.json')
+const translate = require('translate-google')
 
 class LanguageService {
 
@@ -16,6 +17,12 @@ class LanguageService {
         await Promise.all(language_data.map(el => Language.create(el)))
 
         return
+
+    }
+
+    static async translate(data, lang) {
+
+        return translate(data, { to: lang })
 
     }
 

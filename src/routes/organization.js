@@ -6,10 +6,11 @@ const organization = require('../controllers/organization.controller')
 
 routes.get('/', organization.all)
 routes.post('/', [validator(schemas.create)], organization.create)
+// routes.post('/lang_data', )
 
 routes.get('/:id', organization.single)
 routes.put('/:id', organization.update)
-routes.delete('/:id', organization.delete)
+routes.delete('/', organization.delete)
 
 
 //search
