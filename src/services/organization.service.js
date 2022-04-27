@@ -13,6 +13,16 @@ class OrganizationService {
         return Organization.findById(id).lean()
     }
 
+    static async findBy(name, value) {
+
+        const query = {}
+
+        query[name] = value
+
+        return Organization.findOne(query).lean()
+
+    }
+
     static async all() {
 
         const organizations = await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
@@ -68,7 +78,7 @@ class OrganizationService {
 
 
         // return await Promise.all([Organization.deleteMany(), Member.deleteMany()])
-        return await Budget.deleteMany()
+        // return await Budget.deleteMany()
 
     }
 
