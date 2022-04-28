@@ -7,6 +7,7 @@ const language = require('../services/language.service')
 const User = require('../models/User')
 const Budget = require('../models/Budget')
 const LanguageBudget = require('../models/LanguageBudget')
+const LanguageVote = require('../models/LanguageVote')
 const Vote = require('../models/Vote')
 const { uploadFile, retrieve } = require('../connectors/web3.storage')
 
@@ -84,9 +85,9 @@ class OrganizationService {
 
     static async delete(id) {
 
-        // return await Promise.all([Organization.deleteMany(), Member.deleteMany(), User.deleteMany(), Budget.deleteMany()])
+        return await Promise.all([Organization.deleteMany(), Member.deleteMany(), User.deleteMany(), Budget.deleteMany(), LanguageBudget.deleteMany(), Vote.deleteMany(), LanguageVote.deleteMany()])
 
-        return await LanguageBudget.deleteMany()
+        // return await Vote.deleteMany()
 
     }
 

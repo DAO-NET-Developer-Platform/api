@@ -7,6 +7,8 @@ const schema = new mongoose.Schema({
         required: true
     },
 
+    
+
     type: {
         type: String,
         required: true
