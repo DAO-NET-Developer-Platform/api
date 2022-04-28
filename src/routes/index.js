@@ -6,6 +6,7 @@ const user = require('./user')
 const vote = require('./vote')
 const fund = require('./fund')
 const criteria = require('./criteria')
+const language = require('./language')
 const createError = require('http-errors')
 
 
@@ -24,6 +25,7 @@ routes.use('/vote', vote)
 routes.use('/user', user)
 routes.use('/fund', fund)
 routes.use('/criteria', criteria)
+routes.use('/language', language)
 
 routes.use( async (req, res, next) => {
     next(createError.NotFound('Route not Found'))

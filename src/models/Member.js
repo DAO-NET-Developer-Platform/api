@@ -7,14 +7,9 @@ const member = new mongoose.Schema({
         required: true
     },
 
-    //change
     user: {
-        type: String,
-        required: true
-    },
-
-    image: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
         required: true
     },
 
@@ -25,7 +20,7 @@ const member = new mongoose.Schema({
 
     amountInTreasury: {
         type: Number,
-        required: true
+        // required: true
     }
 
 }, {

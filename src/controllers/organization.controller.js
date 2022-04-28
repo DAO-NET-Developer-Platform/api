@@ -25,6 +25,8 @@ class OrganizationController {
 
     static async create(req, res, next) {
 
+        req.body.image = req.files.image
+
         try {
 
             const data = await organization.create(req.body)
@@ -49,7 +51,7 @@ class OrganizationController {
 
         try {
 
-            const data = await organization.single(id)
+            const data = await organization.single(id, req.isMember)
 
             return res.status(200).json({
                 status: true,
@@ -89,11 +91,11 @@ class OrganizationController {
 
     static async delete(req, res, next) {
 
-        const id = req.params.id
+        // const id = req.params.id
 
         try {
 
-            const data = await organization.delete(id)
+            const data = await organization.delete()
 
             return res.status(200).json({
                 status: true,
@@ -122,6 +124,51 @@ class OrganizationController {
             })
 
         } catch(e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+    }
+
+    static async join(req, res, next) {
+
+        const { id } = req.params
+
+        req.body.organization = id
+
+        try {
+
+            const data = await organization.join(req.body)
+
+            return res.status(200).json({
+                status: true,
+                message: 'Join requested successfully'
+            })
+
+        } catch(e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+    } 
+
+    static async leave(req, res, next) {
+
+        const { id, member_id } = req.params
+
+        try {
+
+            const data = await organization.leave(id, member_id)
+
+            return res.status(200).json({
+                status: true,
+                message: 'Left organization successfully'
+            })
+
+
+        } catch (e) {
 
             return next(createError(e.statusCode, e.message))
 

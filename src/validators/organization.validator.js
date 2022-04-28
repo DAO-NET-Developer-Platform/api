@@ -8,6 +8,11 @@ const schemas = {
         budgetCriteria: Joi.any().required(),
         joinCriteriaAmount: Joi.number().required(),
         budgetCriteriaAmount: Joi.number().required(),
+        address: Joi.string().required()
+    }),
+
+    join: Joi.object().keys({
+        address: Joi.string().required()
     })
 }
 

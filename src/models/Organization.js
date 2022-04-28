@@ -7,6 +7,11 @@ const organization = new mongoose.Schema({
         required: true
     },
 
+    address: {
+        type: String,
+        required: true
+    },
+
     creator: {
        type: String,
        required: true
@@ -33,6 +38,11 @@ const organization = new mongoose.Schema({
     },
 
     image: {
+        type: String,
+        required: true
+    },
+
+    cid: {
         type: String,
         required: true
     },

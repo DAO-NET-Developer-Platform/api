@@ -46,7 +46,9 @@
     "randomstring": "^1.1.5",
     "redis": "^3.0.2",
     "slugify": "^1.5.0",
-    "socket.io": "^3.0.5"
+    "socket.io": "^3.0.5",
+    "translate-google": "^1.5.0",
+    "web3.storage": "^4.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.7",
