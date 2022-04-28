@@ -1,5 +1,6 @@
 const Budget = require('../models/Budget')
 const language = require('../services/language.service')
+const Language = require('../models/Language')
 const LanguageBudget = require('../models/LanguageBudget')
 const organizationService = require('../services/organization.service')
 const Organization = require('../models/Organization')
@@ -8,9 +9,14 @@ const { uploadFile, retrieve } = require('../connectors/web3.storage')
 
 class BudgetService {
 
-    static async all(id) {
+    static async all(id, lang) {
 
-        return await Budget.find({ organization: id }).populate('organization').lean()
+
+        if(!lang) return await Budget.find({ organization: id }).populate('organization').lean()
+
+        const language = await Language.findOne({ code: lang }).lean()
+
+        return await LanguageBudget.find({ language:  language._id }).populate('budget').lean()
 
     }
 
@@ -29,9 +35,13 @@ class BudgetService {
 
     }
 
-    static async single(id) {
+    static async single(id, lang) {
 
-        return (await Budget.findById(id)).toObject()
+        if(!lang) return (await Budget.findById(id)).toObject()
+
+        const language = await Language.findOne({ code: lang }).lean()
+
+        return await LanguageBudget.findOne({ $and:[{language:  language._id, budget: id }] }).populate('budget').lean()
 
     }
 
