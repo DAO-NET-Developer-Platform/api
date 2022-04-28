@@ -36,6 +36,10 @@ const schema = new mongoose.Schema({
     organization: {
         type: mongoose.Types.ObjectId,
         ref: 'Organization'
+    },
+
+    type: {
+        type: String,   
     }
 
 

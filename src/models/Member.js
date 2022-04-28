@@ -13,11 +13,6 @@ const member = new mongoose.Schema({
         required: true
     },
 
-    // image: {
-    //     type: String,
-    //     required: true
-    // },
-
     organization: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Organization'

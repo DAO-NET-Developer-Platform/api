@@ -6,6 +6,9 @@ const createError = require('http-errors')
 const language = require('../services/language.service')
 const User = require('../models/User')
 const Budget = require('../models/Budget')
+const Vote = require('../models/Vote')
+const { uploadFile, retrieve } = require('../connectors/web3.storage')
+
 
 class OrganizationService {
 
@@ -19,7 +22,9 @@ class OrganizationService {
 
         query[name] = value
 
-        return Organization.findOne(query).lean()
+        console.log(query)
+
+        return await Organization.findOne(query).lean()
 
     }
 
@@ -33,7 +38,12 @@ class OrganizationService {
 
     static async create(data) {
 
-        data.image = `https://images.unsplash.com/photo-1524758631624-e2822e304c36?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80`
+        // data.image.tempFilePath
+
+        const { cid, image } = await uploadFile(data.image.tempFilePath)
+
+        data.cid = cid
+        data.image = image
 
         //make the creator the first member
         const user = await User.findOne({ address: data.creator }).select('_id').lean()
@@ -53,9 +63,13 @@ class OrganizationService {
 
     }
 
-    static async single(id) {
+    static async single(id, member) {
+
+        console.log(member)
 
         const data = (await Organization.findOne({ _id: id }).populate('joinCriteria').populate('budgetCriteria')).toObject()
+
+        data.isMember = member
 
         return data
 
@@ -75,10 +89,7 @@ class OrganizationService {
 
     static async delete(id) {
 
-
-
-        // return await Promise.all([Organization.deleteMany(), Member.deleteMany()])
-        // return await Budget.deleteMany()
+        return await Promise.all([Organization.deleteMany(), Member.deleteMany(), User.deleteMany(), Budget.deleteMany()])
 
     }
 
@@ -86,7 +97,7 @@ class OrganizationService {
 
         //check membership status
 
-        const isMember = await this.checkMembership(data.user, data.organization)
+        const isMember = await this.checkMembership(data)
 
         if(isMember != null) {
             await Member.findByIdAndDelete(isMember._id)
@@ -152,9 +163,26 @@ class OrganizationService {
 
     }
 
-    static async checkMembership(user_id, org_id) {
+    static async checkMembership(data) {
 
-        return await Member.findOne({ $and: [ {user: user_id, organization: org_id} ] }).lean()
+        const user = await User.findOne({ address: data.address }).lean()
+
+        const { organization } = data
+
+        return await Member.findOne({ $and: [ {user: user._id, organization} ]}).lean()
+
+    }
+
+    static async isMember(address, org_id) {
+
+        //find user with address
+        const user = await User.findOne({ address }).lean()
+
+        console.log('user', user)
+
+        if(!user) return
+
+        return await Member.findOne({ $and: [ {user: user._id, organization: org_id} ] }).lean()
 
     }
 

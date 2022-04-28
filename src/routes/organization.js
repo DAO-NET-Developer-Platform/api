@@ -9,7 +9,7 @@ routes.get('/', organization.all)
 routes.post('/', [validator(schemas.create), check.user, check.organizationName], organization.create)
 // routes.post('/lang_data', )
 
-routes.get('/:id', check.validOrganization, organization.single)
+routes.get('/:id', [check.isMember, check.validOrganization], organization.single)
 
 // routes.put('/:id', organization.update)
 // routes.delete('/', organization.delete)
@@ -19,7 +19,7 @@ routes.get('/:id', check.validOrganization, organization.single)
 routes.post('/search', organization.search)
 
 //join
-routes.post('/:id/join', check.validOrganization, organization.join)
+routes.post('/:id/join', [validator(schemas.join), check.validOrganization], organization.join)
 
 // routes.post('/:id/leave/:member_id', organization.leave)
 

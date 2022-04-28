@@ -25,6 +25,8 @@ class OrganizationController {
 
     static async create(req, res, next) {
 
+        req.body.image = req.files.image
+
         try {
 
             const data = await organization.create(req.body)
@@ -49,7 +51,7 @@ class OrganizationController {
 
         try {
 
-            const data = await organization.single(id)
+            const data = await organization.single(id, req.isMember)
 
             return res.status(200).json({
                 status: true,
