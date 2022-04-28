@@ -2,11 +2,12 @@ const routes = require('express').Router()
 const validator = require('../middlewares/validator')
 const schemas = require('../validators/organization.validator')
 const check = require('../middlewares/organizationCheck')
+const generalCheck = require('../middlewares/check')
 
 const organization = require('../controllers/organization.controller')
 
 routes.get('/', organization.all)
-routes.post('/', [validator(schemas.create), check.user, check.organizationName], organization.create)
+routes.post('/', [validator(schemas.create), generalCheck.checkImage, check.user, check.organizationName], organization.create)
 // routes.post('/lang_data', )
 
 routes.get('/:id', [check.isMember, check.validOrganization], organization.single)

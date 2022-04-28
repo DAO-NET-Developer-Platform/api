@@ -4,6 +4,7 @@ const organization = require('../services/organization.service')
 class OrganizationController {
 
     static async all(req, res, next) {
+        
 
         try {
 

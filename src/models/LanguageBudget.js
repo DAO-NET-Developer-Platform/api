@@ -11,6 +11,11 @@ const schema = new mongoose.Schema({
         required: true
     },
 
+    code: {
+        type: String,
+        required: true
+    },
+
     language: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Language'
