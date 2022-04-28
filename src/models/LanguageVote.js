@@ -16,18 +16,19 @@ const schema = new mongoose.Schema({
         ref: 'Organization'
     },
 
+
     language: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Language'
     },
 
-    budget: {
+    vote: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Budget'
+        ref: 'Vote'
     }
     
 }, {
     timestamps: true
 })
 
-module.exports = mongoose.model('LanguageBudget', schema)
+module.exports = mongoose.model('LanguageVote', schema)

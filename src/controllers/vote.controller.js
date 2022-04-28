@@ -7,9 +7,11 @@ class VoteController {
 
         const { organization_id } = req.params
 
+        // if(req.language)
+
         try {
 
-            const data = await vote.all(organization_id)
+            const data = await vote.all(organization_id, req.language)
 
             return res.status(200).json({
                 status: true,
@@ -25,6 +27,8 @@ class VoteController {
     static async create(req, res, next) {
 
         req.body.organization = req.params.organization_id
+
+        req.body.image = req.files.image
 
         try {
 
@@ -49,7 +53,7 @@ class VoteController {
 
         try {
 
-            const data = await vote.single(id)
+            const data = await vote.single(id, req.language)
 
             return res.status(200).json({
                 status: true,

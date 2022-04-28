@@ -5,7 +5,6 @@ const schemas = {
     create: Joi.object().keys({
         title: Joi.string().required(),
         creator: Joi.string().required(),
-        // deadline: Joi.any().required(),
         startDate: Joi.any().required(),
         endDate: Joi.any().required(),
         description: Joi.any().required(),

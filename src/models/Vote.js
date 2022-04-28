@@ -25,11 +25,21 @@ const schema = new mongoose.Schema({
 
     image: {
         type: String,
+        // required: true
+    },
+
+    cid: {
+        type: String,
+        // required: true
+    },
+
+    startDate: {
+        type: Date,
         required: true
     },
 
-    deadline: {
-        type: String,
+    endDate: {
+        type: Date,
         required: true
     },
 
@@ -41,7 +51,6 @@ const schema = new mongoose.Schema({
     type: {
         type: String,   
     }
-
 
 })
 

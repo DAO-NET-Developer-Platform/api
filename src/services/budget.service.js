@@ -16,7 +16,7 @@ class BudgetService {
 
         const language = await Language.findOne({ code: lang }).lean()
 
-        return await LanguageBudget.find({ language:  language._id }).populate('budget').lean()
+        return await LanguageBudget.find({ $and: [{language:  language._id, organization: id}] }).populate('budget').lean()
 
     }
 
@@ -91,6 +91,7 @@ class BudgetService {
                 budget: budget._id,
                 title,
                 description,
+                organization: data.organization,
                 language: el._id
             }
 
