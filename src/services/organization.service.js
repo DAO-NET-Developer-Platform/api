@@ -6,6 +6,7 @@ const createError = require('http-errors')
 const language = require('../services/language.service')
 const User = require('../models/User')
 const Budget = require('../models/Budget')
+const LanguageBudget = require('../models/LanguageBudget')
 const Vote = require('../models/Vote')
 const { uploadFile, retrieve } = require('../connectors/web3.storage')
 
@@ -22,8 +23,6 @@ class OrganizationService {
 
         query[name] = value
 
-        console.log(query)
-
         return await Organization.findOne(query).lean()
 
     }
@@ -37,8 +36,6 @@ class OrganizationService {
     }
 
     static async create(data) {
-
-        // data.image.tempFilePath
 
         const { cid, image } = await uploadFile(data.image.tempFilePath)
 
@@ -65,8 +62,6 @@ class OrganizationService {
 
     static async single(id, member) {
 
-        console.log(member)
-
         const data = (await Organization.findOne({ _id: id }).populate('joinCriteria').populate('budgetCriteria')).toObject()
 
         data.isMember = member
@@ -89,7 +84,9 @@ class OrganizationService {
 
     static async delete(id) {
 
-        return await Promise.all([Organization.deleteMany(), Member.deleteMany(), User.deleteMany(), Budget.deleteMany()])
+        // return await Promise.all([Organization.deleteMany(), Member.deleteMany(), User.deleteMany(), Budget.deleteMany()])
+
+        return await LanguageBudget.deleteMany()
 
     }
 
@@ -110,14 +107,6 @@ class OrganizationService {
         await this.determineJoin(criteria, data)
 
         return
-
-        //generate address
-        // data.address = `#addr${randomString.generate(32)}`
-
-        // data.amountInTreasury = 150
-
-        // //joining organization
-        // return await Member.create(data)
 
     }
 
@@ -153,11 +142,10 @@ class OrganizationService {
             data.amountInTreasury = 150
 
         }
-    
-        data.address = `#addr${randomString.generate(32)}`
 
-        console.log(data.address)
-        // return
+        const user = await User.findOne({ address: data.address }).lean()
+
+        data.user = user._id
 
         return await Member.create(data)
 
@@ -177,8 +165,6 @@ class OrganizationService {
 
         //find user with address
         const user = await User.findOne({ address }).lean()
-
-        console.log('user', user)
 
         if(!user) return
 

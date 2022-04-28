@@ -7,9 +7,11 @@ class MemberController {
 
         const id = req.params.organization_id
 
+        const address = req.query.address
+
         try {
 
-            const data = await member.getMembers(id)
+            const data = await member.getMembers(id, address)
 
             return res.status(200).json({
                 status: true,

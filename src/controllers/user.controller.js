@@ -301,6 +301,24 @@ class userController {
 
     }
 
+    static async all(req, res, next) {
+
+        try {
+
+            const data = await user.all()
+
+            return res.status(200).json({
+                status: true,
+                message: 'All users',
+                data
+            })
+
+        } catch(e) {
+            return next(createError(e.statusCode, e.message))
+        }
+
+    }
+
 }
 
 module.exports = userController;
