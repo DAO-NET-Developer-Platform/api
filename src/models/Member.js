@@ -21,6 +21,14 @@ const member = new mongoose.Schema({
     amountInTreasury: {
         type: Number,
         // required: true
+    },
+
+    status: {
+        type: String,
+        enum: {
+          values: ['pending', 'active'],
+          message: 'Unsupported value'
+        }
     }
 
 }, {

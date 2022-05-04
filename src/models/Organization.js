@@ -42,11 +42,6 @@ const organization = new mongoose.Schema({
         required: true
     },
 
-    cid: {
-        type: String,
-        required: true
-    },
-
     treasury: {
         type: Number,
         // required: true

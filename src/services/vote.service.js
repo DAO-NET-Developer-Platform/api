@@ -17,13 +17,13 @@ class VoteService {
 
     static async create(data) {
 
-        if(data.image) {
+        // if(data.image) {
 
-            const { cid, image } = await uploadFile(data.image.tempFilePath)
-            data.cid = cid
-            data.image = image
+        //     const { cid, image } = await uploadFile(data.image.tempFilePath)
+        //     data.cid = cid
+        //     data.image = image
 
-        }
+        // }
 
         const languages = await language.all()
 

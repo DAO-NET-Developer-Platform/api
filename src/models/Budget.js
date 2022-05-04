@@ -27,11 +27,6 @@ const budget = new mongoose.Schema({
         required: true
     },
 
-    cid: {
-        type: String,
-        required: true
-    },
-
     startDate: {
         type: Date,
         required: true
@@ -50,6 +45,14 @@ const budget = new mongoose.Schema({
     organization: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Organization'
+    },
+
+    status: {
+        type: String,
+        enum: {
+          values: ['pending', 'active'],
+          message: 'Unsupported value'
+        }
     }
 
 }, {

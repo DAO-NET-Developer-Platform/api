@@ -4,6 +4,7 @@ const Language = require('../models/Language')
 const LanguageBudget = require('../models/LanguageBudget')
 const organizationService = require('../services/organization.service')
 const Organization = require('../models/Organization')
+const vote = require('../services/vote.service')
 const { uploadFile, retrieve } = require('../connectors/web3.storage')
 
 
@@ -24,10 +25,10 @@ class BudgetService {
 
         const criteria = await this.getBudgetCriteria(data.organization)
 
-        const { cid, image } = await uploadFile(data.image.tempFilePath)
+        // const { cid, image } = await uploadFile(data.image.tempFilePath)
 
-        data.cid = cid
-        data.image = image
+        // data.cid = cid
+        // data.image = image
 
         const budget = await this.determineBudgetCreation(criteria, data)
 
@@ -67,13 +68,14 @@ class BudgetService {
 
     static async determineBudgetCreation(criteria, data) {
 
+        data.status = "active"
+
         if(criteria.criteria.includes(`members' approval`)) {
 
             //create a vote for the the request
+            data.status = 'pending'
 
-        }
-
-        if(criteria.criteria == 'Anyone who pays the set fee') {
+        } else if(criteria.criteria == 'Anyone who pays the set fee') {
 
             if(!data.paymentHash) throw createError.Unauthorized('Please pay before joining Dao')
 
@@ -92,7 +94,8 @@ class BudgetService {
                 title,
                 description,
                 organization: data.organization,
-                language: el._id
+                language: el._id,
+                status: data.status
             }
 
             return LanguageBudget.create(lang_data)

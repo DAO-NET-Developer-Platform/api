@@ -8,6 +8,10 @@ const schema = new mongoose.Schema({
         required: true
     },
 
+    userAddress: {
+        type: String
+    },
+
     description: {
         type: String,
         required: true
@@ -24,11 +28,6 @@ const schema = new mongoose.Schema({
     },
 
     image: {
-        type: String,
-        // required: true
-    },
-
-    cid: {
         type: String,
         // required: true
     },
