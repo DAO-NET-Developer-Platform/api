@@ -2,6 +2,7 @@ const Member = require('../models/Member')
 const User = require('../models/User')
 const Approval = require('../models/Approval')
 const organization = require('../services/organization.service')
+const createError = require('http-errors')
 
 
 class MemberService {
@@ -88,7 +89,7 @@ class MemberService {
 
         if(!user) return
 
-        return await Member.findOne({ $and: [ { member, user: user._id } ] }).lean()
+        return await Approval.findOne({ $and: [ { member, user: user._id } ] }).lean()
 
     }
 }

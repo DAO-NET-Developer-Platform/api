@@ -73,6 +73,31 @@ class BudgetController {
 
     }
 
+    static async approve(req, res, next) {
+
+        const organization = req.params.organization_id
+
+        req.body.address = req.query.address
+
+
+        try {
+
+            await budget.approve(organization, req.body)
+
+            return res.status(200).json({
+                status: true,
+                message: 'Budget approval successfull'
+            })
+
+        } catch(e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+
+    }
+
     static async update(req, res, next) {
 
         const { id } = req.params
