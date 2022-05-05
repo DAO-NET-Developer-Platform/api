@@ -7,11 +7,7 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-
-    userAddress: {
-        type: String
-    },
-
+    
     description: {
         type: String,
         required: true

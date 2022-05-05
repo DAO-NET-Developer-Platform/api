@@ -30,9 +30,7 @@ class BudgetController {
     static async create(req, res, next) {
 
         req.body.organization = req.params.organization_id
-
-        req.body.image = req.files.image
-
+        
         try {
 
             const data = await budget.create(req.body)

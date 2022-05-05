@@ -23,6 +23,30 @@ class MemberController {
             return next(createError(e.statusCode, e.message))
         }
     }
+
+    static async approve(req, res, next) {
+
+        const organization = req.params.organization_id
+
+        req.body.address = req.query.address
+
+
+        try {
+
+            await member.approve(organization, req.body)
+
+            return res.status(200).json({
+                status: true,
+                message: 'Approval successfull'
+            })
+
+        } catch(e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+    }
 }
 
 module.exports = MemberController

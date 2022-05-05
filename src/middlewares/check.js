@@ -6,7 +6,7 @@ module.exports = {
 
     async checkImage(req, res, next) {
 
-        if(!req.files.image) return next(createError.UnprocessableEntity('Please provide an image'))
+        // if(!req.files.image) return next(createError.UnprocessableEntity('Please provide an image'))
         return next()
 
     },

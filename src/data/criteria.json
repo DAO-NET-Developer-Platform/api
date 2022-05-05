@@ -1,0 +1,34 @@
+[
+    {
+        "type": "Join",
+        "criteria": "Anyone may join"
+    },
+    {
+        "type": "Join",
+        "criteria": "By numbers - members' approval"
+    },
+    {
+        "type": "Join",
+        "criteria": "By percentage - members' approval"
+    },
+    {
+        "type": "Join",
+        "criteria": "Anyone who pays the entry fee"
+    },
+    {
+        "type": "Budget",
+        "criteria": "Anyone may submit"
+    },
+    {
+        "type": "Budget",
+        "criteria": "By numbers - members' approval"
+    },
+    {
+        "type": "Budget",
+        "criteria": "By percentage - members' approval"
+    },
+    {
+        "type": "Budget",
+        "criteria": "Anyone who pays the set fee"
+    }
+]

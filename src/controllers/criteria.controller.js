@@ -7,7 +7,7 @@ class criteriaController {
 
         try {
 
-            const data = await criteria.create(req.body)
+            const data = await criteria.create()
 
             return res.status(200).json({
                 status: true,

@@ -1,10 +1,12 @@
 const Criteria = require('../models/Criteria')
+const criterias = require('../data/criteria.json')
 
 class criteriaService {
 
-    static async create(data) {
+    static async create() {
 
-        return await Criteria.create(data)
+
+        return await Criteria.insertMany(criterias)
 
     }
 

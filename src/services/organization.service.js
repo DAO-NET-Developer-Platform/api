@@ -9,7 +9,6 @@ const Budget = require('../models/Budget')
 const LanguageBudget = require('../models/LanguageBudget')
 const LanguageVote = require('../models/LanguageVote')
 const Vote = require('../models/Vote')
-const { uploadFile, retrieve } = require('../connectors/web3.storage')
 
 
 class OrganizationService {
@@ -52,7 +51,8 @@ class OrganizationService {
             address: data.creator,
             user: user._id,
             organization: organization._id,
-            amountInTreasury: 0
+            amountInTreasury: 0,
+            status: 'active'
         }
 
         await Member.create(memberData)

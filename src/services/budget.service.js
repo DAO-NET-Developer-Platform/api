@@ -68,6 +68,8 @@ class BudgetService {
 
     static async determineBudgetCreation(criteria, data) {
 
+        // console.log(criteria)
+
         data.status = "active"
 
         if(criteria.criteria.includes(`members' approval`)) {

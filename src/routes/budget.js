@@ -6,7 +6,7 @@ const check = require('../middlewares/budgetCheck')
 const generalCheck = require('../middlewares/check')
 
 routes.get('/:organization_id', check.organization, budget.all)
-routes.post('/:organization_id', [validator(schemas.create), generalCheck.checkImage, check.organization], budget.create)
+routes.post('/:organization_id', [validator(schemas.create), check.organization], budget.create)
 
 routes.get('/single/:id', budget.single)
 

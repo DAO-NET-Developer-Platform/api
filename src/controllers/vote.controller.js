@@ -28,8 +28,6 @@ class VoteController {
 
         req.body.organization = req.params.organization_id
 
-        req.body.image = req.files.image
-
         try {
 
             const data = await vote.create(req.body)
