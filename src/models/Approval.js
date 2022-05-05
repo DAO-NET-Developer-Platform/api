@@ -7,6 +7,10 @@ const schema = new mongoose.Schema({
         ref: 'User',
     },
 
+    address: {
+        type: String
+    },
+
     type: {
         type: String,
         enum: {
@@ -23,6 +27,11 @@ const schema = new mongoose.Schema({
     member: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Member'
+    },
+
+    organization: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization'
     }
 })
 

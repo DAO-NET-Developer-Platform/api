@@ -27,6 +27,7 @@ class MemberService {
          */
 
         data.type = 'Member'
+        data.organization = data.organization_id
 
         //create approval
 

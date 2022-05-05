@@ -56,11 +56,9 @@ class VoteService {
 
     }
 
-    static async update(id, data) {
+    static async createVoteOptions() {
 
-    }
-    
-    static async delete(id) {
+        // const options = [ 'Yes, i support', '' ]
 
     }
 }

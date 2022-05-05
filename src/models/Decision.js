@@ -13,8 +13,8 @@ const schema = new mongoose.Schema({
     },
 
     option: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Option'
     },
 
     amount: {

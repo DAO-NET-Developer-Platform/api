@@ -6,8 +6,8 @@ const schemas = {
         creator: Joi.string().required(),
         joinCriteria: Joi.any().required(),
         budgetCriteria: Joi.any().required(),
-        joinCriteriaAmount: Joi.number().required(),
-        budgetCriteriaAmount: Joi.number().required(),
+        joinCriteriaAmount: Joi.number(),
+        budgetCriteriaAmount: Joi.number(),
         address: Joi.string().required(),
         image: Joi.string().required()
     }),

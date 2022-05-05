@@ -29,12 +29,12 @@ const organization = new mongoose.Schema({
 
     joinCriteriaAmount: {
         type: Number,
-        required: true
+        // required: true
     },
     
     budgetCriteriaAmount: {
         type: Number,
-        required: true
+        // required: true
     },
 
     image: {

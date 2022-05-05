@@ -12,8 +12,6 @@ routes.post('/:organization_id/approve', [memberCheck.isMember, check.isPending,
 
 routes.get('/single/:id', budget.single)
 
-// routes.put('/single/:id', budget.update)
-// routes.delete('/single/:id', budget.delete)
 
 //search
 routes.post('/search', budget.search)

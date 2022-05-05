@@ -105,6 +105,7 @@ class BudgetService {
          */
 
         data.type = 'Budget'
+        data.organization = data.organization_id
 
         //create approval
 

@@ -15,6 +15,14 @@ const schema = new mongoose.Schema({
     vote: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vote'
+    },
+
+    type: {
+        type: String,
+        enum: {
+            values: ['Budget', 'Vote'],
+            message: 'Unsupported value'
+        }
     }
 
 }, { 
