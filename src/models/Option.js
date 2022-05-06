@@ -7,14 +7,22 @@ const schema = new mongoose.Schema({
         required: true
     },
 
-    budgetItem: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Budget'
-    },
+    // budgetItem: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Budget'
+    // },
 
-    vote: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Vote'
+    // vote: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'Vote'
+    // },
+
+    type: {
+        type: String,
+        enum: {
+            values: ['Budget', 'Vote'],
+            message: 'Unsupported value'
+        }
     }
 
 }, { 

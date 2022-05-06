@@ -30,9 +30,7 @@ class BudgetController {
     static async create(req, res, next) {
 
         req.body.organization = req.params.organization_id
-
-        req.body.image = req.files.image
-
+        
         try {
 
             const data = await budget.create(req.body)
@@ -72,6 +70,31 @@ class BudgetController {
             return next(createError(e.statusCode, e.message))
 
         }
+
+    }
+
+    static async approve(req, res, next) {
+
+        const organization = req.params.organization_id
+
+        req.body.address = req.query.address
+
+
+        try {
+
+            await budget.approve(organization, req.body)
+
+            return res.status(200).json({
+                status: true,
+                message: 'Budget approval successfull'
+            })
+
+        } catch(e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
 
     }
 

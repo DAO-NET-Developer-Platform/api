@@ -1,0 +1,11 @@
+[
+    {
+        "title": "Yes, I Support",
+        "type": "Vote"
+    },
+
+    {
+        "title": "No, I Don't Support",
+        "type": "Vote"
+    }
+]

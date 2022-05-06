@@ -8,7 +8,8 @@ const schemas = {
         startDate: Joi.string().required(),
         endDate: Joi.string().required(),
         description: Joi.any().required(),
-        address: Joi.string().required()
+        address: Joi.string().required(),
+        image: Joi.string().empty('').default(null)
     })
 
 }

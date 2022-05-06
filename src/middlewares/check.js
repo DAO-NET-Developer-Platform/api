@@ -1,12 +1,13 @@
 const Language = require('../models/Language')
 const createError = require('http-errors')
 const db = require('../connectors/knex')
+const Option = require('../models/Option')
 
 module.exports = {
 
     async checkImage(req, res, next) {
 
-        if(!req.files.image) return next(createError.UnprocessableEntity('Please provide an image'))
+        // if(!req.files.image) return next(createError.UnprocessableEntity('Please provide an image'))
         return next()
 
     },
@@ -23,6 +24,17 @@ module.exports = {
 
         return next()
 
+    },
+
+    async typeOptions(req, res, next) {
+
+        const { type } = req.query
+
+        const options = await Option.find({ type }).lean()
+
+        req.options = options
+
+        return next()
     }
 
 }

@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
         type: String,
         required: true
     },
-
+    
     description: {
         type: String,
         required: true
@@ -24,11 +24,6 @@ const schema = new mongoose.Schema({
     },
 
     image: {
-        type: String,
-        // required: true
-    },
-
-    cid: {
         type: String,
         // required: true
     },

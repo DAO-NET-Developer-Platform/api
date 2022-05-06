@@ -1,46 +1,48 @@
-const criteria = require('../services/criteria.service')
 const createError = require('http-errors')
+const option = require('../services/option.service.js')
 
-class criteriaController {
+class OptionController {
 
     static async create(req, res, next) {
-
+        
         try {
 
-            const data = await criteria.create()
+            const data = await option.create()
 
             return res.status(200).json({
                 status: true,
-                message: "Criteria created successfully",
+                message: "successfully added options",
                 data
             })
 
         } catch (e) {
+
             return next(createError(e.statusCode, e.message))
+
         }
 
     }
 
     static async all(req, res, next) {
 
-        const { type } = req.query
-
         try {
 
-            const data = await criteria.all(type)
+            const data = await option.all(req.options, req.language)
 
             return res.status(200).json({
                 status: true,
-                message: `All ${type} criterias`,
+                message: "All options",
                 data
             })
 
         } catch (e) {
+
             return next(createError(e.statusCode, e.message))
-        }
+
+        }        
 
     }
 
 }
 
-module.exports = criteriaController
+module.exports = OptionController

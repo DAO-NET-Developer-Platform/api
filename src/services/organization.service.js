@@ -9,7 +9,6 @@ const Budget = require('../models/Budget')
 const LanguageBudget = require('../models/LanguageBudget')
 const LanguageVote = require('../models/LanguageVote')
 const Vote = require('../models/Vote')
-const { uploadFile, retrieve } = require('../connectors/web3.storage')
 
 
 class OrganizationService {
@@ -38,10 +37,10 @@ class OrganizationService {
 
     static async create(data) {
 
-        const { cid, image } = await uploadFile(data.image.tempFilePath)
+        // const { cid, image } = await uploadFile(data.image.tempFilePath)
 
-        data.cid = cid
-        data.image = image
+        // data.cid = cid
+        // data.image = image
 
         //make the creator the first member
         const user = await User.findOne({ address: data.creator }).select('_id').lean()
@@ -52,7 +51,8 @@ class OrganizationService {
             address: data.creator,
             user: user._id,
             organization: organization._id,
-            amountInTreasury: 0
+            amountInTreasury: 0,
+            status: 'active'
         }
 
         await Member.create(memberData)
@@ -129,12 +129,7 @@ class OrganizationService {
 
     static async determineJoin(criteria, data) {
 
-
-        if(criteria.criteria.includes(`members' approval`)) {
-
-            //create a vote for the the request
-
-        }
+        data.status = 'active'
 
         if(criteria.criteria == 'Anyone who pays the entry fee') {
 
@@ -142,6 +137,9 @@ class OrganizationService {
 
             data.amountInTreasury = 150
 
+        } else if(criteria.criteria.includes(`members' approval`)) {
+            //create a pending status for the user
+            data.status = 'pending'
         }
 
         const user = await User.findOne({ address: data.address }).lean()

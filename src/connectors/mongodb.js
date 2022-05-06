@@ -8,7 +8,8 @@ const database_url = process.env.DB_URL
 mongoose.connect(database_url, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    useCreateIndex: true,
+    useFindAndModify: false
 }).catch(error => {
     console.error(error)
 })

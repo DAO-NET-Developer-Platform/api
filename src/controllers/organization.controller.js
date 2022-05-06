@@ -26,7 +26,7 @@ class OrganizationController {
 
     static async create(req, res, next) {
 
-        req.body.image = req.files.image
+        // req.body.image = req.files.image
 
         try {
 
