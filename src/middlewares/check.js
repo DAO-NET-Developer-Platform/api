@@ -1,6 +1,7 @@
 const Language = require('../models/Language')
 const createError = require('http-errors')
 const db = require('../connectors/knex')
+const Option = require('../models/Option')
 
 module.exports = {
 
@@ -23,6 +24,17 @@ module.exports = {
 
         return next()
 
+    },
+
+    async typeOptions(req, res, next) {
+
+        const { type } = req.query
+
+        const options = await Option.find({ type }).lean()
+
+        req.options = options
+
+        return next()
     }
 
 }
