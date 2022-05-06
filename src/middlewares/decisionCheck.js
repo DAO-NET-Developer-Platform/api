@@ -7,6 +7,8 @@ const Vote = require('../models/Vote')
 const memberService = require('../services/member.service')
 const User = require('../models/User')
 const LanguageVote = require('../models/LanguageVote')
+const LanguageOption = require('../models/LanguageOption')
+const Decision = require('../models/Decision')
 
 module.exports = {
 
@@ -56,16 +58,53 @@ module.exports = {
 
     async getLangVote(req, res, next) {
 
-        if(!req.query.lang) return next()
+        let vote_id = req.params.vote_id
 
-        const lang_vote = await LanguageVote.findById(req.params.vote_id)
-        if(!lang_vote) return next(createError.NotFound('No such Vote'))
-        vote_id = lang_vote.vote
+        if(req.query.lang) {
+            const lang_vote = await LanguageVote.findById(req.params.vote_id)
+            if(!lang_vote) return next(createError.NotFound('No such Vote'))
+            vote_id = lang_vote.vote
+        }
 
         const vote = await Vote.findById(vote_id)
         if(!vote) return next(createError.NotFound('No such Vote'))
 
         req.params.vote_id = vote._id
+
+        return next()
+
+    },
+
+    async getLangOption(req, res, next) {
+
+        let option_id = req.body.option
+
+        if(req.query.lang) {
+            const lang_option = await LanguageOption.findById(option_id)
+            if(!lang_option) return next(createError.NotFound('No such option'))
+            option_id = lang_option.option
+        }
+
+        const option = await Option.findById(option_id)
+        if(!option) return next(createError.NotFound('No such option'))
+
+        req.body.option = option._id
+
+        return next()
+
+    },
+
+    //check if user has previously voted
+    async hasDecided(req, res, next) {
+
+        const { address } = req.query
+        const { vote_id } = req.params
+
+        console.log(vote_id)
+
+        const decision = await Decision.findOne({ $and: [{ address, vote: vote_id }] }).lean()
+
+        if(decision !== null) return next(createError.BadRequest('Cannot Decide more than once'))
 
         return next()
 
