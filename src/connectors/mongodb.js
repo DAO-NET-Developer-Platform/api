@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const dotenv = require('dotenv').config()
 
-// const database_url = process.env.MONGODB_URL || 'mongodb://localhost:27017/daocoders';
+const database_url = process.env.MONGODB_URL || 'mongodb://localhost:27017/daocoders';
 
-const database_url = process.env.DB_URL
+// const database_url = process.env.DB_URL
 
 mongoose.connect(database_url, {
     useNewUrlParser: true,

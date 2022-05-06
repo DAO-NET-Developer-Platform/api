@@ -8,6 +8,7 @@ const fund = require('./fund')
 const criteria = require('./criteria')
 const language = require('./language')
 const option = require('./option')
+const decision = require('./decision')
 const createError = require('http-errors')
 
 
@@ -28,6 +29,7 @@ routes.use('/fund', fund)
 routes.use('/criteria', criteria)
 routes.use('/language', language)
 routes.use('/option', option)
+routes.use('/decision', decision)
 
 routes.use( async (req, res, next) => {
     next(createError.NotFound('Route not Found'))
