@@ -7,6 +7,7 @@ const Organization = require('../models/Organization')
 const Approval = require('../models/Approval')
 const memberService = require('../services/member.service')
 const User = require('../models/User')
+const Vote = require('../models/Vote')
 
 class BudgetService {
 
@@ -79,6 +80,16 @@ class BudgetService {
 
         const budget = await Budget.create(data)
 
+        // if()
+
+        // const voteData = {
+        //     budget: budget._id,
+        //     ...data,
+        //     type: "Budget"
+        // }
+
+        // const vote = await Vote.create(voteData)
+
         await Promise.all(languages.map(async (el, i) => {
 
             const [ title, description ] = await Promise.all([language.translate(data.title, el.code), language.translate(data.description, el.code)])
@@ -91,6 +102,10 @@ class BudgetService {
                 language: el._id,
                 status: data.status
             }
+
+            // const lang_vote = {
+
+            // }
 
             return LanguageBudget.create(lang_data)
         }))
@@ -128,7 +143,7 @@ class BudgetService {
 
         if(criteria.includes('By percentage')) {
 
-        treshold = Math.round(members.length * Number(amount)/100)
+            treshold = Math.round(members.length * Number(amount)/100)
 
         }
 
