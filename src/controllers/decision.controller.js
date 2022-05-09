@@ -41,6 +41,30 @@ class DecisionController {
 
     }
 
+    static async getAllVoters(req, res, next) {
+
+        const { vote_id } = req.params
+         
+        const voteData = {}
+        voteData.lang = req.language
+        voteData.address = req.query.address
+
+        try {
+
+            const data = await decision.getAllVoters(vote_id, voteData)
+
+            return res.status(200).json({
+                status: true,
+                message: 'All Vote Decisions',
+                data
+            })
+            
+        } catch (e) {
+            return next(createError(e.statusCode, e.message))
+        }
+
+    }
+
 }
 
 module.exports = DecisionController

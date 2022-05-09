@@ -34,6 +34,35 @@ class DecisionController {
 
     }
 
+    static async getAllVoters(vote, data) {
+
+        let allDecisions
+
+        if(data.lang) {
+            //get lang options
+            const langOptions = await LanguageOption.find({ language: data.lang }).lean()
+
+            allDecisions = await Decision.find({ vote, type: 'Vote' }).lean()
+
+            await Promise.all(allDecisions.map((el, i) => {
+                const option = langOptions.find((opt) => 
+                    opt.option.toString() == el.option.toString()
+                )
+                allDecisions[i].option = option
+            }))
+
+        } else {
+            allDecisions = await Decision.find({ vote, type: 'Vote' }).populate('option').lean()
+        }
+
+        await Promise.all(allDecisions.map(async(el, i) => {
+            if(el.address == data.address) allDecisions[i].isMe = true
+        }))
+
+        return allDecisions
+
+    }
+
 }
 
-module.exports = DecisionController
+module.exports = DecisionController 
