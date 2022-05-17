@@ -1,4 +1,4 @@
-const circom = require("circomlibjs")
+// const circom = require("circomlibjs")
 
 /**
  * Creates a Poseidon big number hash.
