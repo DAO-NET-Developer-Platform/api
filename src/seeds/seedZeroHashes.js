@@ -1,7 +1,7 @@
-const { MerkleTreeZero } = require("@interep/db")
+// const { MerkleTreeZero } = require("@interep/db")
 // import config from "src/config"
 // import { logger } from "src/utils/backend"
-const poseidon = require("../utils/posidon")
+// const poseidon = require("../utils/posidon")
 
 module.exports = async function seedZeroHashes(req, res, next){
     console.log("Seeding zero hashes...")
