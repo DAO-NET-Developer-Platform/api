@@ -7,6 +7,9 @@ const Organization = require('../models/Organization')
 const Approval = require('../models/Approval')
 const memberService = require('../services/member.service')
 const User = require('../models/User')
+const Vote = require('../models/Vote')
+// const LanguageVote = require('../models/LanguageVote')
+const vote = require('../services/vote.service')
 
 class BudgetService {
 
@@ -17,7 +20,13 @@ class BudgetService {
 
         const language = await Language.findOne({ code: lang }).lean()
 
-        return await LanguageBudget.find({ $and: [{language:  language._id, organization: id}] }).populate('budget').lean()
+        const budget = await LanguageBudget.find({ $and: [{language:  language._id, organization: id}] }).populate('budget').lean()
+
+        await Promise.all(budget.map((el, i) => {
+            budget[i].status = el.budget.status
+        }))
+
+        return budget
 
     }
 
@@ -42,7 +51,11 @@ class BudgetService {
 
         const language = await Language.findOne({ code: lang }).lean()
 
-        return await LanguageBudget.findOne({ $and:[{language:  language._id, budget: id }] }).populate('budget').lean()
+        const budget = await LanguageBudget.findOne({ $and:[{language:  language._id, budget: id }] }).populate('budget').lean()
+
+        budget.status = budget.budget.status
+
+        return budget
 
     }
 
@@ -89,11 +102,20 @@ class BudgetService {
                 description,
                 organization: data.organization,
                 language: el._id,
-                status: data.status
+                // status: data.status
             }
 
             return LanguageBudget.create(lang_data)
         }))
+
+        const vote_data = {
+            budget: budget._id,
+            ...data,
+            type: "Budget",
+            status: data.status
+        }
+
+        await vote.create(vote_data)
 
         return budget
 
@@ -128,23 +150,27 @@ class BudgetService {
 
         if(criteria.includes('By percentage')) {
 
-        treshold = Math.round(members.length * Number(amount)/100)
+            treshold = Math.round(members.length * Number(amount)/100)
 
         }
 
-        approvals.length >= treshold ? await Budget.findByIdAndUpdate(budgetItem, {
-        status: 'active'
-        }, {
-            new: true
-        }) : null
+        if(approvals.length >= treshold) {
+            await Budget.findByIdAndUpdate(budgetItem, { status: 'active' }, { new: true })
+
+            await Vote.findOneAndUpdate({ $and: [{ budget: budgetItem, type: 'Budget' }] }, { status: 'active' }, { new: true })
+        }
 
         return
     }
 
     static async isPending(org_id, budgetItem) {
 
-        return await Budget.findOne({ $and: [ { budgetItem, organization: org_id, status: 'pending' } ] }).lean()
+        console.log(org_id, budgetItem)
 
+        return await Budget.findOne({ $and: [ { _id: budgetItem, organization: org_id, status: 'pending' } ] }).lean()
+
+        // console.log(data)
+        // return
     }
 
     static async decided(budgetItem, address) {

@@ -8,8 +8,6 @@ module.exports = {
 
        const member = await memberService.isMember(req.params.organization_id, req.query.address)
 
-       console.log(member)
-
        if(member == null) return next(createError.NotFound('Invalid user'))
 
        return next()
@@ -30,9 +28,9 @@ module.exports = {
 
         const decision = await memberService.decided(req.body.member, req.query.address)
 
-        if(decision == null) return next(createError.NotFound('Cannot approve more than once'))
+        if(decision != null) return next(createError.NotFound('Cannot approve more than once'))
 
-        // return next()
+        return next()
 
     }
 

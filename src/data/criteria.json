@@ -1,34 +1,42 @@
 [
     {
         "type": "Join",
-        "criteria": "Anyone may join"
+        "criteria": "Anyone may join",
+        "data": null
     },
     {
         "type": "Join",
-        "criteria": "By numbers - members' approval"
+        "criteria": "By numbers - members' approval",
+        "data": "Number"
     },
     {
         "type": "Join",
-        "criteria": "By percentage - members' approval"
+        "criteria": "By percentage - members' approval",
+        "data": "Percent"
     },
     {
         "type": "Join",
-        "criteria": "Anyone who pays the entry fee"
+        "criteria": "Anyone who pays the entry fee",
+        "data": "Fee"
     },
     {
         "type": "Budget",
-        "criteria": "Anyone may submit"
+        "criteria": "Anyone may submit",
+        "data": null
     },
     {
         "type": "Budget",
-        "criteria": "By numbers - members' approval"
+        "criteria": "By numbers - members' approval",
+        "data": "Number"
     },
     {
         "type": "Budget",
-        "criteria": "By percentage - members' approval"
+        "criteria": "By percentage - members' approval",
+        "data": "Percent"
     },
     {
         "type": "Budget",
-        "criteria": "Anyone who pays the set fee"
+        "criteria": "Anyone who pays the set fee",
+        "data": "Fee"
     }
 ]

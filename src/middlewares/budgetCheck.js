@@ -31,7 +31,7 @@ module.exports = {
 
         const decision = await budget.decided(req.body.budgetItem, req.query.address)
 
-        if(decision == null) return next(createError('Cannot approve more than once'))
+        if(decision != null) return next(createError('Cannot approve more than once'))
 
         return next()
 
