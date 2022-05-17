@@ -7,11 +7,17 @@ class VoteService {
 
     static async all(id, language) {
 
-        console.log(language, id)
+        // console.log(language, id)
 
         if(!language) return await Vote.find({organization: id}).lean()
 
-        return await LanguageVote.find({ $and: [{ language, organization: id }] }).populate('vote').lean()
+        const vote = await LanguageVote.find({ $and: [{ language, organization: id }] }).populate('vote').lean()
+
+        await Promise.all(vote.map((el, i) => {
+            vote[i].status = el.vote.status
+        }))
+
+        return vote
 
     }
 
@@ -38,7 +44,8 @@ class VoteService {
                 title,
                 description,
                 organization: data.organization,
-                language: el._id
+                language: el._id,
+                // status: data.status
             }
 
             return LanguageVote.create(lang_data)
@@ -52,7 +59,11 @@ class VoteService {
 
         if(!language) return await Vote.findById(id).lean()
 
-        return await LanguageVote.find({ $and: [{ language, vote: id }] }).populate('vote').lean()
+        const vote = await LanguageVote.findOne({ $and: [{ language, vote: id }] }).populate('vote').lean()
+
+        vote.status = vote.vote.status
+
+        return vote
 
     }
 

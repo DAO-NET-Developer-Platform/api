@@ -63,6 +63,13 @@ class DecisionController {
 
     }
 
+    static async createBudgetDecision(data) {
+
+        data.type = 'Budget'
+        return await Decision.create(data)     
+
+    }
+
 }
 
 module.exports = DecisionController 

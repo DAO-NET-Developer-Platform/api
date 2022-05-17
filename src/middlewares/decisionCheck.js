@@ -108,6 +108,18 @@ module.exports = {
 
         return next()
 
+    },
+
+    async checkDeadLine(req, res, next) {
+
+        const vote = await Vote.findById(req.params.vote_id).lean()
+
+        if(new Date() > new Date(vote.endDate)) return next('Vote has Ended')
+
+        if(new Date() < new Date(vote.startDate)) return next('Vote has not started')
+
+        return next()
+
     }
 
 }

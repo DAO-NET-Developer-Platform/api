@@ -65,6 +65,30 @@ class DecisionController {
 
     }
 
+    static async createBudgetDecision(req, res, next) {
+
+        try {
+
+            try {
+
+                const data = await decision.createBudgetDecision(req.body)
+    
+                return res.status(200).json({
+                    status: true,
+                    message: 'Decision created successfully',
+                    data
+                })
+                
+            } catch (e) {
+                return next(createError(e.statusCode, e.message))
+            }
+
+        } catch (e) {
+
+        }
+
+    }
+
 }
 
 module.exports = DecisionController

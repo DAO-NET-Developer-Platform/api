@@ -43,7 +43,18 @@ const schema = new mongoose.Schema({
     },
 
     type: {
-        type: String,   
+        type: String,
+        enum: ['Budget', 'Vote']
+    },
+
+    status: {
+        type: String,
+        enum: ['pending', 'active']
+    },
+
+    budget: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Budget'
     }
 
 })

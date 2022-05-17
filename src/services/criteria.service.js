@@ -5,6 +5,7 @@ class criteriaService {
 
     static async create() {
 
+        await Criteria.deleteMany()
 
         return await Criteria.insertMany(criterias)
 

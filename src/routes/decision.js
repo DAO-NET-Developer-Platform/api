@@ -7,7 +7,8 @@ routes.get('/vote/:vote_id', [check.isUser, check.getLangVote], decision.getVote
 routes.post('/vote/:vote_id', [check.isUser, check.isMember, check.getLangOption, check.getLangVote, check.hasDecided], decision.createVoteDecision)
 routes.get('/vote/:vote_id/all', globalCheck.getLang, decision.getAllVoters)
 
-// routes.get('/budget/:budget_id')
+routes.get('/budget/:vote_id', [check.isUser, check.getLangVote])
+routes.post('/budget/:vote_id', [check.isUser, check.isMember, check.getLangVote, check.checkDeadLine], decision.createBudgetDecision)
 // routes.post('/budget/:budget_id', decision.create)
 
 

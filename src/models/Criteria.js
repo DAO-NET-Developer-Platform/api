@@ -13,6 +13,11 @@ const schema = new mongoose.Schema({
           values: ['Budget', 'Join'],
           message: 'Unsupported value'
         }
+    },
+
+    data: {
+        type: String,
+        // required: true
     }
 
 })
