@@ -1,4 +1,4 @@
-// const circom = require("circomlibjs")
+const poseidonService = require('../services/poseidon')
 
 /**
  * Creates a Poseidon big number hash.
@@ -7,6 +7,6 @@
  */
 module.exports = function poseidon(...values){
     values = values.map(BigInt)
-
-    return circom.poseidon(values).toString()
+    
+    return poseidonService(values).toString()
 }

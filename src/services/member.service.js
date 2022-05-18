@@ -64,6 +64,8 @@ class MemberService {
             new: true
         }) : null
 
+        //appendLeaf to merkle root
+
         return
 
     }

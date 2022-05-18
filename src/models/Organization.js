@@ -45,7 +45,23 @@ const organization = new mongoose.Schema({
     treasury: {
         type: Number,
         // required: true
+    },
+
+    hash: {
+        type: String,
+        required: true
     }
+
+    // transaction: {
+    //     hash: {
+    //         type: String,
+    //         required: true
+    //     },
+
+    //     blockNumber: {
+    //         type: Number
+    //     }
+    // }
 
 }, {
     timestamps: true
