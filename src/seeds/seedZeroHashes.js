@@ -1,7 +1,8 @@
-// const { MerkleTreeZero } = require("@interep/db")
+const { MerkleTreeZero } = require("@interep/db")
 // import config from "src/config"
 // import { logger } from "src/utils/backend"
-// const poseidon = require("../utils/posidon")
+const poseidon = require("../utils/posidon")
+const crypto = require('crypto')
 
 module.exports = async function seedZeroHashes(req, res, next){
     console.log("Seeding zero hashes...")
@@ -28,4 +29,9 @@ module.exports = async function seedZeroHashes(req, res, next){
     }
 
     console.log("All the zero hashes have been inserted correctly")
+
+    return res.status(200).json({
+        status: true,
+        message: "All the zero hashes have been inserted correctly"
+    })
 }
