@@ -2,16 +2,16 @@ const { MerkleTreeNode, MerkleTreeNodeDocument, MerkleTreeRootBatch, MerkleTreeZ
 // import config from "src/config"
 // import { checkGroup } from "src/core/groups"
 // import { GroupName, Provider } from "src/types/groups"
-const { poseidon } =  require("./poseidon")
+const poseidon = require("../utils/posidon")
 
-/**
- * Appends a leaf on a tree.
- * @param provider The provider of the group.
- * @param name The name of the group.
- * @param identityCommitment The leaf of the tree.
- * @returns The new Merkle tree root.
- */
-export default async function appendLeaf(
+// /**
+//  * Appends a leaf on a tree.
+//  * @param provider The provider of the group.
+//  * @param name The name of the group.
+//  * @param identityCommitment The leaf of the tree.
+//  * @returns The new Merkle tree root.
+//  */
+module.exports = async function appendLeaf(
     provider,
     name,
     identityCommitment
@@ -24,7 +24,9 @@ export default async function appendLeaf(
     // Get the zero hashes.
     const zeroes = await MerkleTreeZero.find()
 
-    if (!zeroes || zeroes.length !== process.env.MERKLE_TREE_DEPTH) {
+    console.log(zeroes.length, 'zeroes')
+
+    if (!zeroes || zeroes.length !== parseInt(process.env.MERKLE_TREE_DEPTH)) {
         throw new Error(`The zero hashes have not yet been created`)
     }
 
@@ -62,6 +64,8 @@ export default async function appendLeaf(
 
                 await parentNode.save()
             } else {
+                console.log(node.hash, node.siblingHash)
+
                 parentNode = await MerkleTreeNode.create({
                     group: {
                         provider,

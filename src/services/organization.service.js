@@ -9,7 +9,8 @@ const Budget = require('../models/Budget')
 const LanguageBudget = require('../models/LanguageBudget')
 const LanguageVote = require('../models/LanguageVote')
 const Vote = require('../models/Vote');
-// const { default: appendLeaf } = require('./appendLeaf');
+const { appendLeaf } = require('./appendLeaf');
+const crypto = require('crypto')
 
 
 class OrganizationService {
@@ -148,8 +149,6 @@ class OrganizationService {
         data.user = user._id
 
         return await Member.create(data)
-
-        // if(data.status == 'active') appendLeaf
 
     }
 
