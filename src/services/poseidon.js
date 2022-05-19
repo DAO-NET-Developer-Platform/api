@@ -19,6 +19,7 @@ const N_ROUNDS_P = [56, 57, 56, 60, 60, 63, 64, 63, 60, 66, 60, 65, 70, 60, 64, 
 const pow5 = a => F.mul(a, F.square(F.square(a, a)));
 
 function poseidon(inputs) {
+
     assert(inputs.length > 0);
     assert(inputs.length <= N_ROUNDS_P.length);
 
