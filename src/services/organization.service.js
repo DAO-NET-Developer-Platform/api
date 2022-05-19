@@ -1,4 +1,5 @@
 const Organization = require('../models/Organization');
+const { MerkleTreeNode, MerkleTreeNodeDocument, MerkleTreeRootBatch, MerkleTreeZero } = require("@interep/db")
 // const LangOrganization = require('../models/LanguageOrganization')
 const Member = require('../models/Member')
 const randomString = require('randomstring')
@@ -9,7 +10,7 @@ const Budget = require('../models/Budget')
 const LanguageBudget = require('../models/LanguageBudget')
 const LanguageVote = require('../models/LanguageVote')
 const Vote = require('../models/Vote');
-const { appendLeaf } = require('./appendLeaf');
+const appendLeaf = require('./appendLeaf');
 const crypto = require('crypto')
 
 
@@ -58,6 +59,19 @@ class OrganizationService {
         }
 
         await Member.create(memberData)
+
+        //create merkleRootbatch and append leaf
+        const rootBatch = new MerkleTreeRootBatch({
+            group: {
+                provider: organization._id,
+                name: organization.name
+            },
+        })
+
+        await rootBatch.save()
+
+        //last option is for identityCommitment
+        await appendLeaf(organization._id, organization.name, '18903181363824143898991577644926413440129187799018296116511855593047705859145')
 
         return organization
 
@@ -146,9 +160,15 @@ class OrganizationService {
 
         const user = await User.findOne({ address: data.address }).lean()
 
-        data.user = user._id
+        data.user = user._id 
 
-        return await Member.create(data)
+        const member = await Member.create(data)
+
+        const organization = await this.find(data.organization)
+
+        if(data.status == 'active') await appendLeaf(organization._id, organization.name, '18903181363824143898991577644926413440129187799018296116511855593047705855895')
+
+        return member
 
     }
 
