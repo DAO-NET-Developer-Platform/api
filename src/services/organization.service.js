@@ -1,7 +1,7 @@
 const Organization = require('../models/Organization');
 // const LangOrganization = require('../models/LanguageOrganization')
 const Member = require('../models/Member')
-const randomString = require('randomstring')
+const randomstring = require('randomstring')
 const createError = require('http-errors')
 const language = require('../services/language.service')
 const User = require('../models/User')
@@ -9,8 +9,7 @@ const Budget = require('../models/Budget')
 const LanguageBudget = require('../models/LanguageBudget')
 const LanguageVote = require('../models/LanguageVote')
 const Vote = require('../models/Vote');
-const { appendLeaf } = require('./appendLeaf');
-const crypto = require('crypto')
+const slug = require('slugify')
 
 
 class OrganizationService {
@@ -29,6 +28,21 @@ class OrganizationService {
 
     }
 
+    static async slugify(name) {
+
+        const org = await this.findBy(name)
+
+        if(org == null) return slug(name)
+
+        const random = randomstring.generate({
+            length: 6,
+            charset: 'alphabetic'
+        });
+
+        return slug(`${name} ${random}`)
+
+    }
+
     static async all() {
 
         const organizations = await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
@@ -43,6 +57,8 @@ class OrganizationService {
 
         // data.cid = cid
         // data.image = image
+
+        data.slug = await this.slugify(data.name)
 
         //make the creator the first member
         const user = await User.findOne({ address: data.creator }).select('_id').lean()
