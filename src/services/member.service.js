@@ -39,7 +39,7 @@ class MemberService {
         //find all membership approvals for member
         const approvals = await Approval.find({ $and: [ { type, member } ] })
 
-        console.log(approvals.length)
+        // console.log(approvals.length)
     
         //find organization membership criteria
         const { criteria, amount } = await organization.getJoinCriteria(organization_id)

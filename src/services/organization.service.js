@@ -11,6 +11,7 @@ const LanguageBudget = require('../models/LanguageBudget')
 const LanguageVote = require('../models/LanguageVote')
 const Vote = require('../models/Vote');
 const appendLeaf = require('./appendLeaf');
+const deleteLeaf = require('./deleteLeaf')
 const crypto = require('crypto')
 
 
@@ -115,6 +116,11 @@ class OrganizationService {
 
         if(isMember != null) {
             await Member.findByIdAndDelete(isMember._id)
+
+            const organization = await this.find(data.organization)
+
+            await deleteLeaf(organization._id, organization.name, '18903181363824143898991577644926413440129187799018296116511855593047705855895')
+            
             return
         }
 
