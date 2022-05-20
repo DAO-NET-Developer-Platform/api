@@ -32,14 +32,18 @@ class OrganizationService {
 
         const org = await this.findBy(name)
 
-        if(org == null) return slug(name)
+        if(org == null) return slug(name, {
+            lower: true
+        })
 
         const random = randomstring.generate({
             length: 6,
-            charset: 'alphabetic'
+            charset: 'numeric'
         });
 
-        return slug(`${name} ${random}`)
+        return slug(`${name} ${random}`, {
+            lower: true
+        })
 
     }
 
