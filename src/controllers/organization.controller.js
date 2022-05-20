@@ -144,7 +144,8 @@ class OrganizationController {
 
             return res.status(200).json({
                 status: true,
-                message: 'Join requested successfully'
+                message: 'Join requested successfully',
+                data
             })
 
         } catch(e) {

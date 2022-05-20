@@ -23,7 +23,7 @@ module.exports = async function deleteLeaf(
     // Get the zero hashes.
     const zeroes = await MerkleTreeZero.find()
 
-    if (!zeroes || zeroes.length !== process.env.MERKLE_TREE_DEPTH) {
+    if (!zeroes || zeroes.length !== parseInt(process.env.MERKLE_TREE_DEPTH)) {
         throw new Error(`The zero hashes have not yet been created`)
     }
 
