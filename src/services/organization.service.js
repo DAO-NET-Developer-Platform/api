@@ -56,7 +56,8 @@ class OrganizationService {
             user: user._id,
             organization: organization._id,
             amountInTreasury: 0,
-            status: 'active'
+            status: 'active',
+            identityCommitment: data.identityCommitment
         }
 
         await Member.create(memberData)
@@ -72,7 +73,7 @@ class OrganizationService {
         await rootBatch.save()
 
         //last option is for identityCommitment
-        await appendLeaf(organization._id, organization.name, '18903181363824143898991577644926413440129187799018296116511855593047705859145')
+        await appendLeaf(organization._id, organization.name, data.identityCommitment)
 
         return organization
 

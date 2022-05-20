@@ -58,7 +58,7 @@ class MemberService {
         }
 
         if(approvals.length >= treshold) {
-            await Member.findByIdAndUpdate(member, {
+            const approvedMember = await Member.findByIdAndUpdate(member, {
                 status: 'active'
             }, {
                 new: true
@@ -67,7 +67,7 @@ class MemberService {
             const organizationData = await organization.find(data.organization)
 
             //appendLeaf to merkle root
-            await appendLeaf(organizationData._id, organization.name, '18903181363824143898991577644926413440129187799018291116511855593047705855895')         
+            await appendLeaf(organizationData._id, organization.name, approvedMember.identityCommitment)         
         }
 
         return
