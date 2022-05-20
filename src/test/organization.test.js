@@ -18,8 +18,22 @@ beforeEach(async () => {
 	// }
 }, 100000)
 
-describe('', () => {
+
+describe('when there is initially some organizations saved', () => {
     
+	test('organizations are returned as json', async () => {
+		await api
+			.get('/organization')
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
+	}, 100000)
+
+    test('fetch organization with slug', async() => {
+        await api
+            .get('/organization/dao-mazen')
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+    }, 100000)
 })
 
 afterAll(() => {
