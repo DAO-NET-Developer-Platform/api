@@ -51,7 +51,7 @@ class OrganizationService {
 
         const organizations = await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
 
-        return { organizations }
+        return organizations
 
     }
 
