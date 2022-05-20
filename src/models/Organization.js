@@ -50,6 +50,11 @@ const organization = new mongoose.Schema({
     hash: {
         type: String,
         required: true
+    },
+
+    slug: {
+        type: String,
+        required: true
     }
 
     // transaction: {
