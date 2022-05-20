@@ -56,7 +56,7 @@ module.exports = {
 
     async getOrgId(req, res, next) {
 
-        const org = await organization.findBy('slug', req.params.slug).lean()
+        const org = await organization.findBy('slug', req.params.slug)
 
         if(!org) return next(createError.NotFound('No such organization'))
 
