@@ -10,7 +10,7 @@ routes.get('/', organization.all)
 routes.post('/', [validator(schemas.create), generalCheck.checkImage, check.user, check.organizationName], organization.create)
 // routes.post('/lang_data', )
 
-routes.get('/:id', [check.isMember, check.validOrganization], organization.single)
+routes.get('/:slug', [check.getOrgId, check.isMember, check.validOrganization], organization.single)
 
 // routes.put('/:id', organization.update)
 // routes.delete('/', organization.delete)
