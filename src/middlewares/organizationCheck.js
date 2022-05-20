@@ -46,7 +46,7 @@ module.exports = {
 
         const member = await organization.isMember(req.query.address, req.params.id)
 
-        if(!member) return next(createError.Unauthorized('Invalid Credentials'))
+        // if(!member) return next(createError.Unauthorized('Invalid Credentials'))
 
         req.isMember = member == null ? false : true
 
