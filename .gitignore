@@ -28,3 +28,5 @@ benchmarks/graphs
 
 # Environment variables
 .env
+
+mongodb.js
