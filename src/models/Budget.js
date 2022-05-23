@@ -48,6 +48,11 @@ const budget = new mongoose.Schema({
           values: ['pending', 'active'],
           message: 'Unsupported value'
         }
+    },
+
+    hash: {
+        type: String,
+        required: true
     }
 
 }, {
