@@ -193,6 +193,16 @@ class OrganizationService {
 
     }
 
+    static async search(data) {
+        const results = await Organization.find(
+            {
+                name: { $regex: new RegExp(`${data}`), $options: 'i'}
+            }
+        )
+        
+        return results
+    }
+
 }
 
 module.exports = OrganizationService
