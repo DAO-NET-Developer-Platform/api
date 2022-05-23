@@ -23,6 +23,18 @@ const initialOrganizations = [
 	}
 ]
 
+const initialUsers = [
+
+	{
+		address: 'addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvo'
+	},
+
+	{
+		address: 'addrXAr9aE1u84fkrXOHppzTUCVVgvmOTcsp',
+	}
+
+]
+
 const nonExistingId = async () => {
 	const organization = new Organization({
 		title: 'Dao-Midas',
@@ -47,5 +59,6 @@ const organizationsInDb = async () => {
 module.exports = {
 	initialOrganizations,
 	nonExistingId,
-	organizationsInDb
+	organizationsInDb,
+	initialUsers
 }
