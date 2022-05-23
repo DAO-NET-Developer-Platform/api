@@ -99,13 +99,13 @@ describe('organization creation', () => {
 
 })
 
-// describe('Joining a Dao', () => {
+describe('Joining a Dao', () => {
 
-//     test('Existent users can join a Dao', () => {
+    // test('Existent users can join a Dao', () => {
 
-//     })
+    // })
 
-// })
+})
 
 
 afterAll(() => {
