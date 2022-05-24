@@ -27,7 +27,7 @@ describe('when there is initially some organizations saved', () => {
 	test('organizations are returned as json', async () => {
 		await api
 			.get('/organization')
-			.expect(400)
+			.expect(200)
 			.expect('Content-Type', /application\/json/)
 	}, 100000)
 
@@ -68,9 +68,6 @@ describe('organization creation', () => {
 
         const organizationAtEnd = await organizationsInDb()
         expect(organizationAtEnd).toHaveLength(initialOrganizations.length)
-
-        // const allNames = organizationAtEnd.map(el => el.title)
-        // expect(allTitle).not.toContain('Queen_Amadaila')
 			
 	}, 100000)
 
