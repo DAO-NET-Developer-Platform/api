@@ -5,10 +5,11 @@ const schemas = require('../validators/budget.validator')
 const check = require('../middlewares/budgetCheck')
 const memberCheck = require('../middlewares/memberCheck')
 
-routes.get('/:organization_id', check.organization, budget.all)
-routes.post('/:organization_id', [validator(schemas.create), check.organization], budget.create)
 
-routes.post('/:organization_id/approve', [memberCheck.isMember, check.isPending, check.decided], budget.approve)
+routes.get('/:organization_slug', check.getOrgId, check.organization, budget.all)
+routes.post('/:organization_slug', [validator(schemas.create), check.getOrgId, check.organization], budget.create)
+
+routes.post('/:organization_slug/approve', [check.getOrgId, memberCheck.isMember, check.isPending, check.decided], budget.approve)
 
 routes.get('/single/:id', budget.single)
 
