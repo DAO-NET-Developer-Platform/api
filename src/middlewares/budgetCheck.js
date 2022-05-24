@@ -43,7 +43,7 @@ module.exports = {
 
         if(!org) return next(createError.NotFound('No such organization'))
 
-        req.params.id = org._id
+        req.params.organization_id = org._id
 
         return next()
 
