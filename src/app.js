@@ -3,7 +3,7 @@ const app = express();
 const fileUpload = require('express-fileupload');
 
 // connect to mongodb and redis
-require('./connectors/redis');
+// require('./connectors/redis');
 require('./connectors/mongodb');
 
 const morgan = require('morgan');

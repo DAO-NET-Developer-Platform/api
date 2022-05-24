@@ -10,7 +10,7 @@ module.exports = {
 
         const id = req.params.organization_id
 
-        console.log(id)
+        // console.log(id)
 
         const check = await organization.find(id)
 
@@ -43,7 +43,7 @@ module.exports = {
 
         const org = await organization.findBy('slug', req.params.organization_slug)
 
-        console.log(org)
+        // console.log(org)
 
         if(!org) return next(createError.NotFound('No such organization'))
 
