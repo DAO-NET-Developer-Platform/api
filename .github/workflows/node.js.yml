@@ -41,6 +41,7 @@ jobs:
         with:
           mongodb-version: '5.0'
       - run: npm install
+      - run: npm ci
       - name: Connect to Redis
         # Runs a script that creates a Redis client, populates
         # the client with data, and retrieves data
