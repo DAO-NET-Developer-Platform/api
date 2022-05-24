@@ -19,7 +19,7 @@ beforeEach(async () => {
 	// for (let Organization of initialImages) {
 	//     await Organization.create(Organization)
 	// }
-}, 100000)
+})
 
 
 describe('when there is initially some organizations saved', () => {
@@ -27,7 +27,7 @@ describe('when there is initially some organizations saved', () => {
 	test('organizations are returned as json', async () => {
 		await api
 			.get('/organization')
-			.expect(200)
+			.expect(400)
 			.expect('Content-Type', /application\/json/)
 	}, 100000)
 
