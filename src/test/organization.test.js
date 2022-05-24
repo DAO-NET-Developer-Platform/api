@@ -99,14 +99,6 @@ describe('organization creation', () => {
 
 })
 
-describe('Joining a Dao', () => {
-
-    // test('Existent users can join a Dao', () => {
-
-    // })
-
-})
-
 
 afterAll(() => {
 	return mongoose.connection.close()
