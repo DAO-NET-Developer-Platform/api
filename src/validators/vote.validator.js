@@ -8,7 +8,8 @@ const schemas = {
         deadline: Joi.string().required(),
         description: Joi.any().required(),
         address: Joi.string().required(),
-        image: Joi.string().empty('').default(null)
+        image: Joi.string().empty('').default(null),
+        hash: Joi.string().required()
     })
 
 }
