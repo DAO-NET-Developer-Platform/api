@@ -23,7 +23,7 @@ class VoteService {
                 if(vote.type == 'budget') {
 
                 } else {
-                    vote.percentage == null
+                    vote[i].percentage == null
                 }
             }))
 
