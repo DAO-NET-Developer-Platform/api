@@ -9,7 +9,7 @@ class DecisionController {
         return await Decision.create(data)
     }
 
-    static async getVoteDecisions(vote, lang) {
+    static async getVoteDecisions(vote, lang, user) {
 
         const options = await Option.find({ type: 'Vote' }).lean()
 
@@ -18,6 +18,7 @@ class DecisionController {
         await Promise.all(options.map(async (el, i) => {
 
             const decisions = await Decision.find({ $and: [{ vote, option: el._id }] }).lean()
+            const isVoted = await Decision.find({ $and: [{ vote, user, option: el._id }] }).lean()
 
             if(lang) {
                 const lang_option = await LanguageOption.findOne({ option: el._id }).lean()
@@ -26,6 +27,7 @@ class DecisionController {
             }
 
             options[i].voteCount = decisions.length
+            options[i].isVoted = !!isVoted.length
         }))
 
         if(lang) return lang_options
