@@ -28,3 +28,4 @@ jobs:
       - run: npm run test:org
         env:
           MONGODB_TEST_URL: 'mongodb://localhost:27017/testing_daocoders'
+          MERKLE_TREE_DEPTH: 10
