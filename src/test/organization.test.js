@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Organization = require('../models/Organization')
+const { MerkleTreeZero } = require("@interep/db")
 const User = require('../models/User')
 const { initialOrganizations, nonExistingId, organizationsInDb, initialUsers } = require('./organization.test_helper')
 
@@ -15,10 +16,15 @@ beforeEach(async () => {
     const users = initialUsers.map((el) => User.create(el))
 
     await Promise.all(organizations, users)
+    await api.post('/seed/zeroHashes')
 	// //runs in order
 	// for (let Organization of initialImages) {
 	//     await Organization.create(Organization)
 	// }
+})
+
+afterEach(async () => {
+	await MerkleTreeZero.deleteMany({})
 })
 
 
