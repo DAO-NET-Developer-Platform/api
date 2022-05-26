@@ -20,6 +20,9 @@ module.exports = {
         const check = await User.findOne({ address }).lean()
         if(check == null) return next(createError.NotFound('Invalid credentials'))
 
+
+        req.params.user_id = check._id
+
         return next()
     
     },
