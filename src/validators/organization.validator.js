@@ -10,11 +10,13 @@ const schemas = {
         budgetCriteriaAmount: Joi.number(),
         address: Joi.string().required(),
         image: Joi.string().required(),
-        hash: Joi.string().required()
+        hash: Joi.string().required(),
+        identityCommitment: Joi.string().required()
     }),
 
     join: Joi.object().keys({
-        address: Joi.string().required()
+        address: Joi.string().required(),
+        identityCommitment: Joi.string().required()
     })
 }
 

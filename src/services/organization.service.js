@@ -1,4 +1,5 @@
 const Organization = require('../models/Organization');
+const { MerkleTreeNode, MerkleTreeNodeDocument, MerkleTreeRootBatch, MerkleTreeZero } = require("@interep/db")
 // const LangOrganization = require('../models/LanguageOrganization')
 const Member = require('../models/Member')
 const randomstring = require('randomstring')
@@ -9,7 +10,11 @@ const Budget = require('../models/Budget')
 const LanguageBudget = require('../models/LanguageBudget')
 const LanguageVote = require('../models/LanguageVote')
 const Vote = require('../models/Vote');
+const appendLeaf = require('./appendLeaf');
+const deleteLeaf = require('./deleteLeaf')
+const crypto = require('crypto')
 const slug = require('slugify')
+
 
 
 class OrganizationService {
@@ -74,10 +79,24 @@ class OrganizationService {
             user: user._id,
             organization: organization._id,
             amountInTreasury: 0,
-            status: 'active'
+            status: 'active',
+            identityCommitment: data.identityCommitment
         }
 
         await Member.create(memberData)
+
+        //create merkleRootbatch and append leaf
+        const rootBatch = new MerkleTreeRootBatch({
+            group: {
+                provider: organization._id,
+                name: organization.name
+            },
+        })
+
+        await rootBatch.save()
+
+        //last option is for identityCommitment
+        await appendLeaf(organization._id, organization.name, data.identityCommitment)
 
         return organization
 
@@ -120,8 +139,14 @@ class OrganizationService {
         const isMember = await this.checkMembership(data)
 
         if(isMember != null) {
+
             await Member.findByIdAndDelete(isMember._id)
-            return
+
+            const organization = await this.find(data.organization)
+
+            await deleteLeaf(organization._id, organization.name, data.identityCommitment)
+            
+            return `removed successfully`
         }
 
         //check organization requirement
@@ -166,9 +191,15 @@ class OrganizationService {
 
         const user = await User.findOne({ address: data.address }).lean()
 
-        data.user = user._id
+        data.user = user._id 
 
-        return await Member.create(data)
+        const member = await Member.create(data)
+
+        const organization = await this.find(data.organization)
+
+        if(data.status == 'active') await appendLeaf(organization._id, organization.name, '18903181363824143898991577644926413440129187799018296116511855593047705855895')
+
+        return member
 
     }
 

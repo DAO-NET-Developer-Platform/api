@@ -3,6 +3,7 @@ const User = require('../models/User')
 const Approval = require('../models/Approval')
 const organization = require('../services/organization.service')
 const createError = require('http-errors')
+const appendLeaf = require('./appendLeaf')
 
 
 class MemberService {
@@ -38,7 +39,7 @@ class MemberService {
         //find all membership approvals for member
         const approvals = await Approval.find({ $and: [ { type, member } ] })
 
-        console.log(approvals.length)
+        // console.log(approvals.length)
     
         //find organization membership criteria
         const { criteria, amount } = await organization.getJoinCriteria(organization_id)
@@ -46,8 +47,6 @@ class MemberService {
         let members = await this.getMembers(organization_id, null)
 
         members = members.filter((el) => el.status == "active")
-
-        console.log('members', members.length)
 
         //check if criteria is met and approve accodingly
         let treshold = amount
@@ -58,13 +57,18 @@ class MemberService {
 
         }
 
-        approvals.length >= treshold ? await Member.findByIdAndUpdate(member, {
-            status: 'active'
-        }, {
-            new: true
-        }) : null
+        if(approvals.length >= treshold) {
+            const approvedMember = await Member.findByIdAndUpdate(member, {
+                status: 'active'
+            }, {
+                new: true
+            })
 
-        //appendLeaf to merkle root
+            const organizationData = await organization.find(data.organization)
+
+            //appendLeaf to merkle root
+            await appendLeaf(organizationData._id, organization.name, approvedMember.identityCommitment)         
+        }
 
         return
 
