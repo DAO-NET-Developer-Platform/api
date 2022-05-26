@@ -49,6 +49,11 @@ const schema = new mongoose.Schema({
     budget: {
         type: mongoose.Types.ObjectId,
         ref: 'Budget'
+    },
+
+    hash: {
+        type: String,
+        required: true
     }
 
 })

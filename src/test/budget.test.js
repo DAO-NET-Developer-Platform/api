@@ -1,14 +1,16 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const Organization = require('../models/Organization')
+const Budget = require('../models/budget')
 const User = require('../models/User')
-const { initialOrganizations, nonExistingId, organizationsInDb, initialUsers } = require('./organization.test_helper')
+const { initialOrganizations, budgetsInDb, organizationsInDb, initialUsers } = require('./organization.test_helper')
+const Organization = require('../models/Organization')
 
 const api = supertest(app)
 
 beforeEach(async () => {
-	await Organization.deleteMany({})
+	await Budget.deleteMany({})
+    await Organization.deleteMany({})
     await User.deleteMany({})
 	//create an array of promises
 	const organizations = initialOrganizations.map((el) => Organization.create(el))
@@ -97,8 +99,6 @@ describe('organization creation', () => {
 })
 
 
-afterAll(async () => {
-    await Organization.deleteMany({})
-    await User.deleteMany({})
+afterAll(() => {
 	return mongoose.connection.close()
 })
