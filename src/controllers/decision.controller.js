@@ -23,11 +23,11 @@ class DecisionController {
 
     static async getVoteDecisions(req, res, next) {
 
-        const { vote_id } = req.params
+        const { vote_id, user_id } = req.params
 
         try {
 
-            const data = await decision.getVoteDecisions(vote_id, req.query.lang)
+            const data = await decision.getVoteDecisions(vote_id, req.query.lang, user_id)
 
             return res.status(200).json({
                 status: true,

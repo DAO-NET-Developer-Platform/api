@@ -46,14 +46,23 @@ class BudgetService {
     }
 
     static async single(id, lang) {
+        
+        const vote = await Vote.findOne({ budget: id }).lean()
 
-        if(!lang) return (await Budget.findById(id)).toObject()
+        if(!lang) {
+
+            const budget = (await Budget.findById(id)).toObject()
+            budget.vote = vote._id
+
+            return budget
+        }
 
         const language = await Language.findOne({ code: lang }).lean()
 
         const budget = await LanguageBudget.findOne({ $and:[{language:  language._id, budget: id }] }).populate('budget').lean()
 
         budget.status = budget.budget.status
+        budget.vote = vote._id
 
         return budget
 

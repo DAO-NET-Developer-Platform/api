@@ -41,6 +41,22 @@ module.exports = {
 
         return next()
 
-    }
+    },
+
+    async isUser(req, res, next) {
+
+        const { address } = req.query
+
+        if(!address) return next()
+
+        const check = await User.findOne({ address }).lean()
+        if(check == null) return next(createError.NotFound('Invalid credentials'))
+
+
+        req.params.user_id = check._id
+
+        return next()
+    
+    },
 
 }
