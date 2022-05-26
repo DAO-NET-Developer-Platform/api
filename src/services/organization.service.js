@@ -62,11 +62,6 @@ class OrganizationService {
 
     static async create(data) {
 
-        // const { cid, image } = await uploadFile(data.image.tempFilePath)
-
-        // data.cid = cid
-        // data.image = image
-
         data.slug = await this.slugify(data.name)
 
         //make the creator the first member
