@@ -29,6 +29,10 @@ const member = new mongoose.Schema({
           values: ['pending', 'active'],
           message: 'Unsupported value'
         }
+    },
+
+    identityCommitment: {
+        type: String,
     }
 
 }, {
