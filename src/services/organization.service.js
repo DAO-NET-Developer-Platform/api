@@ -2,7 +2,7 @@ const Organization = require('../models/Organization');
 const { MerkleTreeNode, MerkleTreeNodeDocument, MerkleTreeRootBatch, MerkleTreeZero } = require("@interep/db")
 // const LangOrganization = require('../models/LanguageOrganization')
 const Member = require('../models/Member')
-const randomString = require('randomstring')
+const randomstring = require('randomstring')
 const createError = require('http-errors')
 const language = require('../services/language.service')
 const User = require('../models/User')
@@ -13,6 +13,8 @@ const Vote = require('../models/Vote');
 const appendLeaf = require('./appendLeaf');
 const deleteLeaf = require('./deleteLeaf')
 const crypto = require('crypto')
+const slug = require('slugify')
+
 
 
 class OrganizationService {
@@ -31,11 +33,30 @@ class OrganizationService {
 
     }
 
+    static async slugify(name) {
+
+        const org = await this.findBy(name)
+
+        if(org == null) return slug(name, {
+            lower: true
+        })
+
+        const random = randomstring.generate({
+            length: 6,
+            charset: 'numeric'
+        });
+
+        return slug(`${name} ${random}`, {
+            lower: true
+        })
+
+    }
+
     static async all() {
 
         const organizations = await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
 
-        return { organizations }
+        return organizations
 
     }
 
@@ -45,6 +66,8 @@ class OrganizationService {
 
         // data.cid = cid
         // data.image = image
+
+        data.slug = await this.slugify(data.name)
 
         //make the creator the first member
         const user = await User.findOne({ address: data.creator }).select('_id').lean()
@@ -199,6 +222,16 @@ class OrganizationService {
 
         return await Member.findOne({ $and: [ {user: user._id, organization: org_id} ] }).lean()
 
+    }
+
+    static async search(data) {
+        const results = await Organization.find(
+            {
+                name: { $regex: new RegExp(`${data}`), $options: 'i'}
+            }
+        )
+        
+        return results
     }
 
 }

@@ -46,9 +46,21 @@ module.exports = {
 
         const member = await organization.isMember(req.query.address, req.params.id)
 
-        if(!member) return next(createError.Unauthorized('Invalid Credentials'))
+        // if(!member) return next(createError.Unauthorized('Invalid Credentials'))
 
         req.isMember = member == null ? false : true
+
+        return next()
+
+    },
+
+    async getOrgId(req, res, next) {
+
+        const org = await organization.findBy('slug', req.params.slug)
+
+        if(!org) return next(createError.NotFound('No such organization'))
+
+        req.params.id = org._id
 
         return next()
 

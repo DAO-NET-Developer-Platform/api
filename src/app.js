@@ -3,7 +3,7 @@ const app = express();
 const fileUpload = require('express-fileupload');
 
 // connect to mongodb and redis
-require('./connectors/redis');
+// require('./connectors/redis');
 require('./connectors/mongodb');
 
 const morgan = require('morgan');
@@ -45,3 +45,5 @@ app.use('/', routes)
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`)
 })
+
+module.exports = app

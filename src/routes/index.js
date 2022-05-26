@@ -9,7 +9,7 @@ const criteria = require('./criteria')
 const language = require('./language')
 const option = require('./option')
 const decision = require('./decision')
-const seed = require('./seed')
+// const seed = require('./seed')
 const createError = require('http-errors')
 
 
@@ -31,7 +31,7 @@ routes.use('/criteria', criteria)
 routes.use('/language', language)
 routes.use('/option', option)
 routes.use('/decision', decision)
-routes.use('/seed', seed)
+// routes.use('/seed', seed)
 
 routes.use( async (req, res, next) => {
     next(createError.NotFound('Route not Found'))

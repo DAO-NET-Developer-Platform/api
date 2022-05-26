@@ -27,13 +27,8 @@ const budget = new mongoose.Schema({
         required: true
     },
 
-    startDate: {
-        type: Date,
-        required: true
-    },
-
-    endDate: {
-        type: Date,
+    deadline: {
+        type: String,
         required: true
     },
 
@@ -53,6 +48,11 @@ const budget = new mongoose.Schema({
           values: ['pending', 'active'],
           message: 'Unsupported value'
         }
+    },
+
+    hash: {
+        type: String,
+        required: true
     }
 
 }, {

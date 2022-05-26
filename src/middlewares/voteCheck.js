@@ -27,6 +27,36 @@ module.exports = {
 
         return next()      
 
-    }
+    },
+
+    async getOrgId(req, res, next) {
+
+        const org = await organization.findBy('slug', req.params.organization_slug)
+
+        // console.log(org)
+
+        if(!org) return next(createError.NotFound('No such organization'))
+
+        req.params.organization_id = org._id
+
+        return next()
+
+    },
+
+    async isUser(req, res, next) {
+
+        const { address } = req.query
+
+        if(!address) return next()
+
+        const check = await User.findOne({ address }).lean()
+        if(check == null) return next(createError.NotFound('Invalid credentials'))
+
+
+        req.params.user_id = check._id
+
+        return next()
+    
+    },
 
 }

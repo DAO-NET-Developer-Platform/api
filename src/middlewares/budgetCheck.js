@@ -10,6 +10,8 @@ module.exports = {
 
         const id = req.params.organization_id
 
+        // console.log(id)
+
         const check = await organization.find(id)
 
         if(check == null) return next(createError.NotFound('No such organization'))
@@ -32,6 +34,20 @@ module.exports = {
         const decision = await budget.decided(req.body.budgetItem, req.query.address)
 
         if(decision != null) return next(createError('Cannot approve more than once'))
+
+        return next()
+
+    },
+
+    async getOrgId(req, res, next) {
+
+        const org = await organization.findBy('slug', req.params.organization_slug)
+
+        // console.log(org)
+
+        if(!org) return next(createError.NotFound('No such organization'))
+
+        req.params.organization_id = org._id
 
         return next()
 
