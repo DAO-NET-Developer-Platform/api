@@ -17,7 +17,11 @@ const schemas = {
     join: Joi.object().keys({
         address: Joi.string().required(),
         identityCommitment: Joi.string().required()
-    })
+    }),
+
+    // me: Joi.object().key({
+    //     address: Joi.string().required(),
+    // })
 }
 
 module.exports = schemas;

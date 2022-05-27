@@ -8,6 +8,7 @@ const organization = require('../controllers/organization.controller')
 
 routes.get('/', organization.all)
 routes.post('/', [validator(schemas.create), generalCheck.checkImage, check.user, check.organizationName], organization.create)
+routes.get('/me', organization.me)
 // routes.post('/lang_data', )
 
 routes.get('/:slug', [check.getOrgId, check.isMember, check.validOrganization], organization.single)
