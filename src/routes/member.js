@@ -4,5 +4,6 @@ const check = require('../middlewares/memberCheck')
 
 routes.get('/:organization_slug', check.getOrgId, member.getMembers)
 routes.post('/:organization_slug/approve', [check.getOrgId, check.isMember, check.isPending, check.decided], member.approve)
+routes.post('/verify', member.verify)
 
 module.exports = routes

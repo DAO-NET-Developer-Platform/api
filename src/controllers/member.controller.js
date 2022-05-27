@@ -47,6 +47,28 @@ class MemberController {
         }
 
     }
+
+    static async verify(req, res, next) {
+
+        try {
+
+            const isMember = await member.verifyMember(req.body)
+
+            return res.status(200).json({
+                status: true,
+                message: 'Member verification',
+                data: {
+                    isMember
+                }
+            })
+
+        } catch(e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+    }
 }
 
 module.exports = MemberController

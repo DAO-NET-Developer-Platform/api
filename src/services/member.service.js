@@ -5,6 +5,7 @@ const organization = require('../services/organization.service')
 const createError = require('http-errors')
 const appendLeaf = require('./appendLeaf')
 const Decision = require('../models/Decision')
+const hasLeaf = require('./hasLeaf')
 
 
 class MemberService {
@@ -101,6 +102,12 @@ class MemberService {
         if(!user) return
 
         return await Approval.findOne({ $and: [ { member, user: user._id } ] }).lean()
+
+    }
+
+    static async verifyMember(data) {
+
+        return await hasLeaf(data)
 
     }
 }
