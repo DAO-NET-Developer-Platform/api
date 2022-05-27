@@ -15,7 +15,8 @@ module.exports = {
     async isUser(req, res, next) {
 
         const { address } = req.query
-        if(!address) return next(createError.NotFound('Invalid credentials'))
+        
+        if(!address) return next()
 
         const check = await User.findOne({ address }).lean()
         if(check == null) return next(createError.NotFound('Invalid credentials'))

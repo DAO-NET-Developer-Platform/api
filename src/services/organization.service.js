@@ -88,7 +88,7 @@ class OrganizationService {
 
         await Member.create(memberData)
 
-        //create merkleRootbatch and append leaf
+        //create merkleRootbatch and append leaf ..use hash as provider
         const rootBatch = new MerkleTreeRootBatch({
             group: {
                 provider: organization._id,
