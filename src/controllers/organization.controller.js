@@ -68,6 +68,27 @@ class OrganizationController {
 
     }
 
+    static async me(req, res, next) {
+
+
+        try {
+
+            const data = await organization.me(req.query.address)
+
+            return res.status(200).json({
+                status: true,
+                message: 'All my organizations',
+                data
+            })
+
+        } catch(e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+    }
+
     static async update(req, res, next) {
 
         const id = req.params.id

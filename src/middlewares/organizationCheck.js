@@ -64,6 +64,10 @@ module.exports = {
 
         return next()
 
-    }
+    },
+
+    // async getUser() {
+
+    // }
 
 }

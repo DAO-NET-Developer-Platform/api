@@ -60,6 +60,14 @@ class OrganizationService {
 
     }
 
+    static async me(address) {
+
+        const orgs = await Member.find({ address }).populate('organization').lean()
+
+        return orgs.map((el) => el.organization)
+
+    }
+
     static async create(data) {
 
         data.slug = await this.slugify(data.name)
