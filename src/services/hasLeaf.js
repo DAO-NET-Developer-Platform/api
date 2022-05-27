@@ -1,44 +1,37 @@
-import { MerkleTreeNode } from "@interep/db"
+const { MerkleTreeNode } = require("@interep/db")
 // import config from "src/config"
 // import { getCors, logger, runAPIMiddleware } from "src/utils/backend"
 // import { connectDatabase } from "src/utils/backend/database"
+const createProof = require('./createProof')
+const createError = require('http-errors')
 
-export default async function hasLeafController(req, res) {
+module.exports = async function hasLeaf(data)  {
 
-    const root = req.query?.root
-    const leaf = req.query?.leaf
+    // const root = req.query.root
+    // const leaf = req.query.leaf
+
+    const { provider, name, identityCommitment } = data
+
+    const proof = await createProof(provider, name, identityCommitment)
+
+    const { leaf, root } = proof
+
 
     if (!root || typeof root !== "string" || !leaf || typeof leaf !== "string") {
-        res.status(400).end()
-        return
+        throw new Error("Invalid Leaf or Root")
     }
 
-    try {
-        // await runAPIMiddleware(req, res, getCors({ origin: "*" }))
+    const rootNode = await MerkleTreeNode.findOne({ hash: root })
 
-        // await connectDatabase()
-
-        const rootNode = await MerkleTreeNode.findOne({ hash: root })
-
-        if (!rootNode || rootNode.level !== process.env.MERKLE_TREE_DEPTH) {
-            res.status(404).end("The root does not exist")
-            return
-        }
-
-        const leafNode = await MerkleTreeNode.findOne({ hash: leaf })
-
-        res.status(200).send({
-            data:
-                !!leafNode &&
-                leafNode.level === 0 &&
-                rootNode.group.provider === leafNode.group.provider &&
-                rootNode.group.name === leafNode.group.name
-        })
-    } catch (error) {
-        res.status(500).end()
-
-        console.log(error)
+    if (!rootNode || rootNode.level !== parseInt(process.env.MERKLE_TREE_DEPTH)) {
+        throw new Error("The root does not exist")
     }
+
+    const leafNode = await MerkleTreeNode.findOne({ hash: leaf })
+
+    
+    return !!leafNode && leafNode.level === 0 && rootNode.group.provider === leafNode.group.provider && rootNode.group.name === leafNode.group.name
+
 }
 
 
