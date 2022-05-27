@@ -1,6 +1,7 @@
 const Member = require('../models/Member')
 const createError = require('http-errors')
 const memberService = require('../services/member.service')
+const organization = require('../services/organization.service')
 
 module.exports = {
 
