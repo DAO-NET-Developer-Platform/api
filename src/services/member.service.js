@@ -4,6 +4,7 @@ const Approval = require('../models/Approval')
 const organization = require('../services/organization.service')
 const createError = require('http-errors')
 const appendLeaf = require('./appendLeaf')
+const Decision = require('../models/Decision')
 
 
 class MemberService {
@@ -12,11 +13,14 @@ class MemberService {
         
         const members = await Member.find({ organization: id }).populate('user').lean()
 
-        members.map((el, i) => {
+        await Promise.all(members.map(async (el, i) => {
+            const decisions = await Decision.find({ organization: id, address }).lean()
+            members[i].decisions = decisions.length
+
             if(el.address == address) {
                 members[i].me = true
             }
-        })
+        }))
 
         return members
     }

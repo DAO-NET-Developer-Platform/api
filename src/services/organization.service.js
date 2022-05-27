@@ -200,7 +200,7 @@ class OrganizationService {
 
         const organization = await this.find(data.organization)
 
-        if(data.status == 'active') await appendLeaf(organization._id, organization.name, '18903181363824143898991577644926413440129187799018296116511855593047705855895')
+        if(data.status == 'active') await appendLeaf(organization._id, organization.name, data.identityCommitment)
 
         return member
 
