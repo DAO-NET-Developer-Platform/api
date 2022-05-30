@@ -68,46 +68,68 @@ class VoteController {
         }
     }
 
-    static async update(req, res, next) {
+    static async search(req, res, next) {
+
+        const { organization_id } = req.params
+
+        try {
+
+            const data = await vote.search(organization_id, req.query)
+
+            return res.status(200).json({
+                status: true,
+                message: "Search Results",
+                data
+            })
+
+        } catch (e) {
+
+            return next(createError(e.statusCode, e.message))
+
+        }
+
+    }
+
+    // static async update(req, res, next) {
         
-        const id = req.params.id
+    //     const id = req.params.id
 
-        try {
+    //     try {
 
-            const data = await vote.update(id, req.body)
+    //         const data = await vote.update(id, req.body)
 
-            return res.status(200).json({
-                status: true,
-                message: 'Vote updated successfully',
-                data
-            })
+    //         return res.status(200).json({
+    //             status: true,
+    //             message: 'Vote updated successfully',
+    //             data
+    //         })
 
-        } catch(e) {
+    //     } catch(e) {
 
-            return next(createError(e.statusCode, e.message))
+    //         return next(createError(e.statusCode, e.message))
 
-        }
-    }
+    //     }
+    // }
 
-    static async delete(req, res, next) {
-        const id = req.params.id
+    // static async delete(req, res, next) {
+    //     const id = req.params.id
 
-        try {
+    //     try {
 
-            const data = await Vote.delete(id)
+    //         const data = await Vote.delete(id)
 
-            return res.status(200).json({
-                status: true,
-                message: 'Vote Deleted',
-                data
-            })
+    //         return res.status(200).json({
+    //             status: true,
+    //             message: 'Vote Deleted',
+    //             data
+    //         })
 
-        } catch(e) {
+    //     } catch(e) {
 
-            return next(createError(e.statusCode, e.message))
+    //         return next(createError(e.statusCode, e.message))
 
-        }
-    }
+    //     }
+    // }
 
 }
 

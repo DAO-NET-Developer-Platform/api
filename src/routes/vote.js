@@ -16,7 +16,7 @@ routes.get('/single/:id', [globalCheck.getLang], vote.single)
 
 
 //get voters
-routes.get('/:id/voters')
+routes.post('/:organization_slug/search', check.getOrgId, vote.search)
 
 module.exports = routes
 

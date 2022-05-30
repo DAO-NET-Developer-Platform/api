@@ -15,6 +15,6 @@ routes.get('/single/:id', budget.single)
 
 
 //search
-routes.post('/search', budget.search)
+routes.post('/:organization_slug/search', check.getOrgId, budget.search)
 
 module.exports = routes

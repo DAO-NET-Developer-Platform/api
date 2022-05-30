@@ -131,12 +131,6 @@ class OrganizationService {
 
     }
 
-    static async search (data) {
-
-        
-
-    }
-
     static async delete(id) {
 
         return await Promise.all([Organization.deleteMany(), Member.deleteMany(), User.deleteMany(), Budget.deleteMany(), LanguageBudget.deleteMany(), Vote.deleteMany(), LanguageVote.deleteMany()])
@@ -238,11 +232,38 @@ class OrganizationService {
     }
 
     static async search(data) {
-        const results = await Organization.find(
-            {
-                name: { $regex: new RegExp(`${data}`), $options: 'i'}
+
+        const { name, criteria, address } = data
+
+        let results
+
+        //search all organizations
+        if(!criteria || criteria == 'all') {
+
+            results = await Organization.find(
+                {
+                    name: { $regex: new RegExp(`${name}`), $options: 'i'}
+                }
+            )
+
+            return results
+        }
+
+        //search joined organizations
+        results = await Member.find({ address }).populate({
+            path:'organization',
+            match: {
+                name: { $regex: new RegExp(`${name}`), $options: 'i'}
             }
-        )
+        })
+
+        results.map((el, i) => {
+            el.organization != null ? results[i] = el.organization : delete results[i]
+        })
+
+        results = results.filter((el, i) => {
+            return el != null
+        })
         
         return results
     }
