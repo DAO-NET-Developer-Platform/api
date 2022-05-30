@@ -123,6 +123,46 @@ class VoteService {
         // const options = [ 'Yes, i support', '' ]
 
     }
+
+    static async search(id, data) {
+
+        const { title, criteria, address } = data
+
+        let results
+
+        //search all budgets
+        if(!criteria || criteria == 'all') {
+
+            results = await Vote.find({
+                $and: [{
+                    organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                }]
+            })
+
+            return results
+        }
+
+        //search budget votes only
+        results = await Vote.find({ type: 'Budget' }).populate({
+            path: 'budget',
+            match: {
+                $and: [{
+                    organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                }]
+            }
+        })
+
+        results.map((el, i) => {
+            el.budget != null ? results[i] = el.budget : delete results[i]
+        })
+
+        results = results.filter((el, i) => {
+            return el != null
+        })
+        
+        return results
+
+    }
 }
 
 module.exports = VoteService

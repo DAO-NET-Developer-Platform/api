@@ -98,49 +98,49 @@ class BudgetController {
 
     }
 
-    static async update(req, res, next) {
+    // static async update(req, res, next) {
 
-        const { id } = req.params
+    //     const { id } = req.params
 
-        try {
+    //     try {
 
-            const data = await budget.update(id, req.body)
+    //         const data = await budget.update(id, req.body)
 
-            return res.status(200).json({
-                status: true,
-                message: "Budget updated successfully",
-                data
-            })
+    //         return res.status(200).json({
+    //             status: true,
+    //             message: "Budget updated successfully",
+    //             data
+    //         })
 
-        } catch (e) {
+    //     } catch (e) {
 
-            return next(createError(e.statusCode, e.message))
+    //         return next(createError(e.statusCode, e.message))
 
-        }
+    //     }
 
-    }
+    // }
 
-    static async delete(req, res, next) {
+    // static async delete(req, res, next) {
 
-        const { id } = req.params
+    //     const { id } = req.params
 
-        try {
+    //     try {
 
-            const data = await budget.delete(id)
+    //         const data = await budget.delete(id)
 
-            return res.status(200).json({
-                status: true,
-                message: "Budget deleted successfully",
-                data
-            })
+    //         return res.status(200).json({
+    //             status: true,
+    //             message: "Budget deleted successfully",
+    //             data
+    //         })
 
-        } catch (e) {
+    //     } catch (e) {
 
-            return next(createError(e.statusCode, e.message))
+    //         return next(createError(e.statusCode, e.message))
 
-        }
+    //     }
 
-    }
+    // }
 
     static async search(req, res, next) {
 

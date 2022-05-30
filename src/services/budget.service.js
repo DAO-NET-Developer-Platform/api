@@ -119,8 +119,8 @@ class BudgetService {
         }
 
         //search voted budgets
-        results = await Decision.find({ type: 'budget' }).populate({
-            path: 'budget',
+        results = await Decision.find({ $and: [ { type: 'Budget', address }] }).populate({
+            path: 'vote',
             match: {
                 $and: [{
                     organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
@@ -129,7 +129,7 @@ class BudgetService {
         })
 
         results.map((el, i) => {
-            el.budget != null ? results[i] = el.budget : delete results[i]
+            el.vote != null ? results[i] = el.vote : delete results[i]
         })
 
         results = results.filter((el, i) => {
