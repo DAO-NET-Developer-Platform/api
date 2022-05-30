@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require("mongoose-paginate-v2")
 
 const budget = new mongoose.Schema({
 
@@ -58,5 +59,8 @@ const budget = new mongoose.Schema({
 }, {
     timestamps: true
 })
+
+budget.index({ title : 'text' })
+budget.plugin(mongoosePaginate)
 
 module.exports = mongoose.model('Budget', budget)

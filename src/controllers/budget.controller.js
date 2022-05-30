@@ -7,11 +7,11 @@ class BudgetController {
 
         const { organization_id } = req.params
 
-        const { lang } = req.query
+        const { lang, page } = req.query
 
         try {
 
-            const data = await budget.all(organization_id, lang)
+            const data = await budget.all(organization_id, lang, page)
 
             return res.status(200).json({
                 status: true,

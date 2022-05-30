@@ -6,12 +6,25 @@ const Decision = require('../models/Decision')
 
 class VoteService {
 
-    static async all(id, language, user) {
+    static async all(id, language, user, page) {
 
         // console.log(language, id)
 
         if(!language) {
-            const vote = await Vote.find({organization: id}).lean()
+
+            let vote
+
+            if(!page) {
+                vote = await Vote.find({organization: id}).lean()
+            } else {
+                const data = await Vote.paginate({organization: id}, {
+                    page,
+                    limit: 12,
+                    lean: true
+                })
+
+                vote = data.docs
+            }
 
             await Promise.all(vote.map(async (el, i) => {
                 if(user) {
@@ -30,7 +43,22 @@ class VoteService {
             return vote
         }
 
-        const vote = await LanguageVote.find({ $and: [{ language, organization: id }] }).populate('vote').lean()
+        let vote
+
+        if(!page) {
+            vote = await LanguageVote.find({ $and: [{ language, organization: id }] }).populate('vote').lean()
+        } else {
+            const data = await LanguageVote.paginate({ $and: [{ language, organization: id }] }, {
+                page,
+                limit: 12,
+                populate: 'vote',
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+
+            vote = data.docs
+        }
+
 
         await Promise.all(vote.map(async (el, i) => {
             vote[i].status = el.vote.status

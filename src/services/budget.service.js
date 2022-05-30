@@ -13,14 +13,45 @@ const vote = require('../services/vote.service')
 
 class BudgetService {
 
-    static async all(id, lang) {
+    static async all(id, lang, page) {
 
+        if(!lang) {
 
-        if(!lang) return await Budget.find({ organization: id }).populate('organization').lean()
+            if(!page) return await Budget.find({ organization: id }).populate('organization').lean()
+
+            const data = await Budget.paginate({ organization: id }, { 
+                page,
+                limit: 12,
+                populate: 'organization',
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+
+            return data.docs
+
+        } 
 
         const language = await Language.findOne({ code: lang }).lean()
 
-        const budget = await LanguageBudget.find({ $and: [{language:  language._id, organization: id}] }).populate('budget').lean()
+        let budget
+
+        if(!page) {
+
+            budget = await LanguageBudget.find({ $and: [{language:  language._id, organization: id}] }).populate('budget').lean()
+
+        } else {
+
+            const data = await LanguageBudget.paginate({ $and: [{language:  language._id, organization: id}] }, { 
+                page,
+                limit: 12,
+                populate: 'budget',
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+
+            budget = data.docs
+
+        }
 
         await Promise.all(budget.map((el, i) => {
             budget[i].status = el.budget.status

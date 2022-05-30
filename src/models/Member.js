@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require("mongoose-paginate-v2")
 
 const member = new mongoose.Schema({
 
@@ -38,5 +39,8 @@ const member = new mongoose.Schema({
 }, {
     timestamps: true
 })
+
+member.index({ address : 'text' })
+member.plugin(mongoosePaginate)
 
 module.exports = mongoose.model('Member', member)
