@@ -52,11 +52,19 @@ class OrganizationService {
 
     }
 
-    static async all() {
+    static async all(page) {
 
-        const organizations = await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
+        if(!page) return await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
 
-        return organizations
+        const data = await Organization.paginate({}, { 
+            page,
+            limit: 12,
+            populate: ['budgetCriteria', 'joinCriteria'],
+            lean: true,
+            sort: { createdAt: 'desc' }
+        })
+
+        return data.docs
 
     }
 

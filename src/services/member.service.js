@@ -10,9 +10,23 @@ const hasLeaf = require('./hasLeaf')
 
 class MemberService {
 
-    static async getMembers(id, address) {
-        
-        const members = await Member.find({ organization: id }).populate('user').lean()
+    static async getMembers(id, address, page) {
+
+        let members
+
+        if(!page) {
+            members =  await Member.find({ organization: id }).populate('user').lean()
+        } else {
+            const data = await Member.paginate({ organization: id }, {
+                page,
+                limit: 10,
+                populate: 'user',
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+
+            members = data.docs
+        }
 
         await Promise.all(members.map(async (el, i) => {
             const decisions = await Decision.find({ organization: id, address }).lean()

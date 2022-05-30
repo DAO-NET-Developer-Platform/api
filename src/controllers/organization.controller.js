@@ -4,11 +4,13 @@ const organization = require('../services/organization.service')
 class OrganizationController {
 
     static async all(req, res, next) {
+
+        const { page } = req.query
         
 
         try {
 
-            const data = await organization.all()
+            const data = await organization.all(page)
 
             return res.status(200).json({
                 status: true,

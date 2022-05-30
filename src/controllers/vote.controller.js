@@ -9,9 +9,11 @@ class VoteController {
 
         // if(req.language)
 
+        const { page } = req.query
+
         try {
 
-            const data = await vote.all(organization_id, req.language, user_id)
+            const data = await vote.all(organization_id, req.language, user_id, page)
 
             return res.status(200).json({
                 status: true,

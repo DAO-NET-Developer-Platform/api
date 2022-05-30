@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const mongoosePaginate = require("mongoose-paginate-v2")
 
 const organization = new mongoose.Schema({
 
@@ -71,5 +72,8 @@ const organization = new mongoose.Schema({
 }, {
     timestamps: true
 })
+
+organization.index({ name : 'text' })
+organization.plugin(mongoosePaginate)
 
 module.exports = mongoose.model('Organization', organization)
