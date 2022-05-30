@@ -144,9 +144,11 @@ class BudgetController {
 
     static async search(req, res, next) {
 
+        const { organization_id } = req.params
+
         try {
 
-            const data = await budget.search(req.query)
+            const data = await budget.search(organization_id, req.query)
 
             return res.status(200).json({
                 status: true,

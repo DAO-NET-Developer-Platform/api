@@ -10,6 +10,7 @@ const User = require('../models/User')
 const Vote = require('../models/Vote')
 // const LanguageVote = require('../models/LanguageVote')
 const vote = require('../services/vote.service')
+const Decision = require('../models/Decision')
 
 class BudgetService {
 
@@ -99,7 +100,43 @@ class BudgetService {
 
     }
 
-    static async search (data) {
+    static async search (id, data) {
+
+        const { title, criteria, address } = data
+
+        let results
+
+        //search all budgets
+        if(!criteria || criteria == 'all') {
+
+            results = await Budget.find({
+                $and: [{
+                    organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                }]
+            })
+
+            return results
+        }
+
+        //search voted budgets
+        results = await Decision.find({ type: 'budget' }).populate({
+            path: 'budget',
+            match: {
+                $and: [{
+                    organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                }]
+            }
+        })
+
+        results.map((el, i) => {
+            el.budget != null ? results[i] = el.budget : delete results[i]
+        })
+
+        results = results.filter((el, i) => {
+            return el != null
+        })
+        
+        return results
 
     }
 

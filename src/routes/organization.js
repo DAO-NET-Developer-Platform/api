@@ -12,7 +12,6 @@ routes.get('/me', organization.me)
 // routes.post('/lang_data', )
 
 routes.get('/:slug', [check.getOrgId, check.isMember, check.validOrganization], organization.single)
-
 // routes.put('/:id', organization.update)
 // routes.delete('/', organization.delete)
 
