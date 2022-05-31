@@ -48,7 +48,7 @@ module.exports = {
 
         //check membership
         const member = await memberService.isMember(organization._id, req.query.address)
-        if(!member) return (createError.Unauthorized('Must be a member'))
+        if(!member) return next(createError.Unauthorized('Must be a member'))
 
         req.body.organization = organization._id
         req.body.member = member._id
