@@ -6,7 +6,7 @@ const validator = require('../middlewares/validator')
 const schemas = require('../validators/decision.validator')
 
 routes.get('/vote/:vote_id', [check.isUser, check.getLangVote], decision.getVoteDecisions)
-routes.post('/vote/:vote_id', [[validator(schemas, 'query')], check.isUser, check.isMember, check.getLangOption, check.getLangVote, check.hasDecided], decision.createVoteDecision)
+routes.post('/vote/:vote_id', [[validator(schemas.decide, 'query')], check.isUser, check.isMember, check.getLangOption, check.getLangVote, check.hasDecided], decision.createVoteDecision)
 routes.get('/vote/:vote_id/all', globalCheck.getLang, decision.getAllVoters)
 
 routes.get('/budget/:vote_id', [check.isUser, check.getLangVote])

@@ -227,7 +227,7 @@ class OrganizationService {
 
         if(!user) return
 
-        return await Member.findOne({ $and: [ {user: user._id, organization: org_id} ] }).lean()
+        return await Member.findOne({ $and: [ {user: user._id, organization: org_id, status: 'active' } ] }).lean()
 
     }
 
