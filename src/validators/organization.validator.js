@@ -16,7 +16,8 @@ const schemas = {
 
     join: Joi.object().keys({
         address: Joi.string().required(),
-        identityCommitment: Joi.string().required()
+        identityCommitment: Joi.string().required(),
+        txHash: Joi.string().empty('').default(null)
     }),
 
     // me: Joi.object().key({

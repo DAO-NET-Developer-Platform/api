@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-const Budget = require('../models/budget')
+const Budget = require('../models/Budget')
 const User = require('../models/User')
-const { initialOrganizations, budgetsInDb, organizationsInDb, initialUsers } = require('./organization.test_helper')
+const { initialOrganizations, initialBudgets, budgetsInDb, organizationsInDb, initialUsers } = require('./budget.test_helper')
 const Organization = require('../models/Organization')
 
 const api = supertest(app)
@@ -15,8 +15,9 @@ beforeEach(async () => {
 	//create an array of promises
 	const organizations = initialOrganizations.map((el) => Organization.create(el))
     const users = initialUsers.map((el) => User.create(el))
+    const budgets = initialBudgets.map((el) => Budget.create(el))
 
-    await Promise.all(organizations, users)
+    await Promise.all(organizations, users, budgets)
 	// //runs in order
 	// for (let Organization of initialImages) {
 	//     await Organization.create(Organization)
@@ -26,73 +27,83 @@ beforeEach(async () => {
 
 describe('when there is initially some organizations saved', () => {
 
-	test('organizations are returned as json', async () => {
+	test('budgets are returned as json', async () => {
+        const organization = await organizationsInDb()
+
 		await api
-			.get('/organization')
+			.get(`/budget/${organization[0].slug}`)
 			.expect(200)
 			.expect('Content-Type', /application\/json/)
 	}, 100000)
 
-    test('fetch organization with slug', async() => {
-        await api
-            .get('/organization/dao-mazen')
-            .expect(200)
-            .expect('Content-Type', /application\/json/)
-    }, 100000)
+    // test('fetch organization with slug', async() => {
+    //     await api
+    //         .get('/organization/dao-mazen')
+    //         .expect(200)
+    //         .expect('Content-Type', /application\/json/)
+    // }, 100000)
 
-    test('fetch organization with slug correctly', async() => {
-        const res = await api
-            .get('/organization/dao-mazen')
+    // test('fetch organization with slug correctly', async() => {
+    //     const res = await api
+    //         .get('/organization/dao-mazen')
 
-        expect((res._body.data.slug)).toBe('dao-mazen')
-    }, 100000)
+    //     expect((res._body.data.slug)).toBe('dao-mazen')
+    // }, 100000)
     
 })
 
 describe('organization creation', () => {
 
-    test('organization creation should fail if no such user exists', async () => {
+    test('budget creation should fail if no such organization exists', async () => {
+
+        // const organization = await organizationsInDb()
 
         const data = {
-            name: 'Dao Mazen',
-            image: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm',
-            creator: 'addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvor',
-            joinCriteria: '6283762e2f335a6df2c71901',
-            budgetCriteria: '6283762e2f335a6df2c71905',
-            address: 'addrXAr9aE1u84fkrXOHppzTUCVVgvsyrtwevrap',
-            hash: '13467859453662759606374521637484558599684623349201647366263674748574478818345630322',
+            title: "Failed budget",
+            address: "addr04457283538647465672340856277365",
+            creator: "addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvo",
+            deadline: '10',
+            amount: 50,
+            description: 'something new',
+            hash: '12236636464662834823434363647364732647418232047483463476474734376634510647284187374572819174743248193403748291',
+            image: 'cs94568499920034122233445',
         }
         
 		await api
-			.post('/organization')
+			.post(`/budget/dao-slug`)
             .send(data)
-			.expect(404, { status: false, message: 'Invalid credentials' })
+			.expect(404, { status: false, message: 'No such organization' })
 
-        const organizationAtEnd = await organizationsInDb()
-        expect(organizationAtEnd).toHaveLength(initialOrganizations.length)
+        const budgets = await budgetsInDb()
+        expect(budgets).toHaveLength(initialBudgets.length)
 			
 	}, 100000)
 
 
-    test('organization creation should be created when user exists', async() => {
+    test('budget creation should be created when organization exists', async() => {
+
+        const organization = await organizationsInDb()
 
         const data = {
-            name: 'Dao New',
-            image: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm',
-            creator: 'addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvo',
-            joinCriteria: '6283762e2f335a6df2c71901',
-            budgetCriteria: '6283762e2f335a6df2c71905',
-            address: 'addrXAr9aE1u84fkrXOHppzTUCVVgvsyrtwevrap',
-            hash: '13467859453662759606374521637484558599684623349201647366263674748574478818345630322',
+            title: "Confirm budget",
+            address: "addr04457283538647465672340856277365",
+            creator: "addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvo",
+            deadline: '10',
+            amount: 50,
+            description: 'something new',
+            hash: '12236636464662834823434363647364732647418232047483463476474734376634510647284187374572819174743248193403748291',
+            image: 'cs94568499920034122233445',
         }
-
+        
         await api
-			.post('/organization')
-            .send(data)
-			.expect(200)
+        .post(`/budget/${organization[0].slug}`)
+        .send(data)
+        .expect(200)
+       
 
-        const organizationAtEnd = await organizationsInDb()
-        expect(organizationAtEnd).toHaveLength(initialOrganizations.length + 1)
+        // const budgets = await budgetsInDb()
+        // console.log(budgets)
+        // expect(budgets).toHaveLength(initialBudgets.length)
 
     }, 100000)
 

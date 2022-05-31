@@ -161,7 +161,7 @@ class BudgetService {
 
         } else if(criteria.criteria == 'Anyone who pays the set fee') {
 
-            if(!data.paymentHash) throw createError.Unauthorized('Please pay before joining Dao')
+            if(!data.txHash) throw createError.Unauthorized('Please pay before joining Dao')
 
         }
 
