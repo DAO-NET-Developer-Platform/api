@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_ENV=test jest --verbose --runInBand --forceExit",
     "test:org": "NODE_ENV=test jest --verbose --runInBand --forceExit -- organization.test.js",
+    "test:budget": "Node_ENV=test jest --verbose --runInBand --forceExit -- budget.test.js",
     "start": "node src/app",
     "dev": "nodemon src/app",
     "socket": "nodemon socket"

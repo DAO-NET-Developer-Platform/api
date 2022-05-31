@@ -187,9 +187,9 @@ class OrganizationService {
 
         if(criteria.criteria == 'Anyone who pays the entry fee') {
 
-            if(!data.paymentHash) throw createError.Unauthorized('Please pay before joining Dao')
+            if(!data.txHash) throw createError.Unauthorized('Please pay before joining Dao')
 
-            data.amountInTreasury = data.paymentHash.amount
+            // data.amountInTreasury = data.paymentHash.amount
 
         } else if(criteria.criteria.includes(`members' approval`)) {
             //create a pending status for the user

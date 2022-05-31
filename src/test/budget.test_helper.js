@@ -21,6 +21,30 @@ const initialUsers = [
 	},
 ]
 
+const initialBudgets = [
+	{
+		title: "new budget",
+		address: "addr04457283538647465672340856277365",
+		creator: "addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvo",
+		deadline: 10,
+		amount: 50,
+		description: 'something new',
+		hash: '12236636464662834823434363647364732647418232047483463476474734376634510647284187374572819174743248193403748291',
+		image: 'cs94568499920034122233445',
+	},
+
+	{
+		title: "new test budget",
+		address: "addr0445728353864746567234085627736748",
+		creator: "addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvo",
+		deadline: 10,
+		amount: 50,
+		description: 'something new',
+		hash: '12236636464662834823434363647364732647418232047483463476474734376634510647284187374572819174743248193403748291',
+		image: 'cs94568499920034122233478',
+	}
+
+]
 
 const organizationsInDb = async () => {
 	const organizations = await Organization.find({})
@@ -36,5 +60,6 @@ module.exports = {
 	initialOrganizations,
 	organizationsInDb,
 	initialUsers,
-    budgetsInDb
+    budgetsInDb,
+	initialBudgets
 }

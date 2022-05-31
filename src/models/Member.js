@@ -19,8 +19,8 @@ const member = new mongoose.Schema({
         ref: 'Organization'
     },
 
-    amountInTreasury: {
-        type: Number,
+    txHash: {
+        type: String,
         // required: true
     },
 
