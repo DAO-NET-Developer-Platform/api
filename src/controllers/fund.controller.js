@@ -22,16 +22,17 @@ class FundController {
 
     static async fundDao(req, res, next) {
 
-        const id = req.params.id
+        const id = req.params.organization_id
 
         try {
-            const data = await fund.fundDao(id)
+            const data = await fund.fundDao(id, req.body)
 
             return res.status(200).json({
                 status: true,
                 message: 'Fund Successful',
                 data
             })
+
         } catch(e) {
             return next(createError(e.statusCode, e.message))
         }

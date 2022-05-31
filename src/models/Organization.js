@@ -45,7 +45,7 @@ const organization = new mongoose.Schema({
 
     treasury: {
         type: Number,
-        // required: true
+        default: 0
     },
 
     hash: {
