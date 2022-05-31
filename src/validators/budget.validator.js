@@ -11,7 +11,7 @@ const schemas = {
         amount: Joi.number().required(),
         image: Joi.string().required(),
         hash: Joi.string().required(),
-        txHash: Joi.string()
+        txHash: Joi.any()
     })
 
 }
