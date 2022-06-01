@@ -59,6 +59,10 @@ const budget = new mongoose.Schema({
     hash: {
         type: String,
         required: true
+    },
+
+    endDate: {
+        type: Date
     }
 
 }, {

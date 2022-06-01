@@ -9,7 +9,7 @@ const memberCheck = require('../middlewares/memberCheck')
 routes.get('/:organization_slug', check.getOrgId, check.organization, budget.all)
 
 //add identityCommitment middleware
-routes.post('/:organization_slug', [validator(schemas.create), check.getOrgId, check.organization], budget.create)
+routes.post('/:organization_slug', [validator(schemas.create), check.getOrgId, check.organization, check.addEndDate], budget.create)
 
 routes.post('/:organization_slug/approve', [check.getOrgId, memberCheck.isMember, check.isPending, check.decided], budget.approve)
 
