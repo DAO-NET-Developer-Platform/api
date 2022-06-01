@@ -7,20 +7,28 @@ const schema = new mongoose.Schema({
         required: true
     },
 
+    amount: {
+        type: Number,
+        required: true
+    },
+
     type: {
         type: String,
         required: true
     },
 
-    status: {
-        type: String,
-        required: true
+    inputs: {
+        type: Object
     },
 
-    time: {
-        type: String,
-        required: true
-    }
+    outputs: {
+        type: Object
+    },
+
+    // time: {
+    //     type: String,
+    //     required: true
+    // }
 
 }, {
     timestamps: true

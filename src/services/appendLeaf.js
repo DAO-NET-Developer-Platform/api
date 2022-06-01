@@ -62,7 +62,6 @@ module.exports = async function appendLeaf(
 
                 await parentNode.save()
             } else {
-                console.log(node.hash, node.siblingHash)
 
                 parentNode = await MerkleTreeNode.create({
                     group: {
