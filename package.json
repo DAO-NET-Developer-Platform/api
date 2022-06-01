@@ -26,6 +26,7 @@
     "@hapi/joi": "^17.1.1",
     "@interep/db": "^0.3.1",
     "@prisma/client": "^2.19.0",
+    "@zk-kit/identity": "^1.4.1",
     "axios": "^0.21.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",

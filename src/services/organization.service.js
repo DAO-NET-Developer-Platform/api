@@ -14,6 +14,7 @@ const appendLeaf = require('./appendLeaf');
 const deleteLeaf = require('./deleteLeaf')
 const crypto = require('crypto')
 const slug = require('slugify')
+const transactionService = require('./transaction.service')
 
 
 
@@ -142,7 +143,6 @@ class OrganizationService {
     static async join(data) {
 
         //check membership status
-
         const isMember = await this.checkMembership(data)
 
         if(isMember != null) {
@@ -189,7 +189,18 @@ class OrganizationService {
 
             if(!data.txHash) throw createError.Unauthorized('Please pay before joining Dao')
 
-            // data.amountInTreasury = data.paymentHash.amount
+            //call to transaction services to check
+            const transaction = await transactionService.checkTransaction(data.txHash)
+
+            if(transaction == null) throw createError.Unauthorized('Invalid Hash')
+
+            if(parseInt(transaction.outputs[0].amount[0].quantity) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+
+            transaction.type = 'Joining fee'
+            transaction.amount = criteria.amount * 1000000
+
+            await transactionService.createTransaction(transaction, data.organization)
+
 
         } else if(criteria.criteria.includes(`members' approval`)) {
             //create a pending status for the user

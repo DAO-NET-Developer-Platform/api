@@ -11,6 +11,9 @@ const Vote = require('../models/Vote')
 // const LanguageVote = require('../models/LanguageVote')
 const vote = require('../services/vote.service')
 const Decision = require('../models/Decision')
+const transactionService = require('./transaction.service')
+const createError = require('http-errors')
+
 
 class BudgetService {
 
@@ -161,8 +164,18 @@ class BudgetService {
 
         } else if(criteria.criteria == 'Anyone who pays the set fee') {
 
-            if(!data.txHash) throw createError.Unauthorized('Please pay before joining Dao')
+            if(!data.txHash) throw createError.Unauthorized('Please pay before creating a budget item')
 
+            const transaction = await transactionService.checkTransaction(data.txHash)
+
+            if(transaction == null) throw createError.Unauthorized('Invalid Hash')
+
+            if(parseInt(transaction.outputs[0].amount[0].quantity) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+
+            transaction.type = 'Joining fee'
+            transaction.amount = criteria.amount * 1000000
+
+            await transactionService.createTransaction(transaction, data.organization)
         }
 
         const languages = await language.all()
