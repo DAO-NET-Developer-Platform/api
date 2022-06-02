@@ -1,6 +1,7 @@
 const Decision = require('../models/Decision')
 const Option = require('../models/Option')
 const LanguageOption = require('../models/LanguageOption')
+const Member = require('../models/Member')
 
 class DecisionController {
 
@@ -68,7 +69,23 @@ class DecisionController {
     static async createBudgetDecision(data) {
 
         data.type = 'Budget'
-        return await Decision.create(data)     
+
+        const member = await Member.findById(data.member).lean()
+
+        data.amount = (parseInt(data.amount) / 100) * parseInt(member.unspent)
+
+        await Decision.create(data) 
+
+        const unspent = parseInt(member.unspent) - parseInt(data.amount)
+
+        await Member.findByIdAndUpdate(data.member, {
+            unspent
+        }, {
+            new: true
+        })
+        
+        return
+        
 
     }
 
