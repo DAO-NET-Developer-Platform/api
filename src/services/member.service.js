@@ -29,7 +29,7 @@ class MemberService {
         }
 
         await Promise.all(members.map(async (el, i) => {
-            const decisions = await Decision.find({ organization: id, address }).lean()
+            const decisions = await Decision.find({ organization: id, member: el._id }).lean()
             members[i].decisions = decisions.length
 
             if(el.address == address) {
@@ -47,7 +47,7 @@ class MemberService {
          */
 
         data.type = 'Member'
-        data.organization = data.organization_id
+        data.organization = organization_id
 
         //create approval
 
@@ -85,6 +85,8 @@ class MemberService {
 
             const organizationData = await organization.find(data.organization)
 
+            console.log(organizationData)
+
             //appendLeaf to merkle root
             await appendLeaf(organizationData._id, organization.name, approvedMember.identityCommitment)         
         }
@@ -105,7 +107,7 @@ class MemberService {
 
     static async isPending(org_id, member) {
 
-        return await Member.findOne({ $and: [ { member, organization: org_id, status: 'pending' } ] }).lean()
+        return await Member.findOne({ $and: [ { _id: member, organization: org_id, status: 'pending' } ] }).lean()
 
     }
 

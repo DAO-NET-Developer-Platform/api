@@ -54,7 +54,7 @@ class OrganizationController {
 
         try {
 
-            const data = await organization.single(id, req.isMember)
+            const data = await organization.single(id, req.isMember, req.memberStatus)
 
             return res.status(200).json({
                 status: true,
@@ -167,8 +167,7 @@ class OrganizationController {
 
             return res.status(200).json({
                 status: true,
-                message: 'Join requested successfully',
-                data
+                message: data,
             })
 
         } catch(e) {
