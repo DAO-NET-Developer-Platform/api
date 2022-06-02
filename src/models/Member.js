@@ -34,6 +34,11 @@ const member = new mongoose.Schema({
 
     identityCommitment: {
         type: String,
+    },
+
+    unspent: {
+        type: Number,
+        default: 0
     }
 
 }, {

@@ -48,6 +48,11 @@ const schema = new mongoose.Schema({
         ref: 'Vote'
     },
 
+    done: {
+        type: Boolean,
+        default: false
+    }
+
 }, {
     timestamps: true
 })

@@ -56,6 +56,11 @@ const organization = new mongoose.Schema({
     slug: {
         type: String,
         required: true
+    },
+
+    circulation: {
+        type: Number,
+        default: 0
     }
 
     // transaction: {
