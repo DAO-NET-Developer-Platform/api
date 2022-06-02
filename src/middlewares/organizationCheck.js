@@ -49,6 +49,7 @@ module.exports = {
         // if(!member) return next(createError.Unauthorized('Invalid Credentials'))
 
         req.isMember = member == null ? false : true
+        req.memberStatus = member != null ? member.status : null
 
         return next()
 

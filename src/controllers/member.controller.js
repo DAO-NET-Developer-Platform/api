@@ -42,6 +42,7 @@ class MemberController {
 
         } catch(e) {
 
+            console.log(e)
             return next(createError(e.statusCode, e.message))
 
         }

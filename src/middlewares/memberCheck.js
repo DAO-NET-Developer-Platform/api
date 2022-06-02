@@ -11,6 +11,11 @@ module.exports = {
 
        if(member == null) return next(createError.NotFound('Invalid user'))
 
+    //    console.log(member)
+
+    //    req.body.member = member._id,
+       req.body.user = member.user
+
        return next()
 
     },
@@ -18,6 +23,8 @@ module.exports = {
     async isPending(req, res, next) {
 
         const member = await memberService.isPending(req.params.organization_id, req.body.member)
+
+        console.log(member)
 
         if(member == null) return next(createError.NotFound('Member already exist'))
 

@@ -178,6 +178,8 @@ class BudgetService {
             await transactionService.createTransaction(transaction, data.organization)
         }
 
+        if(data.status == 'active') data.endDate = this.addEndDate(data)
+        
         const languages = await language.all()
 
         const budget = await Budget.create(data)
@@ -245,9 +247,17 @@ class BudgetService {
         }
 
         if(approvals.length >= treshold) {
-            await Budget.findByIdAndUpdate(budgetItem, { status: 'active' }, { new: true })
+            const budget = await Budget.findById(budgetItem).lean()
 
-            await Vote.findOneAndUpdate({ $and: [{ budget: budgetItem, type: 'Budget' }] }, { status: 'active' }, { new: true })
+            console.log('here')
+
+            const endDate = this.addEndDate(budget)
+
+            console.log('here2')
+
+            await Budget.findByIdAndUpdate(budgetItem, { status: 'active', endDate }, { new: true })
+
+            await Vote.findOneAndUpdate({ $and: [{ budget: budgetItem, type: 'Budget' }] }, { status: 'active', endDate }, { new: true })
         }
 
         return
@@ -270,6 +280,20 @@ class BudgetService {
         if(!user) return
 
         return await Approval.findOne({ $and: [ { budgetItem, user: user._id } ] }).lean()
+
+    }
+
+    static addEndDate(data) {
+
+        if(data.deadline <= 1) throw createError.UnprocessableEntity('invalid Deadline')
+
+        let endDate = Date.now() + parseInt(data.deadline) * 24 * 60 * 60 * 1000
+
+        endDate = new Date(endDate)
+
+        // console.log(endDate)
+
+        return endDate
 
     }
 

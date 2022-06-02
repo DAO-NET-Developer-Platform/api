@@ -114,11 +114,12 @@ class OrganizationService {
 
     }
 
-    static async single(id, member) {
+    static async single(id, member, status) {
 
         const data = (await Organization.findOne({ _id: id }).populate('joinCriteria').populate('budgetCriteria')).toObject()
 
         data.isMember = member
+        data.status = status
 
         return data
 
@@ -161,7 +162,7 @@ class OrganizationService {
 
         await this.determineJoin(criteria, data)
 
-        return
+        return `Join requested successfully`
 
     }
 

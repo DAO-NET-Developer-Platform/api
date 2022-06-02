@@ -55,13 +55,7 @@ module.exports = {
 
     async addEndDate(req, res, next) {
 
-        if(req.body.deadline <= 1) return next(createError.UnprocessableEntity('invalid Deadline'))
-
-        const endDate = Date.now() + parseInt(req.body.deadline) * 24 * 60 * 60 * 1000
-
-        req.body.endDate = new Date(endDate)
-
-        return next()
+        
 
     }
 
