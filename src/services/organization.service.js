@@ -148,11 +148,10 @@ class OrganizationService {
 
         if(isMember != null) {
 
-            await Member.findByIdAndDelete(isMember._id)
-
             const organization = await this.find(data.organization)
-
             await deleteLeaf(organization._id, organization.name, data.identityCommitment)
+
+            await Member.findByIdAndDelete(isMember._id)
             
             return `removed successfully`
         }
@@ -212,11 +211,11 @@ class OrganizationService {
 
         data.user = user._id 
 
-        const member = await Member.create(data)
-
         const organization = await this.find(data.organization)
 
         if(data.status == 'active') await appendLeaf(organization._id, organization.name, data.identityCommitment)
+
+        const member = await Member.create(data)
 
         return member
 
