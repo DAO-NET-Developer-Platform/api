@@ -53,7 +53,11 @@ class OrganizationService {
 
     }
 
-    static async all(page) {
+    static async all(query) {
+
+        const { page } = query
+
+        if(query.name) return this.search(query)
 
         if(!page) return await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
 
@@ -125,13 +129,13 @@ class OrganizationService {
 
     }
 
-    static async update(id, data) {
+    // static async update(id, data) {
 
-        await Organization.findByIdAndUpdate(id, data, {
-            new: true
-        }).toObject()
+    //     await Organization.findByIdAndUpdate(id, data, {
+    //         new: true
+    //     }).toObject()
 
-    }
+    // }
 
     static async delete(id) {
 
@@ -244,35 +248,49 @@ class OrganizationService {
 
     static async search(data) {
 
-        const { name, criteria, address } = data
+        const { name, criteria, address, page } = data
 
         let results
 
         //search all organizations
         if(!criteria || criteria == 'all') {
 
-            results = await Organization.find(
+            results = await Organization.paginate(
                 {
                     name: { $regex: new RegExp(`${name}`), $options: 'i'}
+                }, {
+                    page,
+                    limit: 12,
+                    populate: ['budgetCriteria', 'joinCriteria'],
+                    lean: true,
+                    sort: { createdAt: 'desc' }
                 }
             )
 
-            return results
+            return results.docs
         }
 
         //search joined organizations
-        results = await Member.find({ address }).populate({
-            path:'organization',
-            match: {
-                name: { $regex: new RegExp(`${name}`), $options: 'i'}
-            }
+        results = await Member.paginate({ address }, {
+            page,
+            limit: 12,
+            populate: {
+                path:'organization',
+                match: {
+                    name: { $regex: new RegExp(`${name}`), $options: 'i'}
+                }
+            },
+            lean: true,
+            sort: { createdAt: 'desc' }
         })
 
-        results.map((el, i) => {
-            el.organization != null ? results[i] = el.organization : delete results[i]
+        // return results
+
+        results.docs.map((el, i) => {
+            el.organization != null ? results.docs[i] = el.organization : delete results.docs[i]
         })
 
-        results = results.filter((el, i) => {
+        results = results.docs.filter((el, i) => {
             return el != null
         })
         
