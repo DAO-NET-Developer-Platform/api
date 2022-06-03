@@ -37,6 +37,26 @@ class FundController {
             return next(createError(e.statusCode, e.message))
         }
     }
+
+    static async fundBudget(req, res, next) {
+
+        const id = req.params.budget_id
+
+        try {
+
+            const data = await fund.fundBudget(id, req.body)
+
+            return res.status(200).json({
+                status: true,
+                message: 'Budget donation Successful',
+                data
+            })
+
+        } catch(e) {
+            return next(createError(e.statusCode, e.message))
+        }
+
+    }
 }
 
 module.exports = FundController

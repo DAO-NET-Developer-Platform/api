@@ -1,7 +1,9 @@
 const Transaction = require('../models/Transaction')
 const Organization = require('../models/Organization')
+const Budget = require('../models/Budget')
 const axios = require('axios')
 const createError = require('http-errors')
+const transactionService = require('../services/transaction.service')
 
 class FundService {
 
@@ -62,6 +64,29 @@ class FundService {
         const transaction = await Transaction.findOne({ hash }).lean()
 
         return transaction
+
+    }
+
+    static async fundBudget(id, data) {
+
+        const budget = await Budget.findById(id).lean()
+
+        if(budget == null) throw createError.NotFound('No such budget item')
+
+        const transaction = await transactionService.checkTransaction(data.txHash)
+
+        if(!transaction) throw createError.Unauthorized('Invalid hash')
+
+        if(budget.address != transaction.outputs[0].address) throw createError.Unauthorized('Invalid address')
+
+        if(parseInt(transaction.outputs[0].amount[0].quantity) != parseInt(data.amount)) throw createError.Unauthorized('Invalid hash')
+
+        transaction.amount = data.amount
+        transaction.type = "Budget Funding"
+
+        await Transaction.create(transaction)
+
+        return
 
     }
 
