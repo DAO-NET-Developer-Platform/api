@@ -6,9 +6,13 @@ const Decision = require('../models/Decision')
 
 class VoteService {
 
-    static async all(id, language, user, page) {
+    static async all(id, user, query) {
 
         // console.log(language, id)
+
+        const { language, page } = query
+
+        if(query.title) return this.search(id, query)
 
         if(!language) {
 
@@ -126,37 +130,49 @@ class VoteService {
 
     static async search(id, data) {
 
-        const { title, criteria, address } = data
+        const { title, criteria, address, page } = data
 
         let results
 
         //search all budgets
         if(!criteria || criteria == 'all') {
 
-            results = await Vote.find({
+            results = await Vote.paginate({
                 $and: [{
                     organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
                 }]
+            }, {
+                page,
+                limit: 12,
+                populate: 'vote',
+                lean: true,
+                sort: { createdAt: 'desc' }
             })
 
-            return results
+            return results.docs
         }
 
         //search budget votes only
-        results = await Vote.find({ type: 'Budget' }).populate({
-            path: 'budget',
-            match: {
-                $and: [{
-                    organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
-                }]
-            }
+        results = await Vote.paginate({ type: 'Budget' }, {
+            page,
+            limit: 12,
+            populate: {
+                path: 'budget',
+                match: {
+                    $and: [{
+                        organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                    }]
+                }
+            },
+            lean: true,
+            sort: { createdAt: 'desc' }
         })
 
-        results.map((el, i) => {
-            el.budget != null ? results[i] = el.budget : delete results[i]
+        results.docs.map((el, i) => {
+            el.budget != null ? results.docs[i].budget = el.budget : delete results.docs[i]
         })
 
-        results = results.filter((el, i) => {
+        results = results.docs.filter((el, i) => {
             return el != null
         })
         
