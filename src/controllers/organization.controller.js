@@ -178,27 +178,27 @@ class OrganizationController {
 
     } 
 
-    static async leave(req, res, next) {
+    // static async leave(req, res, next) {
 
-        const { id, member_id } = req.params
+    //     const { id, member_id } = req.params
 
-        try {
+    //     try {
 
-            const data = await organization.leave(id, member_id)
+    //         const data = await organization.leave(id, member_id)
 
-            return res.status(200).json({
-                status: true,
-                message: 'Left organization successfully'
-            })
+    //         return res.status(200).json({
+    //             status: true,
+    //             message: 'Left organization successfully'
+    //         })
 
 
-        } catch (e) {
+    //     } catch (e) {
 
-            return next(createError(e.statusCode, e.message))
+    //         return next(createError(e.statusCode, e.message))
 
-        }
+    //     }
 
-    }
+    // }
 
 }
 

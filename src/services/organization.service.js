@@ -36,7 +36,7 @@ class OrganizationService {
 
     static async slugify(name) {
 
-        const org = await this.findBy(name)
+        const org = await this.findBy('name', name)
 
         if(org == null) return slug(name, {
             lower: true
