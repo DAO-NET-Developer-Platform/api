@@ -5,12 +5,12 @@ class OrganizationController {
 
     static async all(req, res, next) {
 
-        const { page } = req.query
+        // const { page } = req.query
         
 
         try {
 
-            const data = await organization.all(page)
+            const data = await organization.all(req.query)
 
             return res.status(200).json({
                 status: true,
@@ -91,49 +91,49 @@ class OrganizationController {
 
     }
 
-    static async update(req, res, next) {
+    // static async update(req, res, next) {
 
-        const id = req.params.id
+    //     const id = req.params.id
 
-        try {
+    //     try {
 
-            const data = await organization.update(id, req.body)
+    //         const data = await organization.update(id, req.body)
 
-            return res.status(200).json({
-                status: true,
-                message: 'Organization Updated successfully',
-                data
-            })
+    //         return res.status(200).json({
+    //             status: true,
+    //             message: 'Organization Updated successfully',
+    //             data
+    //         })
 
-        } catch(e) {
+    //     } catch(e) {
 
-            return next(createError(e.statusCode, e.message))
+    //         return next(createError(e.statusCode, e.message))
 
-        }
+    //     }
 
-    }
+    // }
 
-    static async delete(req, res, next) {
+    // static async delete(req, res, next) {
 
-        // const id = req.params.id
+    //     // const id = req.params.id
 
-        try {
+    //     try {
 
-            const data = await organization.delete()
+    //         const data = await organization.delete()
 
-            return res.status(200).json({
-                status: true,
-                message: 'Organization Deleted',
-                data
-            })
+    //         return res.status(200).json({
+    //             status: true,
+    //             message: 'Organization Deleted',
+    //             data
+    //         })
 
-        } catch(e) {
+    //     } catch(e) {
 
-            return next(createError(e.statusCode, e.message))
+    //         return next(createError(e.statusCode, e.message))
 
-        }
+    //     }
 
-    }
+    // }
 
     static async search(req, res, next) {
 
@@ -178,27 +178,27 @@ class OrganizationController {
 
     } 
 
-    static async leave(req, res, next) {
+    // static async leave(req, res, next) {
 
-        const { id, member_id } = req.params
+    //     const { id, member_id } = req.params
 
-        try {
+    //     try {
 
-            const data = await organization.leave(id, member_id)
+    //         const data = await organization.leave(id, member_id)
 
-            return res.status(200).json({
-                status: true,
-                message: 'Left organization successfully'
-            })
+    //         return res.status(200).json({
+    //             status: true,
+    //             message: 'Left organization successfully'
+    //         })
 
 
-        } catch (e) {
+    //     } catch (e) {
 
-            return next(createError(e.statusCode, e.message))
+    //         return next(createError(e.statusCode, e.message))
 
-        }
+    //     }
 
-    }
+    // }
 
 }
 
