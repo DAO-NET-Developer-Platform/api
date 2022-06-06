@@ -51,7 +51,10 @@ class VoteService {
         if(!page) {
             vote = await LanguageVote.find({ $and: [{ language, organization: id }] }).populate('vote').lean()
         } else {
-            const data = await LanguageVote.paginate({ $and: [{ language, organization: id }] }, {
+
+            query.language = language
+
+            const data = query.search? await this.langSearch(id, query) : await LanguageVote.paginate({ $and: [{ language, organization: id }] }, {
                 page,
                 limit: 12,
                 populate: 'vote',
@@ -59,7 +62,7 @@ class VoteService {
                 sort: { createdAt: 'desc' }
             })
 
-            vote = data.docs
+            vote = data.docs != null ? data.docs : data
         }
 
 
@@ -182,7 +185,7 @@ class VoteService {
                 sort: { createdAt: 'desc' }
             })
             
-            return results.docs
+            return results
 
         }
 
@@ -226,7 +229,112 @@ class VoteService {
                 return el != null
             })
     
+            return results
+
+        }
+
+    }
+
+    static async langSearch(id, data) {
+
+        const criterias = [ 'all', 'budget', 'vote', 'voted' ]
+
+        const { search, criteria, address, page, language } = data
+
+        if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
+
+        let results
+
+        //search all budgets
+        if(criteria == 'all') {
+
+            results = await LanguageVote.paginate({
+                $and: [{
+                    language, organization: id, title: { $regex: new RegExp(`${search}`), $options: 'i'}
+                }]
+            }, {
+                page,
+                limit: 12,
+                populate: 'vote',
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+
             return results.docs
+        }
+
+        //search budget votes only
+        if(criteria == 'budget') {
+
+            results = await LanguageVote.paginate({ $and: [{
+                language, organization: id, type: 'Budget', title: { $regex: new RegExp(`${search}`), $options: 'i'}
+            }] }, {
+                page,
+                limit: 12,
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+            
+            return results.docs
+
+        }
+
+        if(criteria == 'vote') {
+
+            results = await LanguageVote.paginate({  $and: [{
+                language, organization: id, type: null, title: { $regex: new RegExp(`${search}`), $options: 'i'}
+            }] }, {
+                page,
+                limit: 12,
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+            
+            return results.docs
+
+        }
+
+        if(criteria == 'voted') {
+
+            results = await Decision.paginate({ $and: [{ address, organization: id }] }, { 
+                page,
+                limit: 12,
+                populate: {
+                    path: 'vote',
+                    match: {
+                        title: { $regex: new RegExp(`${search}`), $options: 'i'}
+                    }
+                },
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+    
+            results.docs.map((el, i) => {
+                el.vote != null ? results.docs[i] = el.vote : delete results.docs[i]
+            })
+    
+            results = results.docs.filter((el, i) => {
+                return el != null
+            })
+    
+            const groupname = []
+    
+            await Promise.all(results.map(async (el, i) => {
+                if(groupname.includes(el._id.toString())) {
+                    delete results[i]
+                    return
+                }
+                groupname.push(el._id.toString())
+                results[i] = el
+            }))
+    
+            results = results.filter((el, i) => {
+                return el != null
+            })
+    
+            results = await Promise.all(results.map(async (el, i) => results[i] = await LanguageVote.find({ vote: el._id, language }).lean()))
+
+            return
 
         }
 
