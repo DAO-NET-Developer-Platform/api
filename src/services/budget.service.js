@@ -10,7 +10,6 @@ const User = require('../models/User')
 const Vote = require('../models/Vote')
 // const LanguageVote = require('../models/LanguageVote')
 const vote = require('../services/vote.service')
-const Decision = require('../models/Decision')
 const transactionService = require('./transaction.service')
 const createError = require('http-errors')
 
@@ -109,12 +108,16 @@ class BudgetService {
 
     static async search (id, data) {
 
+        const criterias = [ 'active', 'all' ]
+
         const { title, criteria, address, page } = data
+
+        if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
         let results
 
         //search all budgets
-        if(!criteria || criteria == 'all') {
+        if(criteria == 'all') {
 
             results = await Budget.paginate({
                 $and: [{
@@ -131,47 +134,20 @@ class BudgetService {
             return results.docs
         }
 
-        //search voted budgets
-        results = await Decision.paginate({ $and: [ { type: 'Budget', address }] }, { 
+        //search active budgets
+        results = await Budget.paginate({
+            $and: [{
+                organization: id, status: 'active', title: { $regex: new RegExp(`${title}`), $options: 'i'}
+            }]
+        }, { 
             page,
             limit: 12,
-            populate: {
-                path: 'vote',
-                match: {
-                    $and: [{
-                        organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
-                    }]
-                }
-            },
+            populate: 'organization',
             lean: true,
             sort: { createdAt: 'desc' }
         })
 
-        results.docs.map((el, i) => {
-            el.vote != null ? results.docs[i] = el.vote : delete results.docs[i]
-        })
-
-        results = results.docs.filter((el, i) => {
-            return el != null
-        })
-
-        const groupname = []
-
-        await Promise.all(results.map(async (el, i) => {
-            const bud = await Budget.findById(el.budget).lean()
-            if(groupname.includes(bud._id.toString())) {
-                delete results[i]
-                return
-            }
-            groupname.push(bud._id.toString())
-            results[i] = bud
-        }))
-
-        results = results.filter((el, i) => {
-            return el != null
-        })
-
-        return results
+        return results.docs
 
     }
 
