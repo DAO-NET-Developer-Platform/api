@@ -20,7 +20,7 @@ class BudgetService {
 
         const { lang, page } = query
 
-        if(query.search) return await this.search(id, query)
+        if(query.search && !lang) return await this.search(id, query)
 
         if(!lang) {
 
