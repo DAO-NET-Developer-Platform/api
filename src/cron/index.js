@@ -1,4 +1,4 @@
-const cron = require('node-cron')
+let cron = require('node-cron')
 const Organization = require('../models/Organization')
 const Decision = require('../models/Decision')
 const Member = require('../models/Member')
@@ -78,19 +78,19 @@ async function generateVotingPower() {
 
 }
 
-async function dispenseFunds() {
+// async function dispenseFunds() {
 
-    // await Decision.find()
+//     // await Decision.find()
 
-}
+// }
 
 cron.schedule('0 */1 * * *', async () => {
-    console.log('cron started')
+    console.log('cron job started')
 
     try {
         await returnRemaining()
         await generateVotingPower()
-        await dispenseFunds()
+        // await dispenseFunds()
     } catch(e) {
 
         console.log(e)

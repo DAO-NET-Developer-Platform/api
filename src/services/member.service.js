@@ -10,14 +10,18 @@ const hasLeaf = require('./hasLeaf')
 
 class MemberService {
 
-    static async getMembers(id, address, page) {
+    static async getMembers(id, query) {
 
         let members
+
+        const { page, address } = query
+
+        // if(query.search) return await this.search(id, query)
 
         if(!page) {
             members =  await Member.find({ organization: id }).populate('user').lean()
         } else {
-            const data = await Member.paginate({ organization: id }, {
+            const data = query.search ? await this.search(id, query) : await Member.paginate({ organization: id }, {
                 page,
                 limit: 10,
                 populate: 'user',
@@ -25,7 +29,7 @@ class MemberService {
                 sort: { createdAt: 'desc' }
             })
 
-            members = data.docs
+            members = data.docs != null ? data.docs : data
         }
 
         await Promise.all(members.map(async (el, i) => {
@@ -123,6 +127,95 @@ class MemberService {
     static async verifyMember(data) {
 
         return await hasLeaf(data)
+
+    }
+
+    static async search(id, data) {
+
+        const criterias = [ 'all', 'active', 'pending', 'approved' ]
+
+        const { search, criteria, address, page } = data
+
+        if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid Criteria')
+
+        let results
+
+        if(criteria == 'all') {
+
+            results = await Member.paginate({  $and: [{
+                    organization: id, address: { $regex: new RegExp(`${search}`), $options: 'i'}
+                }]
+            }, {
+                page,
+                limit: 12,
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+
+            return results.docs
+
+        }
+
+        if(criteria == 'active') {
+
+            results = await Member.paginate({  $and: [{
+                organization: id, status: 'active', address: { $regex: new RegExp(`${search}`), $options: 'i'}
+            }]
+            }, {
+                page,
+                limit: 12,
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+
+            return results.docs
+
+        }
+
+        if(criteria == 'pending') {
+
+            results = await Member.paginate({  $and: [{
+                organization: id, status: 'pending', address: { $regex: new RegExp(`${search}`), $options: 'i'}
+            }]
+        }, {
+            page,
+            limit: 12,
+            lean: true,
+            sort: { createdAt: 'desc' }
+        })
+
+        return results.docs
+
+        }
+
+        if(criteria == 'approved') {
+
+            results = await Approval.paginate({ organization: id,
+            }, {
+                page,
+                limit: 12,
+                populate: {
+                    path: 'member',
+                    match: {
+                        address: { $regex: new RegExp(`${search}`), $options: 'i'}
+                    }
+                },
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+
+            //filter
+            results.docs.map((el, i) => {
+                el.member != null ? results.docs[i] = el.member : delete results.docs[i]
+            })
+    
+            results = results.docs.filter((el, i) => {
+                return el != null
+            })
+            
+            return results
+
+        }
 
     }
 }

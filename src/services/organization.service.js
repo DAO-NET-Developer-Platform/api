@@ -57,7 +57,7 @@ class OrganizationService {
 
         const { page } = query
 
-        if(query.name) return this.search(query)
+        if(query.search) return await this.search(query)
 
         if(!page) return await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
 
@@ -248,7 +248,7 @@ class OrganizationService {
 
     static async search(data) {
 
-        const { name, criteria, address, page } = data
+        const { search, criteria, address, page } = data
 
         let results
 
@@ -257,7 +257,7 @@ class OrganizationService {
 
             results = await Organization.paginate(
                 {
-                    name: { $regex: new RegExp(`${name}`), $options: 'i'}
+                    name: { $regex: new RegExp(`${search}`), $options: 'i'}
                 }, {
                     page,
                     limit: 12,
@@ -277,7 +277,7 @@ class OrganizationService {
             populate: {
                 path:'organization',
                 match: {
-                    name: { $regex: new RegExp(`${name}`), $options: 'i'}
+                    name: { $regex: new RegExp(`${search}`), $options: 'i'}
                 }
             },
             lean: true,

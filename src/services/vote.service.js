@@ -13,8 +13,6 @@ class VoteService {
 
         const { language, page } = query
 
-        if(query.title) return this.search(id, query)
-
         if(!language) {
 
             let vote
@@ -22,13 +20,13 @@ class VoteService {
             if(!page) {
                 vote = await Vote.find({organization: id}).lean()
             } else {
-                const data = await Vote.paginate({organization: id}, {
+                const data = query.search ?  await this.search(id, query) :  await Vote.paginate({organization: id}, {
                     page,
                     limit: 12,
                     lean: true
                 })
 
-                vote = data.docs
+                vote = data.docs ? data.docs : data
             }
 
             await Promise.all(vote.map(async (el, i) => {
@@ -133,7 +131,7 @@ class VoteService {
 
         const criterias = [ 'all', 'budget', 'vote', 'voted' ]
 
-        const { title, criteria, address, page } = data
+        const { search, criteria, address, page } = data
 
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
@@ -144,7 +142,7 @@ class VoteService {
 
             results = await Vote.paginate({
                 $and: [{
-                    organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                    organization: id, title: { $regex: new RegExp(`${search}`), $options: 'i'}
                 }]
             }, {
                 page,
@@ -161,7 +159,7 @@ class VoteService {
         if(criteria == 'budget') {
 
             results = await Vote.paginate({ $and: [{
-                organization: id, type: 'Budget', title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                organization: id, type: 'Budget', title: { $regex: new RegExp(`${search}`), $options: 'i'}
             }] }, {
                 page,
                 limit: 12,
@@ -176,7 +174,7 @@ class VoteService {
         if(criteria == 'vote') {
 
             results = await Vote.paginate({  $and: [{
-                organization: id, type: null, title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                organization: id, type: null, title: { $regex: new RegExp(`${search}`), $options: 'i'}
             }] }, {
                 page,
                 limit: 12,
@@ -196,7 +194,7 @@ class VoteService {
                 populate: {
                     path: 'vote',
                     match: {
-                        title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                        title: { $regex: new RegExp(`${search}`), $options: 'i'}
                     }
                 },
                 lean: true,
@@ -228,7 +226,7 @@ class VoteService {
                 return el != null
             })
     
-            return results
+            return results.docs
 
         }
 
