@@ -65,8 +65,8 @@ class VoteService {
             vote = data.docs != null ? data.docs : data
         }
 
-
         await Promise.all(vote.map(async (el, i) => {
+
             vote[i].status = el.vote.status
             if(user) {
                 const isVoted = await Decision.find({ $and: [{ vote: el.vote._id, user }] }).lean()
@@ -310,7 +310,7 @@ class VoteService {
             })
     
             results.docs.map((el, i) => {
-                el.vote != null ? results.docs[i] = el.vote : delete results.docs[i]
+                el.vote != null ? results.docs[i].vote = el.vote : delete results.docs[i]
             })
     
             results = results.docs.filter((el, i) => {
@@ -332,9 +332,9 @@ class VoteService {
                 return el != null
             })
     
-            results = await Promise.all(results.map(async (el, i) => results[i] = await LanguageVote.find({ vote: el._id, language }).lean()))
-
-            return
+            results = await Promise.all(results.map(async (el, i) => results[i] = await LanguageVote.findOne({ vote: el.vote._id, language }).populate('vote').lean()))
+            
+            return results
 
         }
 
