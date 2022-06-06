@@ -28,6 +28,8 @@ class VoteController {
 
         req.body.organization = req.params.organization_id
 
+        // req.body.type = 'Vote'
+
         try {
 
             const data = await vote.create(req.body)

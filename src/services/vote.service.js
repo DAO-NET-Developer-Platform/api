@@ -3,6 +3,7 @@ const LanguageVote = require('../models/LanguageVote')
 const { uploadFile, retrieve } = require('../connectors/web3.storage')
 const language = require('../services/language.service')
 const Decision = require('../models/Decision')
+const createError = require('http-errors')
 
 class VoteService {
 
@@ -130,12 +131,16 @@ class VoteService {
 
     static async search(id, data) {
 
+        const criterias = [ 'all', 'budget', 'vote', 'voted' ]
+
         const { title, criteria, address, page } = data
+
+        if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
         let results
 
         //search all budgets
-        if(!criteria || criteria == 'all') {
+        if(criteria == 'all') {
 
             results = await Vote.paginate({
                 $and: [{
@@ -153,30 +158,79 @@ class VoteService {
         }
 
         //search budget votes only
-        results = await Vote.paginate({ type: 'Budget' }, {
-            page,
-            limit: 12,
-            populate: {
-                path: 'budget',
-                match: {
-                    $and: [{
-                        organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
-                    }]
+        if(criteria == 'budget') {
+
+            results = await Vote.paginate({ $and: [{
+                organization: id, type: 'Budget', title: { $regex: new RegExp(`${title}`), $options: 'i'}
+            }] }, {
+                page,
+                limit: 12,
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+            
+            return results.docs
+
+        }
+
+        if(criteria == 'vote') {
+
+            results = await Vote.paginate({  $and: [{
+                organization: id, type: null, title: { $regex: new RegExp(`${title}`), $options: 'i'}
+            }] }, {
+                page,
+                limit: 12,
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+            
+            return results.docs
+
+        }
+
+        if(criteria == 'voted') {
+
+            results = await Decision.paginate({ $and: [{ address, organization: id }] }, { 
+                page,
+                limit: 12,
+                populate: {
+                    path: 'vote',
+                    match: {
+                        title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                    }
+                },
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+    
+            results.docs.map((el, i) => {
+                el.vote != null ? results.docs[i] = el.vote : delete results.docs[i]
+            })
+    
+            results = results.docs.filter((el, i) => {
+                return el != null
+            })
+
+            // return results
+    
+            const groupname = []
+    
+            await Promise.all(results.map(async (el, i) => {
+                if(groupname.includes(el._id.toString())) {
+                    delete results[i]
+                    return
                 }
-            },
-            lean: true,
-            sort: { createdAt: 'desc' }
-        })
+                groupname.push(el._id.toString())
+                results[i] = el
+            }))
+    
+            results = results.filter((el, i) => {
+                return el != null
+            })
+    
+            return results
 
-        results.docs.map((el, i) => {
-            el.budget != null ? results.docs[i].budget = el.budget : delete results.docs[i]
-        })
-
-        results = results.docs.filter((el, i) => {
-            return el != null
-        })
-        
-        return results
+        }
 
     }
 }
