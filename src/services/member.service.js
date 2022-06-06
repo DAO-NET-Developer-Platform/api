@@ -16,8 +16,6 @@ class MemberService {
 
         const { page, address } = query
 
-        // if(query.search) return await this.search(id, query)
-
         if(!page) {
             members =  await Member.find({ organization: id }).populate('user').lean()
         } else {

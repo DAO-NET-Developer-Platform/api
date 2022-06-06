@@ -48,7 +48,9 @@ class BudgetService {
 
         } else {
 
-            const data = await LanguageBudget.paginate({ $and: [{language:  language._id, organization: id}] }, { 
+            query.lang = lang
+
+            const data = query.search ? await this.langSearch(id, query) : await LanguageBudget.paginate({ $and: [{language:  language._id, organization: id}] }, { 
                 page,
                 limit: 12,
                 populate: 'budget',
@@ -56,7 +58,7 @@ class BudgetService {
                 sort: { createdAt: 'desc' }
             })
 
-            budget = data.docs
+            budget = data.docs != null ? data.docs : data
 
         }
 
@@ -148,6 +150,67 @@ class BudgetService {
         })
 
         return results.docs
+
+    }
+
+    static async langSearch(id, data) {
+
+        const criterias = [ 'active', 'all' ]
+
+        const { search, criteria, address, page, lang } = data
+
+        if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
+
+        let results
+
+        const language = await Language.findOne({ code: lang }).lean()
+
+        //search all budgets
+        if(criteria == 'all') {
+
+            results = await LanguageBudget.paginate({
+                $and: [{
+                    language: language._id, organization: id, title: { $regex: new RegExp(`${search}`), $options: 'i'}
+                }]
+            }, { 
+                page,
+                limit: 12,
+                populate: 'organization',
+                lean: true,
+                sort: { createdAt: 'desc' }
+            })
+
+            return results.docs
+        }
+
+        //search active budgets
+        results = await LanguageBudget.paginate({
+            $and: [{
+                language: language._id, organization: id, title: { $regex: new RegExp(`${search}`), $options: 'i'}
+            }]
+        }, { 
+            page,
+            limit: 12,
+            populate: 'organization',
+            populate: {
+                path: 'budget',
+                match: {
+                    status: 'active'
+                }
+            },
+            lean: true,
+            sort: { createdAt: 'desc' }
+        })
+
+        results.docs.map((el, i) => {
+            el.budget != null ? results.docs[i].budget = el.budget : delete results.docs[i]
+        })
+
+        results = results.docs.filter((el, i) => {
+            return el != null
+        })
+
+        return results
 
     }
 
