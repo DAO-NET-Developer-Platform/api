@@ -20,7 +20,7 @@ class BudgetService {
 
         const { lang, page } = query
 
-        if(query.title) return this.search(id, query)
+        if(query.search) return await this.search(id, query)
 
         if(!lang) {
 
@@ -110,7 +110,7 @@ class BudgetService {
 
         const criterias = [ 'active', 'all' ]
 
-        const { title, criteria, address, page } = data
+        const { search, criteria, address, page } = data
 
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
@@ -121,7 +121,7 @@ class BudgetService {
 
             results = await Budget.paginate({
                 $and: [{
-                    organization: id, title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                    organization: id, title: { $regex: new RegExp(`${search}`), $options: 'i'}
                 }]
             }, { 
                 page,
@@ -137,7 +137,7 @@ class BudgetService {
         //search active budgets
         results = await Budget.paginate({
             $and: [{
-                organization: id, status: 'active', title: { $regex: new RegExp(`${title}`), $options: 'i'}
+                organization: id, status: 'active', title: { $regex: new RegExp(`${search}`), $options: 'i'}
             }]
         }, { 
             page,
