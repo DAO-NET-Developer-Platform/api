@@ -85,7 +85,7 @@ async function dispenseFunds() {
 }
 
 cron.schedule('0 */1 * * *', async () => {
-    console.log('cron started')
+    console.log('cron job started')
 
     try {
         await returnRemaining()
