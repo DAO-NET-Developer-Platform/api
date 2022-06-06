@@ -97,6 +97,4 @@ cron.schedule('0 */1 * * *', async () => {
 
     }
     
-}, error => {
-    console.log('Error with cron job:', error);
 });
