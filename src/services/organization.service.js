@@ -250,9 +250,9 @@ class OrganizationService {
 
         const criterias = [ 'all', 'joined' ]
 
-        if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
-
         let { search, criteria, address, page } = data
+
+        if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
         let results
 
