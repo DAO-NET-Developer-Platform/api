@@ -23,9 +23,19 @@ const budget = new mongoose.Schema({
        required: true
     },
 
+    // imagePath: {
+    //     type: String,
+    //     required: true
+    // },
+
     image: {
         type: String,
         required: true
+    },
+
+    cid: {
+        type: String,
+        // required: true
     },
 
     deadline: {
