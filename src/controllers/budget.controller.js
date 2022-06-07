@@ -75,6 +75,8 @@ class BudgetController {
 
     static async approve(req, res, next) {
 
+        console.log('here')
+
         const organization = req.params.organization_id
 
         req.body.address = req.query.address

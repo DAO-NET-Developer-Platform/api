@@ -11,7 +11,14 @@ class VoteService {
 
         // console.log(language, id)
 
-        const { language, page } = query
+        // const { language, page } = query
+
+        let page, language
+
+        if(query) {
+            page = query.page
+            language = query.language
+        }
 
         if(!language) {
 
