@@ -19,7 +19,7 @@ class MemberService {
         if(!page) {
             members =  await Member.find({ organization: id }).populate('user').lean()
         } else {
-            const data = query.search ? await this.search(id, query) : await Member.paginate({ organization: id }, {
+            const data = query.criteria ? await this.search(id, query) : await Member.paginate({ organization: id }, {
                 page,
                 limit: 10,
                 populate: 'user',
@@ -137,6 +137,8 @@ class MemberService {
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid Criteria')
 
         let results
+
+        search = search == null ? '' : search
 
         if(criteria == 'all') {
 
