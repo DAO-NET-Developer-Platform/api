@@ -296,47 +296,46 @@ class VoteService {
 
         if(criteria == 'voted') {
 
-            results = await Decision.paginate({ $and: [{ address, organization: id }] }, { 
-                page,
-                limit: 12,
-                populate: {
-                    path: 'vote',
-                    match: {
+            const aggregate = Decision.aggregate([
+
+                { 
+                    $lookup: {
+                        from: "languagevotes",
+                        localField: "vote",    // field in the Decision collection
+                        foreignField: "vote",  //field in the LanguageVote collection
+                        as: "LanguageVotes"
+                    },
+                },
+
+                {
+                    $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$LanguageVotes", 0 ] }, "$$ROOT" ] } }
+                },
+
+                { $project: { LanguageVotes: 0 } },
+
+                {
+                    $match: {
                         title: { $regex: new RegExp(`${search}`), $options: 'i'}
                     }
                 },
+
+                {
+                    $group: {
+                        _id: '$vote'
+                    }
+                }
+            ])
+
+            results = await Decision.aggregatePaginate(aggregate, {
+                page,
+                limit: 12,
                 lean: true,
                 sort: { createdAt: 'desc' }
             })
-    
-            console.log(results)
-
-            results.docs.map((el, i) => {
-                el.vote != null ? results.docs[i].vote = el.vote : delete results.docs[i]
-            })
-    
-            results = results.docs.filter((el, i) => {
-                return el != null
-            })
 
             console.log(results)
-    
-            const groupname = []
-    
-            await Promise.all(results.map(async (el, i) => {
-                if(groupname.includes(el._id.toString())) {
-                    delete results[i]
-                    return
-                }
-                groupname.push(el._id.toString())
-                results[i] = el
-            }))
-    
-            results = results.filter((el, i) => {
-                return el != null
-            })
-    
-            results = await Promise.all(results.map(async (el, i) => results[i] = await LanguageVote.findOne({ vote: el.vote._id, language }).populate('vote').lean()))
+
+            await Promise.all(results.docs.map(async (el, i) => results.docs[i] = await LanguageVote.findOne({ vote: el._id, language }).populate('vote').lean()))
             
             return results
 
