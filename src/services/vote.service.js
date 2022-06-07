@@ -68,6 +68,7 @@ class VoteService {
         await Promise.all(vote.map(async (el, i) => {
 
             vote[i].status = el.vote.status
+            vote[i].image = el.vote.image
             if(user) {
                 const isVoted = await Decision.find({ $and: [{ vote: el.vote._id, user }] }).lean()
                 vote[i].isVoted = !!isVoted.length
@@ -102,6 +103,7 @@ class VoteService {
                 description,
                 organization: data.organization,
                 language: el._id,
+                // image: data.image
                 // status: data.status
             }
 
@@ -332,8 +334,6 @@ class VoteService {
                 lean: true,
                 sort: { createdAt: 'desc' }
             })
-
-            console.log(results)
 
             await Promise.all(results.docs.map(async (el, i) => results.docs[i] = await LanguageVote.findOne({ vote: el._id, language }).populate('vote').lean()))
             
