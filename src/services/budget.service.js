@@ -20,7 +20,7 @@ class BudgetService {
 
         const { lang, page } = query
 
-        if(query.search && !lang) return await this.search(id, query)
+        if(query.criteria && !lang) return await this.search(id, query)
 
         if(!lang) {
 
@@ -50,7 +50,7 @@ class BudgetService {
 
             query.lang = lang
 
-            const data = query.search ? await this.langSearch(id, query) : await LanguageBudget.paginate({ $and: [{language:  language._id, organization: id}] }, { 
+            const data = query.criteria ? await this.langSearch(id, query) : await LanguageBudget.paginate({ $and: [{language:  language._id, organization: id}] }, { 
                 page,
                 limit: 12,
                 populate: 'budget',
@@ -113,11 +113,13 @@ class BudgetService {
 
         const criterias = [ 'active', 'all' ]
 
-        const { search, criteria, address, page } = data
+        let { search, criteria, address, page } = data
 
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
         let results
+
+        search = search == null ? '' : search
 
         //search all budgets
         if(criteria == 'all') {
@@ -163,6 +165,8 @@ class BudgetService {
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
         let results
+
+        search = search == null ? '' : search
 
         const language = await Language.findOne({ code: lang }).lean()
 

@@ -57,7 +57,7 @@ class OrganizationService {
 
         const { page } = query
 
-        if(query.search) return await this.search(query)
+        if(query.criteria) return await this.search(query)
 
         if(!page) return await Organization.find({}).populate('joinCriteria').populate('budgetCriteria').lean()
 
@@ -251,6 +251,8 @@ class OrganizationService {
         const { search, criteria, address, page } = data
 
         let results
+
+        search = search == null ? '' : search
 
         //search all organizations
         if(!criteria || criteria == 'all') {

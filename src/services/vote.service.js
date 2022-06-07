@@ -20,7 +20,7 @@ class VoteService {
             if(!page) {
                 vote = await Vote.find({organization: id}).lean()
             } else {
-                const data = query.search ?  await this.search(id, query) :  await Vote.paginate({organization: id}, {
+                const data = query.criteria ?  await this.search(id, query) :  await Vote.paginate({organization: id}, {
                     page,
                     limit: 12,
                     lean: true
@@ -54,7 +54,7 @@ class VoteService {
 
             query.language = language
 
-            const data = query.search? await this.langSearch(id, query) : await LanguageVote.paginate({ $and: [{ language, organization: id }] }, {
+            const data = query.criteria ? await this.langSearch(id, query) : await LanguageVote.paginate({ $and: [{ language, organization: id }] }, {
                 page,
                 limit: 12,
                 populate: 'vote',
@@ -141,6 +141,8 @@ class VoteService {
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
         let results
+
+        search = search == null ? '' : search
 
         //search all budgets
         if(criteria == 'all') {
@@ -246,6 +248,8 @@ class VoteService {
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
         let results
+
+        search = search == null ? '' : search
 
         //search all budgets
         if(criteria == 'all') {
