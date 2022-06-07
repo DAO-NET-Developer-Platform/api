@@ -61,7 +61,12 @@ const organization = new mongoose.Schema({
     circulation: {
         type: Number,
         default: 0
-    }
+    },
+
+    cid: {
+        type: String,
+        // required: true
+    },
 
     // transaction: {
     //     hash: {

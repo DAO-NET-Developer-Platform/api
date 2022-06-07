@@ -24,10 +24,8 @@ module.exports =  {
        
         console.log(`https://${files[0].cid}.ipfs.dweb.link/${files[0].name}`)
 
-        return
+        return `https://${files[0].cid}.ipfs.dweb.link/${files[0].name}`
 
     }
 
 }
-
-

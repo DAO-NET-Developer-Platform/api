@@ -28,6 +28,11 @@ const schema = new mongoose.Schema({
         // required: true
     },
 
+    cid: {
+        type: String,
+        // required: true
+    },
+
     deadline: {
         type: String,
     },
