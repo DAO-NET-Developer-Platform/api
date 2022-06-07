@@ -51,7 +51,7 @@ class FundService {
 
             // if(res.data.input) {}
         } catch(e) {
-            // console.log(e.errors.hash.properties)
+            console.log(e)
             throw createError.Unauthorized('Invalid hash')
         }
 

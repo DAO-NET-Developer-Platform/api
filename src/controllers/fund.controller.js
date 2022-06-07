@@ -34,6 +34,7 @@ class FundController {
             })
 
         } catch(e) {
+            console.log('controller', e)
             return next(createError(e.statusCode, e.message))
         }
     }

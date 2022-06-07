@@ -309,6 +309,8 @@ class VoteService {
                 sort: { createdAt: 'desc' }
             })
     
+            console.log(results)
+
             results.docs.map((el, i) => {
                 el.vote != null ? results.docs[i].vote = el.vote : delete results.docs[i]
             })
@@ -316,6 +318,8 @@ class VoteService {
             results = results.docs.filter((el, i) => {
                 return el != null
             })
+
+            console.log(results)
     
             const groupname = []
     
