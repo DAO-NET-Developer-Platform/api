@@ -64,6 +64,7 @@ class BudgetService {
 
         await Promise.all(budget.map((el, i) => {
             budget[i].status = el.budget.status
+            budget[i].image = el.budget.image
         }))
 
         return budget
@@ -265,6 +266,7 @@ class BudgetService {
                 description,
                 organization: data.organization,
                 language: el._id,
+                // image: data.image
                 // status: data.status
             }
 
@@ -275,7 +277,8 @@ class BudgetService {
             budget: budget._id,
             ...data,
             type: "Budget",
-            status: data.status
+            status: data.status,
+            // image: data.image
         }
 
         await vote.create(vote_data)

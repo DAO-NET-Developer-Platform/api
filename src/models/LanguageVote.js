@@ -26,7 +26,12 @@ const schema = new mongoose.Schema({
     vote: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Vote'
-    }
+    },
+
+    // image: {
+    //     type: String,
+    //     required: true
+    // }
     
 }, {
     timestamps: true

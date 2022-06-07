@@ -33,7 +33,12 @@ const schema = new mongoose.Schema({
           values: ['pending', 'active'],
           message: 'Unsupported value'
         }
-    }
+    },
+
+    // image: {
+    //     type: String,
+    //     required: true
+    // }
     
 }, {
     timestamps: true
