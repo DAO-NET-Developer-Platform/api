@@ -160,7 +160,7 @@ class BudgetService {
 
         const criterias = [ 'active', 'all' ]
 
-        const { search, criteria, address, page, lang } = data
+        let { search, criteria, address, page, lang } = data
 
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
