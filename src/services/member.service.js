@@ -14,7 +14,12 @@ class MemberService {
 
         let members
 
-        const { page, address } = query
+        let page, address
+
+        if(query) {
+            page = query.page
+            address = query.address
+        }  
 
         if(!page) {
             members =  await Member.find({ organization: id }).populate('user').lean()

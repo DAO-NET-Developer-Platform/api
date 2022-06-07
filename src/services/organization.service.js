@@ -55,7 +55,13 @@ class OrganizationService {
 
     static async all(query) {
 
-        const { page } = query
+        // const { page } = query
+
+        let page
+
+        if(query) {
+            page = query.page
+        }
 
         if(query.criteria) return await this.search(query)
 

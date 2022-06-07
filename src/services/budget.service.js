@@ -18,7 +18,14 @@ class BudgetService {
 
     static async all(id, query) {
 
-        const { lang, page } = query
+        // const { lang, page } = query
+
+        let page, lang
+
+        if(query) {
+            page = query.page
+            lang = query.lang
+        }  
 
         if(query.criteria && !lang) return await this.search(id, query)
 
