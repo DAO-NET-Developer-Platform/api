@@ -248,14 +248,18 @@ class OrganizationService {
 
     static async search(data) {
 
-        const { search, criteria, address, page } = data
+        const criterias = [ 'all', 'joined' ]
+
+        let { search, criteria, address, page } = data
+
+        if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
         let results
 
         search = search == null ? '' : search
 
         //search all organizations
-        if(!criteria || criteria == 'all') {
+        if(criteria == 'all') {
 
             results = await Organization.paginate(
                 {

@@ -136,7 +136,7 @@ class VoteService {
 
         const criterias = [ 'all', 'budget', 'vote', 'voted' ]
 
-        const { search, criteria, address, page } = data
+        let { search, criteria, address, page } = data
 
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 
@@ -243,7 +243,7 @@ class VoteService {
 
         const criterias = [ 'all', 'budget', 'vote', 'voted' ]
 
-        const { search, criteria, address, page, language } = data
+        let { search, criteria, address, page, language } = data
 
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid criteria')
 

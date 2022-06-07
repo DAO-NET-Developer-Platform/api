@@ -132,7 +132,7 @@ class MemberService {
 
         const criterias = [ 'all', 'active', 'pending', 'approved' ]
 
-        const { search, criteria, address, page } = data
+        let { search, criteria, address, page } = data
 
         if(!criterias.includes(criteria)) throw createError.UnprocessableEntity('Invalid Criteria')
 
