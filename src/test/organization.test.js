@@ -68,6 +68,7 @@ describe('organization creation', () => {
             address: 'addrXAr9aE1u84fkrXOHppzTUCVVgvsyrtwevrap',
             hash: '13467859453662759606374521637484558599684623349201647366263674748574478818345630322',
             identityCommitment: '1346785458869662759606374521637484558599684623349201647366263674748574478818345630322',
+            cid: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm'
         }
         
 		await api
@@ -94,6 +95,7 @@ describe('organization creation', () => {
             address: 'addrXAr9aE1u84fkrXOHppzTUCVVgvsyrtwevrap',
             hash: '13467859453662759606374521637484558599684623349201647366263674748574478818345630322',
             identityCommitment: '1346785458869662759606374521637484558599684623349201647366263674748574478818345630322',
+            cid: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm'
         }
 
         await api

@@ -9,6 +9,7 @@ const schemas = {
         description: Joi.any().required(),
         address: Joi.string().required(),
         image: Joi.string().empty('').default(null),
+        cid: Joi.string().required(),
         hash: Joi.string().required()
     })
 

@@ -11,6 +11,7 @@ const initialOrganizations = [
         budgetCriteria: '6283762e2f335a6df2c71905',
         address: 'addrXAr9aE1u84fkrXOHppzTUCVVgvsyrtwevrap',
         hash: '13467859453662759606374521637484558599684623349201647366263674748574478818345630322',
+		cid: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm'
 	}
 ]
 
@@ -31,6 +32,7 @@ const initialBudgets = [
 		description: 'something new',
 		hash: '12236636464662834823434363647364732647418232047483463476474734376634510647284187374572819174743248193403748291',
 		image: 'cs94568499920034122233445',
+		cid: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm'
 	},
 
 	{
@@ -42,6 +44,7 @@ const initialBudgets = [
 		description: 'something new',
 		hash: '12236636464662834823434363647364732647418232047483463476474734376634510647284187374572819174743248193403748291',
 		image: 'cs94568499920034122233478',
+		cid: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm'
 	}
 
 ]
