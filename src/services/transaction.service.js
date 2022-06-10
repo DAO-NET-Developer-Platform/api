@@ -28,11 +28,10 @@ class TransactionService {
         if(txExist != null) throw createError.Unauthorized('Invalid hash')
 
         try {
-        const res = await axios(`${process.env.BLOCKFROST_URL}${hash}/utxos`, {
+        const res = await axios(`${process.env.TANGO_BASE_URL}${hash}/utxos`, {
             method: "GET",
             headers: {
-                'Authorization': `${process.env.BLOCKFROST_ApiKeyAuth}`,
-                'project_id': `${process.env.BLOCKFROST_PROJECT_ID}`
+                'x-api-key': `${process.env.TANGO_API_KEY}`,
             },
         })
 

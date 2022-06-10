@@ -25,38 +25,30 @@ class FundService {
 
         // data.type = 'Dao funding'
 
-        //verify amount with blockfrost
-        try {
+        const transaction = await transactionService.checkTransaction(data.txHash)
 
-            const res = await axios(`${process.env.BLOCKFROST_URL}${data.txHash}/utxos`, {
-                method: "GET",
-                headers: {
-                    'Authorization': `${process.env.BLOCKFROST_ApiKeyAuth}`,
-                    'project_id': `${process.env.BLOCKFROST_PROJECT_ID}`
-                },
-            })
+        if(!transaction) throw createError.Unauthorized('Invalid hash')
 
-            // console.log(res.data.outputs[0].amount.quantity != parseInt(organization))
+        const current = transaction.outputs.find((el) => el.address == organization.address)
 
-            treasury += parseInt(data.amount)
+        if(current < 0) throw createError.Unauthorized('Invalid Transaction')
 
-            await Organization.findByIdAndUpdate(id, {
-                treasury
-            }, { new: true })
+        if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
 
-            res.data.type = 'Dao funding'
-            res.data.amount = data.amount
+        // console.log(res.data.outputs[0].amount.quantity != parseInt(organization))
 
-            await Transaction.create(res.data)
+        treasury += parseInt(data.amount)
 
-            // if(res.data.input) {}
-        } catch(e) {
-            console.log(e)
-            throw createError.Unauthorized('Invalid hash')
-        }
+        await Organization.findByIdAndUpdate(id, {
+            treasury
+        }, { new: true })
 
-        // console.log(res)
+        res.data.type = 'Dao funding'
+        res.data.amount = data.amount
 
+        await Transaction.create(res.data)
+
+        return
     }
 
     static async transactionExists(hash) {
@@ -77,9 +69,11 @@ class FundService {
 
         if(!transaction) throw createError.Unauthorized('Invalid hash')
 
-        if(budget.address != transaction.outputs[0].address) throw createError.Unauthorized('Invalid address')
+        const current = transaction.outputs.find((el) => el.address == budget.address)
 
-        if(parseInt(transaction.outputs[0].amount[0].quantity) != parseInt(data.amount)) throw createError.Unauthorized('Invalid hash')
+        if(current < 0) throw createError.Unauthorized('Invalid Transaction')
+
+        if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
 
         transaction.amount = data.amount
         transaction.type = "Budget Funding"

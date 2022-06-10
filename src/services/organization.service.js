@@ -195,6 +195,8 @@ class OrganizationService {
 
         data.status = 'active'
 
+        const organization = await this.find(data.organization)
+
         if(criteria.criteria == 'Anyone who pays the entry fee') {
 
             if(!data.txHash) throw createError.Unauthorized('Please pay before joining Dao')
@@ -204,7 +206,12 @@ class OrganizationService {
 
             if(transaction == null) throw createError.Unauthorized('Invalid Hash')
 
-            if(parseInt(transaction.outputs[0].amount[0].quantity) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+            //get organization address
+            const current = transaction.outputs.find((el) => el.address == organization.address)
+
+            if(current < 0) throw createError.Unauthorized('Invalid Transaction')
+
+            if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
 
             transaction.type = 'Joining fee'
             transaction.amount = criteria.amount * 1000000
@@ -220,8 +227,6 @@ class OrganizationService {
         const user = await User.findOne({ address: data.address }).lean()
 
         data.user = user._id 
-
-        const organization = await this.find(data.organization)
 
         if(data.status == 'active') await appendLeaf(organization._id, organization.name, data.identityCommitment)
 

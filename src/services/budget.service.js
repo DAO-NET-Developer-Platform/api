@@ -240,6 +240,8 @@ class BudgetService {
 
         data.status = "active"
 
+        const organization = await Organization.findById(data.organization).lean()
+
         if(criteria.criteria.includes(`members' approval`)) {
 
             //create a vote for the the request
@@ -253,7 +255,11 @@ class BudgetService {
 
             if(transaction == null) throw createError.Unauthorized('Invalid Hash')
 
-            if(parseInt(transaction.outputs[0].amount[0].quantity) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+            const current = transaction.outputs.find((el) => el.address == organization.address)
+
+            if(current < 0) throw createError.Unauthorized('Invalid Transaction')
+
+            if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
 
             transaction.type = 'Joining fee'
             transaction.amount = criteria.amount * 1000000
