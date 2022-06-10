@@ -35,9 +35,12 @@ class TransactionService {
             },
         })
 
+        console.log(res.data)
+
         return res.data
 
         } catch(e) {
+            console.log(e)
             throw createError.Unauthorized('Invalid hash')
         }
 

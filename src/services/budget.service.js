@@ -257,7 +257,7 @@ class BudgetService {
 
             const current = transaction.outputs.find((el) => el.address == organization.address)
 
-            if(current < 0) throw createError.Unauthorized('Invalid Transaction')
+            if(!current) throw createError.Unauthorized('Invalid Transaction')
 
             if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
 

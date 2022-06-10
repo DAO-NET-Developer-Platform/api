@@ -31,7 +31,7 @@ class FundService {
 
         const current = transaction.outputs.find((el) => el.address == organization.address)
 
-        if(current < 0) throw createError.Unauthorized('Invalid Transaction')
+        if(!current) throw createError.Unauthorized('Invalid Transaction')
 
         if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
 
@@ -71,7 +71,7 @@ class FundService {
 
         const current = transaction.outputs.find((el) => el.address == budget.address)
 
-        if(current < 0) throw createError.Unauthorized('Invalid Transaction')
+        if(!current) throw createError.Unauthorized('Invalid Transaction')
 
         if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
 
