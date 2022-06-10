@@ -75,6 +75,11 @@ class OrganizationService {
             sort: { createdAt: 'desc' }
         })
 
+        await Promise.all(data.docs.map(async (el, i) => {
+            const members = await Member.find({ organization: el._id })
+            data.docs[i].members = members.length
+        }))
+
         return data.docs
 
     }
