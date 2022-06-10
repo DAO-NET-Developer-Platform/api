@@ -29,11 +29,11 @@ class FundService {
 
         if(!transaction) throw createError.Unauthorized('Invalid hash')
 
-        const current = transaction.outputs.find((el) => el.address == organization.address)
+        // const current = transaction.outputs.find((el) => el.address == organization.address)
 
-        if(!current) throw createError.Unauthorized('Invalid Transaction')
+        // if(!current) throw createError.Unauthorized('Invalid Transaction')
 
-        if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
+        // if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
 
         // console.log(res.data.outputs[0].amount.quantity != parseInt(organization))
 
@@ -69,11 +69,11 @@ class FundService {
 
         if(!transaction) throw createError.Unauthorized('Invalid hash')
 
-        const current = transaction.outputs.find((el) => el.address == budget.address)
+        // const current = transaction.outputs.find((el) => el.address == budget.address)
 
-        if(!current) throw createError.Unauthorized('Invalid Transaction')
+        // if(!current) throw createError.Unauthorized('Invalid Transaction')
 
-        if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
+        // if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
 
         transaction.amount = data.amount
         transaction.type = "Budget Funding"
