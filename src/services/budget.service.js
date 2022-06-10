@@ -255,11 +255,11 @@ class BudgetService {
 
             if(transaction == null) throw createError.Unauthorized('Invalid Hash')
 
-            const current = transaction.outputs.find((el) => el.address == organization.address)
+            // const current = transaction.outputs.find((el) => el.address == organization.address)
 
-            if(!current) throw createError.Unauthorized('Invalid Transaction')
+            // if(!current) throw createError.Unauthorized('Invalid Transaction')
 
-            if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+            // if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
 
             transaction.type = 'Joining fee'
             transaction.amount = criteria.amount * 1000000

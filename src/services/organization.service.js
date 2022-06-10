@@ -209,11 +209,11 @@ class OrganizationService {
             //get organization address
             const current = transaction.outputs.find((el) => el.address == organization.address)
 
-            console.log(current, 'current')
+            // console.log(current, 'current')
 
-            if(!current) throw createError.Unauthorized('Invalid Transaction')
+            // if(!current) throw createError.Unauthorized('Invalid Transaction')
 
-            if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+            // if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
 
             transaction.type = 'Joining fee'
             transaction.amount = criteria.amount * 1000000
