@@ -43,8 +43,8 @@ class FundService {
             treasury
         }, { new: true })
 
-        res.data.type = 'Dao funding'
-        res.data.amount = data.amount
+        data.type = 'Dao funding'
+        data.amount = data.amount
 
         await Transaction.create(res.data)
 
