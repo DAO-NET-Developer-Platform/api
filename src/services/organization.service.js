@@ -209,7 +209,7 @@ class OrganizationService {
             //get organization address
             const current = transaction.outputs.find((el) => el.address == organization.address)
 
-            // console.log(current, 'current')
+            console.log(current, 'current')
 
             if(!current) throw createError.Unauthorized('Invalid Transaction')
 
