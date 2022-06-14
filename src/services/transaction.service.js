@@ -55,7 +55,7 @@ class TransactionService {
 
     static async createWebhook(data) {
 
-        const res = await axios(`${process.env.TANGO_BASE_URL}webhooks`, {
+        const res = await axios(`${process.env.TANGO_WEBHOOK_URL}webhooks`, {
             method: "POST",
             headers: {
                 'x-api-key': `${process.env.TANGO_API_KEY}`,
