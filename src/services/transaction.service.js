@@ -63,7 +63,7 @@ class TransactionService {
             data
         })
 
-        console.log(res)
+        console.log(res.data)
 
         return
 
