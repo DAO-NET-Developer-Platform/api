@@ -35,6 +35,7 @@ class FundService {
         const webhookData = {
             name: 'My Webhook',
             description: 'Payment webhook',
+            network: "testnet",
             type: 'payment',
             address: `${organization.address}`,
             callback_url: 'https://8599-2c0f-f5c0-421-75bc-f118-68db-1668-1342.eu.ngrok.io/webhook/funding',
