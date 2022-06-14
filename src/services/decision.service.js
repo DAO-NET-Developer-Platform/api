@@ -73,8 +73,6 @@ class DecisionController {
 
         const member = await Member.findById(data.member).lean()
 
-        console.log(data)
-
         const decision = await Decision.findOne({ $and: [{ address: data.address, vote: data.vote }] }).lean()
 
         // amount/available_percentage * unspent

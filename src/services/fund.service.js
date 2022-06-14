@@ -4,6 +4,7 @@ const Budget = require('../models/Budget')
 const axios = require('axios')
 const createError = require('http-errors')
 const transactionService = require('../services/transaction.service')
+const webhook = require('../services/webhook.service')
 
 class FundService {
 
@@ -29,9 +30,24 @@ class FundService {
 
         if(!transaction) throw createError.Unauthorized('Invalid hash')
 
-        // const current = transaction.outputs.find((el) => el.address == organization.address)
+        const current = transaction.outputs.find((el) => el.address == organization.address)
 
-        // if(!current) throw createError.Unauthorized('Invalid Transaction')
+        const webhookData = {
+            name: 'My Webhook',
+            description: 'Payment webhook',
+            type: 'payment',
+            address: `${organization.address}`,
+            callback_url: 'https://8599-2c0f-f5c0-421-75bc-f118-68db-1668-1342.eu.ngrok.io/webhook/funding',
+            rules: [
+            {
+                field: 'amount',
+                operator: '=',
+                value: `${data.amount}`
+            }]
+        }
+
+        //if(!current)
+        await transactionService.createWebhook(webhookData)
 
         // if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
 

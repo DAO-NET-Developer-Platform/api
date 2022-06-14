@@ -53,6 +53,22 @@ class TransactionService {
         return transaction
     }
 
+    static async createWebhook(data) {
+
+        const res = await axios(`${process.env.TANGO_BASE_URL}webhooks`, {
+            method: "POST",
+            headers: {
+                'x-api-key': `${process.env.TANGO_API_KEY}`,
+            },
+            data
+        })
+
+        console.log(res)
+
+        return
+
+    }
+
 }
 
 module.exports = TransactionService
