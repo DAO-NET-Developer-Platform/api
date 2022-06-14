@@ -75,13 +75,18 @@ class OrganizationService {
             sort: { createdAt: 'desc' }
         })
 
+        await Promise.all(data.docs.map(async (el, i) => {
+            const members = await this.getMembers(el._id)
+            data.docs[i].members = members.length
+        }))
+
         return data.docs
 
     }
 
     static async me(address) {
 
-        const orgs = await Member.find({ address }).populate('organization').lean()
+        const orgs = await Member.find({ address }).populate('organization').sort({ createdAt: 'Desc' }).lean()
 
         return orgs.map((el) => el.organization)
 
@@ -130,6 +135,10 @@ class OrganizationService {
 
         data.isMember = member
         data.status = status
+
+        const [ members, budget ] = await Promise.all([this.getMembers(id), this.getBudgetItems(id)])
+        data.members = members.length
+        data.budgets = budget.length
 
         return data
 
@@ -314,6 +323,18 @@ class OrganizationService {
         })
         
         return results
+    }
+
+    static async getMembers(org) {
+
+        return Member.find({ $and: [{ organization: org, status: 'active' }] }).lean()
+
+    }
+
+    static async getBudgetItems(org) {
+
+        return Budget.find({ $and: [{ organization: org, status: 'active' }] }).lean()
+
     }
 
 }
