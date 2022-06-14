@@ -2,6 +2,7 @@ const Decision = require('../models/Decision')
 const Option = require('../models/Option')
 const LanguageOption = require('../models/LanguageOption')
 const Member = require('../models/Member')
+const createError = require('http-errors')
 
 class DecisionController {
 
@@ -72,14 +73,63 @@ class DecisionController {
 
         const member = await Member.findById(data.member).lean()
 
-        data.amount = (parseInt(data.amount) / 100) * parseInt(member.unspent)
+        console.log(data)
+
+        const decision = await Decision.findOne({ $and: [{ address: data.address, vote: data.vote }] }).lean()
+
+        // amount/available_percentage * unspent
+
+        if(data.amount > member.votingPower) throw createError.UnprocessableEntity('Invalid percenatage')
+
+        if(decision !== null) throw createError.UnprocessableEntity(`Can't allocate more than once`)
+
+        // if(decision !== null) {
+
+        //     //increase decision by amount
+
+        //     decision.percent = decision.percent == null ? 0 : decision.percent
+        //     data.percent = decision.percent + parseInt(data.amount) //15 + 20 = 35
+
+        //     data.amount = (parseInt(data.amount) / parseInt(member.votingPower)) * parseInt(member.unspent) // 20/85 * 85 = 20
+
+        //     data.amount = parseInt(data.amount) + decision.amount //20 + 15 = 35
+
+        //     const votingPower = parseInt(member.votingPower) - parseInt(data.amount)
+
+        //     await Decision.findByIdAndUpdate(decision._id, {
+        //         amount: data.amount,
+        //         percent: data.percent
+        //     }, {
+        //         new: true
+        //     })
+
+        //     const unspent = parseInt(member.unspent) - parseInt(data.amount)
+
+        //     await Member.findByIdAndUpdate(data.member, {
+        //         unspent,
+        //         votingPower,
+        //     }, {
+        //         new: true
+        //     })
+
+        //     return
+            
+        // }
+
+        data.percent = data.amount
+
+
+        data.amount = (parseInt(data.percent) / parseInt(member.votingPower)) * parseInt(member.unspent)
+
+        const votingPower = parseInt(member.votingPower) - parseInt(data.percent)
 
         await Decision.create(data) 
 
         const unspent = parseInt(member.unspent) - parseInt(data.amount)
 
         await Member.findByIdAndUpdate(data.member, {
-            unspent
+            unspent,
+            votingPower,
         }, {
             new: true
         })

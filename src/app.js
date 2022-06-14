@@ -5,7 +5,7 @@ const fileUpload = require('express-fileupload');
 // connect to mongodb and redis
 // require('./connectors/redis');
 require('./connectors/mongodb');
-require('./cron/index')
+// require('./cron/index')
 
 const morgan = require('morgan');
 // const bodyParser = require('body-parser')

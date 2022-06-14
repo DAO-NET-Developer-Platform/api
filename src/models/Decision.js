@@ -35,6 +35,10 @@ const schema = new mongoose.Schema({
         type: Number,
     },
 
+    percent: {
+        type: Number,
+    },
+    
     organization: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Organization'
