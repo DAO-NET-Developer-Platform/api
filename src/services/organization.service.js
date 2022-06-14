@@ -125,6 +125,8 @@ class OrganizationService {
         //last option is for identityCommitment
         await appendLeaf(organization._id, organization.name, data.identityCommitment)
 
+        await this.calculateVotingPower(organization._id)
+
         return organization
 
     }
@@ -243,6 +245,8 @@ class OrganizationService {
 
         const member = await Member.create(data)
 
+        await this.calculateVotingPower(data.organization)
+
         return member
 
     }
@@ -334,6 +338,31 @@ class OrganizationService {
     static async getBudgetItems(org) {
 
         return Budget.find({ $and: [{ organization: org, status: 'active' }] }).lean()
+
+    }
+
+    static async calculateVotingPower(org) {
+
+        //get all organization members
+        const members = await this.getMembers(org)
+
+        //calculate voting power
+        const organization = (await Organization.findById(org)).toObject()
+
+        await Organization.findByIdAndUpdate(org, {
+            circulation: organization.treasury
+        }, {
+            new: true
+        })
+
+        const unspent = parseInt(organization.treasury)/parseInt(members.length)
+
+        await Member.updateMany({ organization: org }, {
+            unspent: unspent,
+            votingPower: 100
+        })
+
+        return
 
     }
 

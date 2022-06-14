@@ -94,7 +94,9 @@ class MemberService {
                 status: 'active'
             }, {
                 new: true
-            })       
+            })
+            
+            await this.calculateVotingPower(organizationData._id)
         }
 
         return

@@ -13,6 +13,8 @@ class VoteService {
 
         // const { language, page } = query
 
+        const percents = []
+
         let page, language
 
         if(query) {
@@ -43,12 +45,17 @@ class VoteService {
                     vote[i].isVoted = !!isVoted.length
                 }
                 //check for percentage
-                if(vote.type == 'budget') {
+                if(el.type == 'Budget') {
 
-                } else {
-                    vote[i].percentage == null
+                    vote[i].percentage = await this.calculatePercentage(el._id)
+                    percents.push(vote[i].percentage)
+
                 }
             }))
+
+            vote.unshift({
+                treasuryPercent: 100 - percents.reduce((a, b) => a + b)
+            })
 
             return vote
         }
@@ -80,7 +87,18 @@ class VoteService {
                 const isVoted = await Decision.find({ $and: [{ vote: el.vote._id, user }] }).lean()
                 vote[i].isVoted = !!isVoted.length
             }
+
+            if(el.vote.type == 'Budget') {
+
+                vote[i].percentage = await this.calculatePercentage(el.vote._id)
+                percents.push(vote[i].percentage)
+
+            }
         }))
+
+        vote.unshift({
+            treasuryPercent: 100 - percents.reduce((a, b) => a + b)
+        })
 
         return vote
 
@@ -353,6 +371,25 @@ class VoteService {
         }
 
     }
-}
+
+    static async calculatePercentage(vote) {
+
+        const decision = await Decision.find({ type: 'Budget', vote }).lean()
+
+        const percents = decision.map(el => el.percent)
+
+        //get average
+        if(!percents.length) return 0
+
+        const total = percents.reduce((a, b) => {
+            if(!a) a = 0
+            if(!b) b = 0
+            return parseInt(a) + parseInt(b)
+        }, 0)
+
+        return Math.round(total/decision.length)
+
+    }
+ }
 
 module.exports = VoteService

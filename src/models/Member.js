@@ -39,7 +39,13 @@ const member = new mongoose.Schema({
     unspent: {
         type: Number,
         default: 0
+    },
+
+    votingPower: {
+        type: Number,
+        default: 0
     }
+
 
 }, {
     timestamps: true
