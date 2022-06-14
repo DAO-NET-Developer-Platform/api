@@ -11,6 +11,7 @@ const option = require('./option')
 const decision = require('./decision')
 const seed = require('./seed')
 const createError = require('http-errors')
+const webhook = require('./webhook')
 
 
 routes.all("/", (req, res)=> {
@@ -32,6 +33,7 @@ routes.use('/language', language)
 routes.use('/option', option)
 routes.use('/decision', decision)
 routes.use('/seed', seed)
+routes.use('/webhook', webhook)
 
 routes.use( async (req, res, next) => {
     next(createError.NotFound('Route not Found'))
