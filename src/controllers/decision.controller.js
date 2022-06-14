@@ -69,22 +69,16 @@ class DecisionController {
 
         try {
 
-            try {
+            const data = await decision.createBudgetDecision(req.body)
 
-                const data = await decision.createBudgetDecision(req.body)
-    
-                return res.status(200).json({
-                    status: true,
-                    message: 'Decision created successfully',
-                    data
-                })
-                
-            } catch (e) {
-                return next(createError(e.statusCode, e.message))
-            }
-
+            return res.status(200).json({
+                status: true,
+                message: 'Decision created successfully',
+                data
+            })
+            
         } catch (e) {
-
+            return next(createError(e.statusCode, e.message))
         }
 
     }
