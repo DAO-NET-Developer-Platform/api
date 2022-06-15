@@ -36,7 +36,8 @@ class FundService {
         // await transactionService.createWebhook(webhookData)
 
         if(!current) {
-            setTimeout(async(data, organization) => {
+            console.log('will try to validate later')
+            setTimeout(async() => {
 
                 transaction = await transactionService.checkTransaction(data.txHash)
                 console.log(transaction)
