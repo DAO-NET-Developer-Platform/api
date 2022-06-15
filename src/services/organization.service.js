@@ -213,16 +213,43 @@ class OrganizationService {
             if(!data.txHash) throw createError.Unauthorized('Please pay before joining Dao')
 
             //call to transaction services to check
-            const transaction = await transactionService.checkTransaction(data.txHash)
+            let transaction = await transactionService.checkTransaction(data.txHash)
 
-            if(transaction == null) throw createError.Unauthorized('Invalid Hash')
+            if(transaction == null) throw createError.Unauthorized('Invalid transaction')
 
             //get organization address
-            const current = transaction.outputs.find((el) => el.address == organization.address)
+            let current = transaction.outputs.find((el) => el.address == organization.address)
 
             // console.log(current, 'current')
 
-            // if(!current) throw createError.Unauthorized('Invalid Transaction')
+            if(!current) {
+
+                console.log('will try to validate later')
+                setTimeout(async() => {
+
+                    transaction = await transactionService.checkTransaction(data.txHash)
+                    console.log(transaction)
+
+                    current = transaction.outputs.find((el) => el.address == organization.address)
+
+                    if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+
+                    treasury += (parseInt(criteria.amount) * 1000000)
+
+                    await Organization.findByIdAndUpdate(data.organization, {
+                        treasury
+                    }, { new: true })
+
+                    transaction.type = 'Joining fee'
+                    transaction.amount = criteria.amount * 1000000
+
+                    await transactionService.createTransaction(transaction, data.organization)
+
+                    console.log('updated')
+
+                }, 200000)
+
+            }
 
             // if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
 

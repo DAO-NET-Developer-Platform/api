@@ -57,6 +57,8 @@ class FundService {
 
                 await Transaction.create(transaction)
 
+                console.log('updated')
+
             }, 200000)
 
             return {
