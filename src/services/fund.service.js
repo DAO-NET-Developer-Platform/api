@@ -18,41 +18,54 @@ class FundService {
 
         let treasury = parseInt(organization.treasury)
 
-        const txExist = await this.transactionExists(data.txHash)
+        // const txExist = await this.transactionExists(data.txHash)
 
         // console.log(txExist)
 
-        if(txExist != null) throw createError.Unauthorized('Invalid hash')
+        // if(txExist != null) throw createError.Unauthorized('Invalid hash')
 
         // data.type = 'Dao funding'
 
-        const transaction = await transactionService.checkTransaction(data.txHash)
+        let transaction = await transactionService.checkTransaction(data.txHash)
 
-        if(!transaction) throw createError.Unauthorized('Invalid hash')
+        if(!transaction) throw createError.Unauthorized('Invalid transaction')
 
-        const current = transaction.outputs.find((el) => el.address == organization.address)
+        let current = transaction.outputs.find((el) => el.address == organization.address)
 
-        const webhookData = {
-            name: 'My Webhook',
-            description: 'Payment webhook',
-            network: "testnet",
-            type: 'payment',
-            address: `addr_test1qrl2xje6rgcu50vc03gg8j50yglgt497atuc694k3hvcurv8v0kntmc73fytw3e6a8rlqf0h4tmgvm8nymgxpeqqsa2qfrxcw7`,
-            callback_url: 'https://8599-2c0f-f5c0-421-75bc-f118-68db-1668-1342.eu.ngrok.io/webhook/funding',
-            rules: [
-            {
-                "field": "value",
-                "operator": "=",
-                "value": `${data.amount}`
-            }]
+        // if(!current) transaction.status == "pending"
+        // await transactionService.createWebhook(webhookData)
+
+        if(!current) {
+            setTimeout(async(data, organization) => {
+
+                transaction = await transactionService.checkTransaction(data.txHash)
+                console.log(transaction)
+
+                current = transaction.outputs.find((el) => el.address == organization.address)
+
+                if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
+
+                treasury += parseInt(data.amount)
+
+                await Organization.findByIdAndUpdate(id, {
+                    treasury
+                }, { new: true })
+
+                transaction.type = 'Dao funding'
+                transaction.amount = data.amount
+
+                await Transaction.create(transaction)
+
+            }, 200000)
+
+            return {
+                message: 'Processing your payment'
+            }
         }
 
-        //if(!current)
-        await transactionService.createWebhook(webhookData)
+        if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
 
-        // if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
-
-        // console.log(res.data.outputs[0].amount.quantity != parseInt(organization))
+        console.log(res.data.outputs[0].amount.quantity != parseInt(organization))
 
         treasury += parseInt(data.amount)
 
