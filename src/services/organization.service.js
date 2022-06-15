@@ -247,6 +247,18 @@ class OrganizationService {
 
                     console.log('updated')
 
+                    const user = await User.findOne({ address: data.address }).lean()
+
+                    data.user = user._id 
+
+                    if(data.status == 'active') await appendLeaf(organization._id, organization.name, data.identityCommitment)
+
+                    const member = await Member.create(data)
+
+                    await this.calculateVotingPower(data.organization)
+
+                    return member
+
                 }, 200000)
 
             }
