@@ -35,8 +35,8 @@ class TransactionService {
             },
         })
 
-        console.log(res.data)
-        console.log(res.data.outputs)
+        // console.log(res.data)
+        // console.log(res.data.outputs)
         return res.data
 
         } catch(e) {
