@@ -62,7 +62,7 @@ class TransactionService {
                 headers: {
                     'x-api-key': `${process.env.TANGO_API_KEY}`,
                 },
-                data
+                data: JSON.stringify(data)
             })
 
             console.log(res.data)
