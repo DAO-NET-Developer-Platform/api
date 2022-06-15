@@ -299,6 +299,11 @@ class OrganizationService {
                 }
             )
 
+            await Promise.all(results.docs.map(async (el, i) => {
+                const members = await this.getMembers(el._id)
+                results.docs[i].members = members.length
+            }))
+
             return results.docs
         }
 

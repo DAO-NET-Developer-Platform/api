@@ -37,13 +37,13 @@ class FundService {
             description: 'Payment webhook',
             network: "testnet",
             type: 'payment',
-            address: `${organization.address}`,
+            address: `addr_test1qrl2xje6rgcu50vc03gg8j50yglgt497atuc694k3hvcurv8v0kntmc73fytw3e6a8rlqf0h4tmgvm8nymgxpeqqsa2qfrxcw7`,
             callback_url: 'https://8599-2c0f-f5c0-421-75bc-f118-68db-1668-1342.eu.ngrok.io/webhook/funding',
             rules: [
             {
-                field: 'amount',
-                operator: '=',
-                value: `${data.amount}`
+                "field": "value",
+                "operator": "=",
+                "value": `${data.amount}`
             }]
         }
 

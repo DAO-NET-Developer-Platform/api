@@ -35,9 +35,6 @@ class TransactionService {
             },
         })
 
-        console.log(res.data)
-        console.log(res.data.outputs)
-
         return res.data
 
         } catch(e) {
@@ -55,6 +52,8 @@ class TransactionService {
 
     static async createWebhook(data) {
 
+        // console.log(data)
+
         try {
 
             const res = await axios(`${process.env.TANGO_WEBHOOK_URL}`, {
@@ -62,14 +61,14 @@ class TransactionService {
                 headers: {
                     'x-api-key': `${process.env.TANGO_API_KEY}`,
                 },
-                data: JSON.stringify(data)
+                data
             })
 
             console.log(res.data)
             return
 
         } catch(e) {
-            console.log(e.data)
+            console.log(e.response.data)
             throw createError.Unauthorized('Invalid hash')
         }
 
