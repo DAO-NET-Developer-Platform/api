@@ -3,6 +3,7 @@ const Organization = require('../models/Organization')
 const initialOrganizations = [
 	{
 		name: 'Dao Mazen',
+		description: 'something new',
         slug: 'dao-mazen',
 		image: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm',
         creator: 'addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvo',
@@ -15,6 +16,7 @@ const initialOrganizations = [
 	},
 	{
 		name: 'Dao Midas touch',
+		description: 'something new',
         slug: 'dao-midas-touch',
 		image: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm',
         creator: 'addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvo',

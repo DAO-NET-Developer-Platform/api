@@ -98,15 +98,46 @@ class FundService {
 
         if(budget == null) throw createError.NotFound('No such budget item')
 
-        const transaction = await transactionService.checkTransaction(data.txHash)
+        let transaction = await transactionService.checkTransaction(data.txHash)
 
         if(!transaction) throw createError.Unauthorized('Invalid hash')
 
-        // const current = transaction.outputs.find((el) => el.address == budget.address)
+        let current = transaction.outputs.find((el) => el.address == budget.address)
 
-        // if(!current) throw createError.Unauthorized('Invalid Transaction')
+        // if(!current) 
 
-        // if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
+        if(!current) {
+            console.log('will try to validate later')
+            setTimeout(async() => {
+
+                transaction = await transactionService.checkTransaction(data.txHash)
+                // console.log(transaction)
+
+                current = transaction.outputs.find((el) => el.address == budget.address)
+
+                if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
+
+                // treasury += parseInt(data.amount)
+
+                // await Organization.findByIdAndUpdate(id, {
+                //     treasury
+                // }, { new: true })
+
+                transaction.amount = data.amount
+                transaction.type = "Budget Funding"
+
+                await Transaction.create(transaction)
+
+                console.log('updated')
+
+            }, 200000)
+
+            return {
+                message: 'Processing your payment'
+            }
+        }
+
+        if(parseInt(current.value) !== parseInt(data.amount)) throw createError.Unauthorized('Invalid Quantity')
 
         transaction.amount = data.amount
         transaction.type = "Budget Funding"

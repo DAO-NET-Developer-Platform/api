@@ -15,6 +15,7 @@ const deleteLeaf = require('./deleteLeaf')
 const crypto = require('crypto')
 const slug = require('slugify')
 const transactionService = require('./transaction.service')
+const Decision = require('../models/Decision')
 
 
 
@@ -253,17 +254,24 @@ class OrganizationService {
 
                     if(data.status == 'active') await appendLeaf(organization._id, organization.name, data.identityCommitment)
 
-                    const member = await Member.create(data)
+                    await Member.create(data)
 
                     await this.calculateVotingPower(data.organization)
 
-                    return member
+                    return 'Successfully requested to join DAO'
+                    
 
                 }, 200000)
 
             }
 
-            // if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+            if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+
+            treasury += (parseInt(criteria.amount) * 1000000)
+
+            await Organization.findByIdAndUpdate(data.organization, {
+                treasury
+            }, { new: true })
 
             transaction.type = 'Joining fee'
             transaction.amount = criteria.amount * 1000000
@@ -405,6 +413,11 @@ class OrganizationService {
             unspent: unspent,
             votingPower: 100
         })
+
+        await Decision.updateMany({ $and: [{ organization: org, done: false }] }, {
+            done: true
+        }, { new: true })
+
 
         return
 

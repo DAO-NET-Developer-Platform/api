@@ -3,6 +3,7 @@ const Joi = require('joi')
 const schemas = {
     create: Joi.object().keys({
         name: Joi.string().required(),
+        description: Joi.string().required(),
         creator: Joi.string().required(),
         joinCriteria: Joi.any().required(),
         budgetCriteria: Joi.any().required(),
