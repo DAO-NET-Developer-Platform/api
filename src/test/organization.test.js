@@ -59,6 +59,7 @@ describe('organization creation', () => {
 
         const data = {
             name: 'Dao Mazen',
+            description: 'something new',
             image: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm',
             creator: 'addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvor',
             joinCriteria: '6283762e2f335a6df2c71901',
@@ -86,6 +87,7 @@ describe('organization creation', () => {
 
         const data = {
             name: 'Dao New',
+            description: 'something new',
             image: 'bafybeifuc3ozphi2rzaoytokkkft3zh2k4gkre7j3esw6w47t5enjh5wsm',
             creator: 'addrXAr9aE1u84fkrXOHppzTUCVVgvmOTAvo',
             joinCriteria: '6283762e2f335a6df2c71901',
