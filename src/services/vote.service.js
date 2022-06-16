@@ -140,11 +140,28 @@ class VoteService {
 
     }
 
-    static async single(id, language) {
+    static async single(id, user, language) {
 
-        if(!language) return await Vote.findById(id).lean()
+        if(!language) {
+            const vote =  await Vote.findById(id).lean()
+
+            const voteDetails =  await this.myVotePercent(vote._id)
+            vote.isVoted = voteDetails.isVoted
+            vote.myPercent = voteDetails.percent
+            
+            return vote
+        }
 
         const vote = await LanguageVote.findOne({ $and: [{ language, vote: id }] }).populate('vote').lean()
+
+        // console.log(vote)
+        // console.log(vote != null, user, vote.vote.type == "Budget")
+
+        if(vote != null && user && vote.vote.type == "Budget") {
+            const voteDetails =  await this.myVotePercent(vote.vote._id)
+            vote.isVoted = voteDetails.isVoted
+            vote.myPercent = voteDetails.percent
+        }
 
         vote.status = vote.vote.status
 
@@ -390,6 +407,17 @@ class VoteService {
 
         return Math.round(total/decision.length)
 
+    }
+
+    static async myVotePercent(vote, address) {
+
+        const myVote = await Decision.findOne({ $and: [{ type: 'Budget', vote, address }] }).lean()
+
+        console.log(myVote)
+
+        if(myVote == null) return { isVoted: false, percent: 0}
+
+        return { isVoted: true, percent: myVote.percent == null ? 0 : myVote.percent }
     }
  }
 

@@ -28,24 +28,33 @@ class BudgetService {
             lang = query.lang
         }  
 
-        if(query.criteria && !lang) return await this.search(id, query)
-
         if(!lang) {
+
+            let data
 
             if(!page) return await Budget.find({ organization: id }).populate('organization').lean()
 
-            const data = await Budget.paginate({ organization: id }, { 
-                page,
-                limit: 12,
-                populate: 'organization',
-                lean: true,
-                sort: { createdAt: 'desc' }
-            })
+            if(query.criteria) {
 
-            data.docs.map(async (el) => {
+                data = await this.search(id, query)
+                
+            } else {
+
+                data = await Budget.paginate({ organization: id }, { 
+                    page,
+                    limit: 12,
+                    populate: 'organization',
+                    lean: true,
+                    sort: { createdAt: 'desc' }
+                })
+
+            }
+
+            await Promise.all(data.docs.map(async (el, i) => {
                 const vote = await Vote.findOne({ budget: el.id }).lean()
-                data.docs[i].amountRaised = await this.getAmountRaised(vote)
-            })
+                data.docs[i].amountRaised = await this.getAmountRaised(vote._id)
+            }))
+
 
             return data.docs
 
