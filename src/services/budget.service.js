@@ -12,6 +12,7 @@ const Vote = require('../models/Vote')
 const vote = require('../services/vote.service')
 const transactionService = require('./transaction.service')
 const createError = require('http-errors')
+const Decision = require('../models/Decision')
 
 
 class BudgetService {
@@ -39,6 +40,11 @@ class BudgetService {
                 populate: 'organization',
                 lean: true,
                 sort: { createdAt: 'desc' }
+            })
+
+            data.docs.map(async (el) => {
+                const vote = await Vote.findOne({ budget: el.id }).lean()
+                data.docs[i].amountRaised = await this.getAmountRaised(vote)
             })
 
             return data.docs
@@ -69,9 +75,11 @@ class BudgetService {
 
         }
 
-        await Promise.all(budget.map((el, i) => {
+        await Promise.all(budget.map(async (el, i) => {
             budget[i].status = el.budget.status
             budget[i].image = el.budget.image
+            const vote = await Vote.findOne({ budget: el.budget }).lean()
+            budget[i].amountRaised = await this.getAmountRaised(vote)
         }))
 
         return budget
@@ -102,6 +110,8 @@ class BudgetService {
             const budget = (await Budget.findById(id)).toObject()
             budget.vote = vote._id
 
+            budget.amountRaised = await this.getAmountRaised(budget.vote)
+
             return budget
         }
 
@@ -111,6 +121,8 @@ class BudgetService {
 
         budget.status = budget.budget.status
         budget.vote = vote._id
+
+        budget.amountRaised = await this.getAmountRaised(budget.vote)
 
         return budget
 
@@ -255,11 +267,82 @@ class BudgetService {
 
             if(transaction == null) throw createError.Unauthorized('Invalid Hash')
 
-            // const current = transaction.outputs.find((el) => el.address == organization.address)
+            const current = transaction.outputs.find((el) => el.address == organization.address)
 
             // if(!current) throw createError.Unauthorized('Invalid Transaction')
 
-            // if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+            if(!current) {
+
+                console.log('will try to validate later')
+                setTimeout(async() => {
+
+                    transaction = await transactionService.checkTransaction(data.txHash)
+                    console.log(transaction)
+
+                    current = transaction.outputs.find((el) => el.address == organization.address)
+
+                    if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+
+                    treasury += (parseInt(criteria.amount) * 1000000)
+
+                    await Organization.findByIdAndUpdate(data.organization, {
+                        treasury
+                    }, { new: true })
+
+                    transaction.type = 'Joining fee'
+                    transaction.amount = criteria.amount * 1000000
+
+                    await transactionService.createTransaction(transaction, data.organization)
+
+                    console.log('updated')
+
+                    if(data.status == 'active') data.endDate = this.addEndDate(data)
+        
+                    const languages = await language.all()
+
+                    const budget = await Budget.create(data)
+
+                    await Promise.all(languages.map(async (el, i) => {
+
+                        const [ title, description ] = await Promise.all([language.translate(data.title, el.code), language.translate(data.description, el.code)])
+
+                        const lang_data = {
+                            budget: budget._id,
+                            title,
+                            description,
+                            organization: data.organization,
+                            language: el._id,
+                            // image: data.image
+                            // status: data.status
+                        }
+
+                        return LanguageBudget.create(lang_data)
+                    }))
+
+                    const vote_data = {
+                        budget: budget._id,
+                        ...data,
+                        type: "Budget",
+                        status: data.status,
+                        // image: data.image
+                    }
+
+                    await vote.create(vote_data)
+
+
+                    return 'Successfully requested to create A Budget'
+                    
+
+                }, 200000)
+            }
+            
+            if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
+
+            treasury += (parseInt(criteria.amount) * 1000000)
+
+            await Organization.findByIdAndUpdate(data.organization, {
+                treasury
+            }, { new: true })
 
             transaction.type = 'Joining fee'
             transaction.amount = criteria.amount * 1000000
@@ -385,6 +468,26 @@ class BudgetService {
         // console.log(endDate)
 
         return endDate
+
+    }
+
+    static async getAmountRaised(vote) {
+
+        const decision = await Decision.find({ $and: [{type: 'Budget', vote}] }).lean()
+
+        // console.log('current', decision)
+
+        const amount = decision.map((el) => el.amount)
+        
+        if(!amount.length) return 0
+
+        const total = amount.reduce((a, b) => {
+            if(!a) a = 0
+            if(!b) b = 0
+            return parseInt(a) + parseInt(b)
+        }, 0)
+
+        return total/1000000
 
     }
 

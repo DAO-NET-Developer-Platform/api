@@ -54,7 +54,7 @@ class VoteService {
             }))
 
             vote.unshift({
-                treasuryPercent: 100 - percents.reduce((a, b) => a + b)
+                treasuryPercent: 100 - percents.reduce((a, b) => { return a + b }, 0)
             })
 
             return vote
@@ -96,8 +96,9 @@ class VoteService {
             }
         }))
 
+        
         vote.unshift({
-            treasuryPercent: 100 - percents.reduce((a, b) => a + b)
+            treasuryPercent: 100 - percents.reduce((a, b) => { return a + b }, 0)
         })
 
         return vote
@@ -374,7 +375,7 @@ class VoteService {
 
     static async calculatePercentage(vote) {
 
-        const decision = await Decision.find({ type: 'Budget', vote }).lean()
+        const decision = await Decision.find({ $and: [{type: 'Budget', vote, done: false}] }).lean()
 
         const percents = decision.map(el => el.percent)
 
