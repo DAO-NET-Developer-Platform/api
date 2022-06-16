@@ -40,7 +40,7 @@ class FundService {
             setTimeout(async() => {
 
                 transaction = await transactionService.checkTransaction(data.txHash)
-                console.log(transaction)
+                // console.log(transaction)
 
                 current = transaction.outputs.find((el) => el.address == organization.address)
 
