@@ -51,9 +51,13 @@ class VoteController {
         
         const id = req.params.id
 
+        let user
+        
+        if(req.query) user = req.query.address
+
         try {
 
-            const data = await vote.single(id, req.language)
+            const data = await vote.single(id, user, req.language)
 
             return res.status(200).json({
                 status: true,
