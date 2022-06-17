@@ -11,6 +11,7 @@ const poseidon = require("../utils/posidon")
 //  * @param identityCommitment The leaf of the tree.
 //  * @returns The new Merkle tree root.
 //  */
+
 module.exports = async function appendLeaf(
     provider,
     name,

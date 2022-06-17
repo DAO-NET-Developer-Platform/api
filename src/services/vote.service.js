@@ -30,7 +30,7 @@ class VoteService {
             if(!page) {
                 vote = await Vote.find({organization: id}).lean()
             } else {
-                const data = query.criteria ?  await this.search(id, query) :  await Vote.paginate({organization: id}, {
+                const data = query.criteria ?  await this.search(id, query) :  await Vote.paginate({ $and: [{ organization: id, status: "active" }]}, {
                     page,
                     limit: 12,
                     lean: true
