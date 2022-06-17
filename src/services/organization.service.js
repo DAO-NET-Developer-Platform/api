@@ -176,6 +176,7 @@ class OrganizationService {
             await deleteLeaf(organization._id, organization.name, data.identityCommitment)
 
             await Member.findByIdAndDelete(isMember._id)
+            await this.calculateVotingPower(organization._id)
             
             return `removed successfully`
         }
