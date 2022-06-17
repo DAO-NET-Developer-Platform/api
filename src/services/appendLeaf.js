@@ -41,7 +41,7 @@ module.exports = async function appendLeaf(
     /* istanbul ignore next */
     if (currentIndex >= 2 ** parseInt(process.env.MERKLE_TREE_DEPTH)) {
         // throw new Error(`The tree is full`)
-        return createError.BadRequest('DAO is full')
+        throw createError.BadRequest('DAO is full')
     }
 
     let node = await MerkleTreeNode.create({
