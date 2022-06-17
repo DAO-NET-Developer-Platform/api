@@ -111,8 +111,6 @@ class OrganizationService {
             identityCommitment: data.identityCommitment
         }
 
-        await Member.create(memberData)
-
         //create merkleRootbatch and append leaf ..use hash as provider
         const rootBatch = new MerkleTreeRootBatch({
             group: {
@@ -125,6 +123,8 @@ class OrganizationService {
 
         //last option is for identityCommitment
         await appendLeaf(organization._id, organization.name, data.identityCommitment)
+
+        await Member.create(memberData)
 
         await this.calculateVotingPower(organization._id)
 
