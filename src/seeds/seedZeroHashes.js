@@ -5,6 +5,8 @@ const poseidon = require("../utils/posidon")
 const crypto = require('crypto')
 
 module.exports = async function seedZeroHashes(req, res, next){
+
+    await MerkleTreeZero.deleteMany()
     console.log("Seeding zero hashes...")
 
     let level = 0
@@ -17,7 +19,8 @@ module.exports = async function seedZeroHashes(req, res, next){
         zeroHash = zeroHashes[level - 1].hash
     }
 
-    for (level; level < process.env.MERKLE_TREE_DEPTH; level++) {
+    for (level; level < parseInt(process.env.MERKLE_TREE_DEPTH); level++) {
+        console.log(parseInt(process.env.MERKLE_TREE_DEPTH))
         zeroHash = level === 0 ? zeroHash : poseidon(zeroHash, zeroHash)
 
         await MerkleTreeZero.create({

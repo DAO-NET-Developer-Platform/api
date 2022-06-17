@@ -25,6 +25,8 @@ module.exports = async function appendLeaf(
     // Get the zero hashes.
     const zeroes = await MerkleTreeZero.find()
 
+    console.log(zeroes, zeroes.length)
+
     if (!zeroes || zeroes.length !== parseInt(process.env.MERKLE_TREE_DEPTH)) {
         throw new Error(`The zero hashes have not yet been created`)
     }
