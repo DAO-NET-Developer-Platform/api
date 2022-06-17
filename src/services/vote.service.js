@@ -145,7 +145,8 @@ class VoteService {
         if(!language) {
             const vote =  await Vote.findById(id).lean()
 
-            const voteDetails =  await this.myVotePercent(vote._id)
+            const voteDetails =  await this.myVotePercent(vote._id, user)
+            // console.log(voteDetails)
             vote.isVoted = voteDetails.isVoted
             vote.myPercent = voteDetails.percent
             
@@ -158,7 +159,7 @@ class VoteService {
         // console.log(vote != null, user, vote.vote.type == "Budget")
 
         if(vote != null && user && vote.vote.type == "Budget") {
-            const voteDetails =  await this.myVotePercent(vote.vote._id)
+            const voteDetails =  await this.myVotePercent(vote.vote._id, user)
             vote.isVoted = voteDetails.isVoted
             vote.myPercent = voteDetails.percent
         }
@@ -411,9 +412,7 @@ class VoteService {
 
     static async myVotePercent(vote, address) {
 
-        const myVote = await Decision.findOne({ $and: [{ type: 'Budget', vote, address }] }).lean()
-
-        console.log(myVote)
+        const myVote = await Decision.findOne({ $and: [{ type: "Budget", vote, address }] }).lean()
 
         if(myVote == null) return { isVoted: false, percent: 0}
 
