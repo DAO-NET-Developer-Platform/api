@@ -116,8 +116,6 @@ class DecisionController {
 
         data.percent = parseInt(data.amount)
 
-        
-
         data.amount = (parseInt(data.percent) / parseInt(member.votingPower)) * parseInt(member.unspent)
 
         const votingPower = parseInt(member.votingPower) - parseInt(data.percent)
