@@ -3,7 +3,7 @@ const { MerkleTreeNode, MerkleTreeNodeDocument, MerkleTreeRootBatch, MerkleTreeZ
 // import { checkGroup } from "src/core/groups"
 // import { GroupName, Provider } from "src/types/groups"
 const poseidon = require("../utils/posidon")
-
+const createError = require('http-errors')
 // /**
 //  * Appends a leaf on a tree.
 //  * @param provider The provider of the group.
@@ -38,7 +38,8 @@ module.exports = async function appendLeaf(
 
     /* istanbul ignore next */
     if (currentIndex >= 2 ** process.env.MERKLE_TREE_DEPTH) {
-        throw new Error(`The tree is full`)
+        // throw new Error(`The tree is full`)
+        return createError.BadRequest('DAO is full')
     }
 
     let node = await MerkleTreeNode.create({
