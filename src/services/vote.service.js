@@ -4,6 +4,7 @@ const { uploadFile, retrieve } = require('../connectors/web3.storage')
 const language = require('../services/language.service')
 const Decision = require('../models/Decision')
 const createError = require('http-errors')
+const Member = require('../models/Member')
 
 class VoteService {
 
@@ -142,6 +143,7 @@ class VoteService {
 
     static async single(id, user, language) {
 
+
         if(!language) {
             const vote =  await Vote.findById(id).lean()
 
@@ -149,7 +151,7 @@ class VoteService {
             // console.log(voteDetails)
             vote.isVoted = voteDetails.isVoted
             vote.myPercent = voteDetails.percent
-            
+            vote.votingPower = await this.getRemainingVote(vote.organization, user)
             return vote
         }
 
@@ -162,6 +164,7 @@ class VoteService {
             const voteDetails =  await this.myVotePercent(vote.vote._id, user)
             vote.isVoted = voteDetails.isVoted
             vote.myPercent = voteDetails.percent
+            vote.votingPower = await this.getRemainingVote(vote.vote.organization, user)
         }
 
         vote.status = vote.vote.status
@@ -417,6 +420,11 @@ class VoteService {
         if(myVote == null) return { isVoted: false, percent: 0}
 
         return { isVoted: true, percent: myVote.percent == null ? 0 : myVote.percent }
+    }
+
+    static async getRemainingVote(id, address) {
+        const member = await Member.findOne({ $and: [{ organization: id, address }] }).lean()
+        return member == null ? null : member.votingPower
     }
  }
 
