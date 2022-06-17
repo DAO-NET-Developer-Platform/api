@@ -39,7 +39,7 @@ module.exports = async function appendLeaf(
     let currentIndex = await MerkleTreeNode.getNumberOfNodes({ provider, name }, 0)
 
     /* istanbul ignore next */
-    if (currentIndex >= 2 ** process.env.MERKLE_TREE_DEPTH) {
+    if (currentIndex >= 2 ** parseInt(process.env.MERKLE_TREE_DEPTH)) {
         // throw new Error(`The tree is full`)
         return createError.BadRequest('DAO is full')
     }
