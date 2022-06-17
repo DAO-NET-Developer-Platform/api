@@ -157,7 +157,9 @@ class OrganizationService {
 
     static async delete(id) {
 
-        return await Promise.all([Organization.deleteMany(), Member.deleteMany(), User.deleteMany(), Budget.deleteMany(), LanguageBudget.deleteMany(), Vote.deleteMany(), LanguageVote.deleteMany()])
+        // return await Promise.all([Organization.deleteMany(), Member.deleteMany(), User.deleteMany(), Budget.deleteMany(), LanguageBudget.deleteMany(), Vote.deleteMany(), LanguageVote.deleteMany()])
+
+        return await Decision.deleteMany()
 
         // return await Vote.deleteMany()
 
