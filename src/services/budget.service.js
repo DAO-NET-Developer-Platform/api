@@ -50,6 +50,8 @@ class BudgetService {
 
             }
 
+            if(!data.docs.length) return data.docs
+
             await Promise.all(data.docs.map(async (el, i) => {
                 const vote = await Vote.findOne({ budget: el.id }).lean()
                 data.docs[i].amountRaised = await this.getAmountRaised(vote._id)
@@ -83,6 +85,8 @@ class BudgetService {
             budget = data.docs != null ? data.docs : data
 
         }
+
+        if(!budget.length) return budget
 
         await Promise.all(budget.map(async (el, i) => {
             budget[i].status = el.budget.status
