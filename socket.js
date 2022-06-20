@@ -10,12 +10,32 @@ var io = require('socket.io')(http, {
 
 io.on('connection', (socket) => {
 
-    socket.on('walletUpdate', function(data){
-        io.emit('walletUpdate', data);
+    socket.on('dao-update', function(data){
+        io.emit('dao-update', data);
     });
 
-    socket.on('newTransaction', function(){
-        io.emit('newTransaction');
+    socket.on('dao-create', function(data){
+        io.emit('dao-create', data);
+    });
+
+    socket.on('budget-update', function(data){
+        io.emit('budget-update', data);
+    });
+
+    socket.on('budget-create', function(data){
+        io.emit('budget-create', data);
+    });
+
+    socket.on('vote-update', function(data){
+        io.emit('vote-update', data);
+    });
+
+    socket.on('vote-create', function(data){
+        io.emit('vote-create', data);
+    });
+
+    socket.on('member-update', function(data){
+        io.emit('member-update', data);
     });
 
 

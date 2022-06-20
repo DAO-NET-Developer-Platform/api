@@ -380,6 +380,11 @@ class OrganizationService {
         results = results.docs.filter((el, i) => {
             return el != null
         })
+
+        await Promise.all(results.map(async(el, i) => {
+            const members = await this.getMembers(el._id)
+            results[i].members = members.length
+        }))
         
         return results
     }
