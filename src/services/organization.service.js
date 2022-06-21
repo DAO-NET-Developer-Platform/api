@@ -415,7 +415,9 @@ class OrganizationService {
             new: true
         })
 
-        const unspent = parseInt(organization.treasury)/parseInt(members.length)
+        members.length > 0
+
+        const unspent = members.length > 0 && organization.treasury > 0 ? parseInt(organization.treasury)/parseInt(members.length) : 0
 
         await Member.updateMany({ organization: org }, {
             unspent: unspent,
