@@ -98,7 +98,7 @@ class MemberService {
                 new: true
             })
             
-            await this.calculateVotingPower(organizationData._id)
+            await organization.calculateVotingPower(organizationData._id)
         }
 
         return
