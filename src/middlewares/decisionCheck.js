@@ -130,10 +130,7 @@ module.exports = {
 
         console.log(req.params.vote_id)
 
-        const vote = await Vote.findOne({ id: req.params.vote_id }).lean()
-
-        console.log(vote)
-
+        const vote = await Vote.findById(vote_id).lean()
 
         if(vote.status == 'pending') return next(createError.BadRequest('Cannot vote on pending budget item'))
 
