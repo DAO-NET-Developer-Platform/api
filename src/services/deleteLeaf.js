@@ -58,9 +58,9 @@ module.exports = async function deleteLeaf(
         }
 
         if (currentIndex % 2 === 0) {
-            parentNode.hash = poseidon(node.hash, node.siblingHash.toString())
+            parentNode.hash = poseidon(node.hash, node.siblingHash)
         } else {
-            parentNode.hash = poseidon(node.siblingHash.toString(), node.hash)
+            parentNode.hash = poseidon(node.siblingHash, node.hash)
         }
 
         await parentNode.save()
