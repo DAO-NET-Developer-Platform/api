@@ -90,7 +90,7 @@ class MemberService {
             let approvedMember = await Member.findById(member).lean()
 
             //appendLeaf to merkle root
-            await appendLeaf(organizationData._id, organization.name, approvedMember.identityCommitment)  
+            await appendLeaf(organizationData._id, organizationData.name, approvedMember.identityCommitment)  
 
             await Member.findByIdAndUpdate(member, {
                 status: 'active'
