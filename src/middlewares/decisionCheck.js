@@ -128,6 +128,8 @@ module.exports = {
 
     async isPending(req, res, next) {
 
+        console.log(req.params.vote_id)
+
         const vote = await Vote.findOne({ id: req.params.vote_id }).lean()
 
         console.log(vote)
