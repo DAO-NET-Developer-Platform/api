@@ -128,7 +128,7 @@ module.exports = {
 
     async isPending(req, res, next) {
 
-        console.log(req.params.vote_id)
+        // console.log(req.params.vote_id)
 
         const vote = await Vote.findById(req.params.vote_id).lean()
 
