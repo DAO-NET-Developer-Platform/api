@@ -65,12 +65,12 @@ module.exports = {
         let vote_id = req.params.vote_id
 
         if(req.query.lang) {
-            const lang_vote = await LanguageVote.findById(req.params.vote_id)
+            const lang_vote = await LanguageVote.findById(req.params.vote_id).lean()
             if(!lang_vote) return next(createError.NotFound('No such Vote'))
             vote_id = lang_vote.vote
         }
 
-        const vote = await Vote.findById(vote_id)
+        const vote = await Vote.findById(vote_id).lean()
         if(!vote) return next(createError.NotFound('No such Vote'))
 
         req.params.vote_id = vote._id
@@ -128,7 +128,12 @@ module.exports = {
 
     async isPending(req, res, next) {
 
+        console.log(req.params.vote_id)
+
         const vote = await Vote.findOne({ id: req.params.vote_id }).lean()
+
+        console.log(vote)
+
 
         if(vote.status == 'pending') return next(createError.BadRequest('Cannot vote on pending budget item'))
 
