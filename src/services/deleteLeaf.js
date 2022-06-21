@@ -39,7 +39,7 @@ module.exports = async function deleteLeaf(
 
     let currentIndex = node.index
 
-    for (let level = 0; level < process.env.MERKLE_TREE_DEPTH; level++) {
+    for (let level = 0; level < parseInt(process.env.MERKLE_TREE_DEPTH); level++) {
         const parentNode = (await MerkleTreeNode.findByGroupAndLevelAndIndex(
             { provider, name },
             level + 1,
