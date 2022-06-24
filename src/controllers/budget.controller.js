@@ -56,12 +56,12 @@ class BudgetController {
         const { lang } = req.query
 
         let user
-        
+
         if(req.query) user = req.query.address
 
         try {
 
-            const data = await budget.single(id, lang, address)
+            const data = await budget.single(id, lang, user)
 
             return res.status(200).json({
                 status: true,
