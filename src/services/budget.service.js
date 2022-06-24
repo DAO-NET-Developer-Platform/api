@@ -114,7 +114,7 @@ class BudgetService {
 
     }
 
-    static async single(id, lang) {
+    static async single(id, lang, user) {
         
         const vote = await Vote.findOne({ budget: id }).lean()
 
@@ -124,6 +124,8 @@ class BudgetService {
             budget.vote = vote._id
 
             budget.amountRaised = await this.getAmountRaised(budget.vote)
+
+            budget.decided = await this.decided(budget._id, user) == null ? false : true
 
             return budget
         }
@@ -136,6 +138,8 @@ class BudgetService {
         budget.vote = vote._id
 
         budget.amountRaised = await this.getAmountRaised(budget.vote)
+
+        budget.decided = await this.decided(budget.budget._id, user)  == null ? false : true
 
         return budget
 
