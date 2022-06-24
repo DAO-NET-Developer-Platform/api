@@ -11,7 +11,7 @@ const schemas = {
         budgetCriteriaAmount: Joi.number(),
         address: Joi.string().required(),
         image: Joi.any(),
-        cid: Joi.string().required(),
+        cid: Joi.any(),
         hash: Joi.string().required(),
         identityCommitment: Joi.string().required()
     }),

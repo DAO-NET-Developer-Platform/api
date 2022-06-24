@@ -165,6 +165,12 @@ class OrganizationService {
 
         //organization, budget, languageBudget, Vote, languageVote, decision, Member, approvals
 
+        // creator - addr_test1qruqfv7maxwjmm5u9grm8e336ygqjtqev6nwpexga2jsfp4llfedut84f5ctvts3wpp67x5wejh0envrdh2jytggf7wsydx20a
+
+        // start - 2022-06-21
+
+        //end - 2022-06-22
+
         return await Organization.find({ createdAt: { $lt: '2022-06-22'}})
 
     }
