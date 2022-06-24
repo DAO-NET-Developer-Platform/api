@@ -163,6 +163,10 @@ class OrganizationService {
 
         // return await Vote.deleteMany()
 
+        //organization, budget, languageBudget, Vote, languageVote, decision, Member, approvals
+
+        return await Organization.find({ createdAt: { $lt: '2022-06-22'}})
+
     }
 
     static async join(data) {
