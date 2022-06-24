@@ -55,6 +55,8 @@ class BudgetController {
 
         const { lang } = req.query
 
+        let user
+        
         if(req.query) user = req.query.address
 
         try {
