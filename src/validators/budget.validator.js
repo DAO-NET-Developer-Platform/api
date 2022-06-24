@@ -10,7 +10,7 @@ const schemas = {
         address: Joi.string().required(),
         amount: Joi.number().required(),
         image: Joi.any(),
-        cid: Joi.string().required(),
+        cid: Joi.any(),
         hash: Joi.string().required(),
         txHash: Joi.any()
     })
