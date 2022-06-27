@@ -28,6 +28,14 @@ const schema = new mongoose.Schema({
         ref: 'Vote'
     },
 
+    status: {
+        type: String,
+        enum: {
+          values: ['pending', 'active'],
+          message: 'Unsupported value'
+        }
+    }
+
     // image: {
     //     type: String,
     //     required: true

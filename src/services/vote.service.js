@@ -25,7 +25,7 @@ class VoteService {
 
         if(!language) {
 
-            let vote
+            let vote, metadata
 
             if(!page) {
                 vote = await Vote.find({organization: id}).lean()
@@ -36,7 +36,11 @@ class VoteService {
                     lean: true
                 })
 
-                vote = data.docs ? data.docs : data
+                // vote = data.docs ? data.docs : data
+
+                const { docs, ...meta } = data
+                vote = docs
+                metadata = meta
             }
 
             await Promise.all(vote.map(async (el, i) => {
@@ -58,10 +62,12 @@ class VoteService {
                 treasuryPercent: 100 - percents.reduce((a, b) => { return a + b }, 0)
             })
 
-            return vote
+            if(metadata) return { docs: vote, ...metadata }
+
+            return { docs: vote }
         }
 
-        let vote
+        let vote, metadata
 
         if(!page) {
             vote = await LanguageVote.find({ $and: [{ language, organization: id }] }).populate('vote').lean()
@@ -77,7 +83,11 @@ class VoteService {
                 sort: { createdAt: 'desc' }
             })
 
-            vote = data.docs != null ? data.docs : data
+            // vote = data.docs != null ? data.docs : data
+
+            const { docs, ...meta } = data
+            vote = docs
+            metadata = meta
         }
 
         await Promise.all(vote.map(async (el, i) => {
@@ -102,7 +112,9 @@ class VoteService {
             treasuryPercent: 100 - percents.reduce((a, b) => { return a + b }, 0)
         })
 
-        return vote
+        if(metadata) return { docs: vote, ...metadata }
+
+        return { docs: vote }
 
     }
 
@@ -132,6 +144,7 @@ class VoteService {
                 language: el._id,
                 // image: data.image
                 // status: data.status
+                type: data.type
             }
 
             return LanguageVote.create(lang_data)
@@ -206,7 +219,7 @@ class VoteService {
                 sort: { createdAt: 'desc' }
             })
 
-            return results.docs
+            return results
         }
 
         //search budget votes only
@@ -221,7 +234,7 @@ class VoteService {
                 sort: { createdAt: 'desc' }
             })
             
-            return results.docs
+            return results
 
         }
 
@@ -259,7 +272,7 @@ class VoteService {
                 el.vote != null ? results.docs[i] = el.vote : delete results.docs[i]
             })
     
-            results = results.docs.filter((el, i) => {
+            results.docs = results.docs.filter((el, i) => {
                 return el != null
             })
 
@@ -267,16 +280,16 @@ class VoteService {
     
             const groupname = []
     
-            await Promise.all(results.map(async (el, i) => {
+            await Promise.all(results.docs.map(async (el, i) => {
                 if(groupname.includes(el._id.toString())) {
-                    delete results[i]
+                    delete results.docs[i]
                     return
                 }
                 groupname.push(el._id.toString())
-                results[i] = el
+                results.docs[i] = el
             }))
     
-            results = results.filter((el, i) => {
+            results.docs = results.docs.filter((el, i) => {
                 return el != null
             })
     
@@ -313,11 +326,15 @@ class VoteService {
                 sort: { createdAt: 'desc' }
             })
 
-            return results.docs
+            return results
         }
 
         //search budget votes only
         if(criteria == 'budget') {
+
+            // console.log(search)
+
+            // console.log(id)
 
             results = await LanguageVote.paginate({ $and: [{
                 language, organization: id, type: 'Budget', title: { $regex: new RegExp(`${search}`), $options: 'i'}
@@ -327,8 +344,10 @@ class VoteService {
                 lean: true,
                 sort: { createdAt: 'desc' }
             })
+
+            // console.log(results)
             
-            return results.docs
+            return results
 
         }
 
@@ -343,7 +362,7 @@ class VoteService {
                 sort: { createdAt: 'desc' }
             })
             
-            return results.docs
+            return results
 
         }
 
