@@ -310,7 +310,7 @@ class OrganizationService {
 
         await this.calculateVotingPower(data.organization)
 
-        return 'Successfully requested to join DAO'
+        return { member, message : 'Successfully requested to join DAO' }
 
     }
 

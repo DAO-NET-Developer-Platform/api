@@ -167,7 +167,8 @@ class OrganizationController {
 
             return res.status(200).json({
                 status: true,
-                message: data,
+                message: data.message ? data.message : data,
+                data: data.member
             })
 
         } catch(e) {
