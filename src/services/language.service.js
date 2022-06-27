@@ -14,7 +14,11 @@ class LanguageService {
 
         console.log(language_data)
 
-        await Promise.all(language_data.map(el => Language.create(el)))
+        const languages = await this.all()
+
+        await Promise.all(language_data.map(el => {
+            if(!languages.find(lan => lan.code.toLowerCase() == el.code.toLowerCase())) return Language.create(el)
+        }))
 
         return
 

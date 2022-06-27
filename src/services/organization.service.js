@@ -81,7 +81,7 @@ class OrganizationService {
             data.docs[i].members = members.length
         }))
 
-        return data.docs
+        return data
 
     }
 
@@ -171,7 +171,7 @@ class OrganizationService {
 
         //end - 2022-06-22
 
-        return await Organization.find({ createdAt: { $lt: '2022-06-22'}})
+        // return await Organization.find({ createdAt: { $lt: '2022-06-22'}})
 
     }
 
@@ -235,6 +235,8 @@ class OrganizationService {
             let current = transaction.outputs.find((el) => el.address == organization.address)
 
             // console.log(current, 'current')
+
+            let treasury = parseInt(organization.treasury)
 
             if(!current) {
 
@@ -364,7 +366,7 @@ class OrganizationService {
                 results.docs[i].members = members.length
             }))
 
-            return results.docs
+            return results
         }
 
         //search joined organizations
@@ -387,11 +389,13 @@ class OrganizationService {
             el.organization != null ? results.docs[i] = el.organization : delete results.docs[i]
         })
 
-        results = results.docs.filter((el, i) => {
+        // const { docs, ...metaData } = results
+
+        results.docs = results.docs.filter((el, i) => {
             return el != null
         })
 
-        await Promise.all(results.map(async(el, i) => {
+        await Promise.all(results.docs.map(async(el, i) => {
             const members = await this.getMembers(el._id)
             results[i].members = members.length
         }))
