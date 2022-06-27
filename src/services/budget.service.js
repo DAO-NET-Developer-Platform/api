@@ -50,11 +50,11 @@ class BudgetService {
 
             }
 
-            data = data.docs ? data.docs : data
+            // data = data.docs ? data.docs : data
 
-            await Promise.all(data.map(async (el, i) => {
+            await Promise.all(data.docs.map(async (el, i) => {
                 const vote = await Vote.findOne({ budget: el.id }).lean()
-                data[i].amountRaised = await this.getAmountRaised(vote._id)
+                data.docs[i].amountRaised = await this.getAmountRaised(vote._id)
             }))
 
 
@@ -64,7 +64,7 @@ class BudgetService {
 
         const language = await Language.findOne({ code: lang }).lean()
 
-        let budget
+        let budget, metadata
 
         if(!page) {
 
@@ -82,7 +82,11 @@ class BudgetService {
                 sort: { createdAt: 'desc' }
             })
 
-            budget = data.docs != null ? data.docs : data
+            // budget = data.docs != null ? data.docs : data
+
+            const { docs, ...meta } = data
+            budget = docs
+            metadata = meta
 
         }
 
@@ -95,7 +99,9 @@ class BudgetService {
             budget[i].amountRaised = await this.getAmountRaised(vote)
         }))
 
-        return budget
+        if(metadata) return { docs: budget, ...metadata }
+
+        return { docs: budget }
 
     }
 
@@ -172,7 +178,8 @@ class BudgetService {
                 sort: { createdAt: 'desc' }
             })
 
-            return results.docs
+            // console.log(results)
+            return results
         }
 
         //search active budgets
@@ -188,7 +195,8 @@ class BudgetService {
             sort: { createdAt: 'desc' }
         })
 
-        return results.docs
+        // console.log(results)
+        return results
 
     }
 
@@ -221,7 +229,7 @@ class BudgetService {
                 sort: { createdAt: 'desc' }
             })
 
-            return results.docs
+            return results
         }
 
         //search active budgets
@@ -247,7 +255,7 @@ class BudgetService {
             el.budget != null ? results.docs[i].budget = el.budget : delete results.docs[i]
         })
 
-        results = results.docs.filter((el, i) => {
+        results.docs = results.docs.filter((el, i) => {
             return el != null
         })
 
@@ -280,13 +288,15 @@ class BudgetService {
 
             if(!data.txHash) throw createError.Unauthorized('Please pay before creating a budget item')
 
-            const transaction = await transactionService.checkTransaction(data.txHash)
+            let transaction = await transactionService.checkTransaction(data.txHash)
 
             if(transaction == null) throw createError.Unauthorized('Invalid Hash')
 
-            const current = transaction.outputs.find((el) => el.address == organization.address)
+            let current = transaction.outputs.find((el) => el.address == organization.address)
 
             // if(!current) throw createError.Unauthorized('Invalid Transaction')
+
+            let treasury = parseInt(organization.treasury)
 
             if(!current) {
 
