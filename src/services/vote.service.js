@@ -14,7 +14,7 @@ class VoteService {
 
         // const { language, page } = query
 
-        const percents = []
+        // const percents = []
 
         let page, language
 
@@ -22,6 +22,9 @@ class VoteService {
             page = query.page
             language = query.language
         }
+
+        const treasuryPercent = await this.calculateTresuryPercent(id)
+        // console.log('balance', treasuryPercent)
 
         if(!language) {
 
@@ -53,13 +56,13 @@ class VoteService {
                 if(el.type == 'Budget') {
 
                     vote[i].percentage = await this.calculatePercentage(el._id)
-                    percents.push(vote[i].percentage)
+                    // percents.push(vote[i].percentage)
 
                 }
             }))
 
             vote.unshift({
-                treasuryPercent: 100 - percents.reduce((a, b) => { return a + b }, 0)
+                treasuryPercent
             })
 
             if(metadata) return { docs: vote, ...metadata }
@@ -102,14 +105,15 @@ class VoteService {
             if(el.vote.type == 'Budget') {
 
                 vote[i].percentage = await this.calculatePercentage(el.vote._id)
-                percents.push(vote[i].percentage)
+                // percents.push(vote[i].percentage)
 
             }
         }))
 
-        
+        // const treasuryPercent = await this.calculateTresuryPercent(id)
+
         vote.unshift({
-            treasuryPercent: 100 - percents.reduce((a, b) => { return a + b }, 0)
+            treasuryPercent
         })
 
         if(metadata) return { docs: vote, ...metadata }
@@ -430,6 +434,15 @@ class VoteService {
 
         return Math.round(total/decision.length)
 
+    }
+
+    static async calculateTresuryPercent(id) {
+
+        let votes = await Vote.find({ organization: id }).lean()
+
+        votes = await Promise.all(votes.map(async(el, i) =>  await this.calculatePercentage(el._id)))
+
+        return (100 - votes.reduce((a, b) => { return a + b }, 0)) 
     }
 
     static async myVotePercent(vote, address) {
