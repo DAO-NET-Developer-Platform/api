@@ -27,13 +27,9 @@ const schema = new mongoose.Schema({
         ref: 'Budget'
     },
 
-    status: {
-        type: String,
-        enum: {
-          values: ['pending', 'active'],
-          message: 'Unsupported value'
-        }
-    },
+    type: {
+        type: String
+    }
 
     // image: {
     //     type: String,

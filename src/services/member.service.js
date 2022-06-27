@@ -12,7 +12,7 @@ class MemberService {
 
     static async getMembers(id, query) {
 
-        let members
+        let members, metadata
 
         let page, address
 
@@ -32,7 +32,11 @@ class MemberService {
                 sort: { createdAt: 'desc' }
             })
 
-            members = data.docs != null ? data.docs : data
+            // members = data.docs != null ? data.docs : data
+
+            const { docs, ...meta } = data
+            members = docs
+            metadata = meta
         }
 
         await Promise.all(members.map(async (el, i) => {
@@ -44,7 +48,9 @@ class MemberService {
             }
         }))
 
-        return members
+        if(metadata) return { docs: members, ...metadata }
+
+        return { docs: members }
     }
 
     static async approve(organization_id, data) {
@@ -161,7 +167,7 @@ class MemberService {
                 sort: { createdAt: 'desc' }
             })
 
-            return results.docs
+            return results
 
         }
 
@@ -177,7 +183,7 @@ class MemberService {
                 sort: { createdAt: 'desc' }
             })
 
-            return results.docs
+            return results
 
         }
 
@@ -193,7 +199,7 @@ class MemberService {
             sort: { createdAt: 'desc' }
         })
 
-        return results.docs
+        return results
 
         }
 
@@ -218,7 +224,7 @@ class MemberService {
                 el.member != null ? results.docs[i] = el.member : delete results.docs[i]
             })
     
-            results = results.docs.filter((el, i) => {
+            results.docs = results.docs.filter((el, i) => {
                 return el != null
             })
             
