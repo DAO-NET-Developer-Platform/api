@@ -278,6 +278,7 @@ class OrganizationService {
 
                 }, 200000)
 
+                return 'Successfully requested to join DAO'
             }
 
             if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
@@ -309,7 +310,7 @@ class OrganizationService {
 
         await this.calculateVotingPower(data.organization)
 
-        return member
+        return { member, message : 'Successfully requested to join DAO' }
 
     }
 

@@ -308,6 +308,8 @@ class BudgetService {
 
                     current = transaction.outputs.find((el) => el.address == organization.address)
 
+                    console.log(current)
+
                     if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
 
                     treasury += (parseInt(criteria.amount) * 1000000)
@@ -357,10 +359,12 @@ class BudgetService {
                     await vote.create(vote_data)
 
 
-                    return 'Successfully requested to create A Budget'
+                    return
                     
 
                 }, 200000)
+
+                return
             }
             
             if(parseInt(current.value) !== parseInt(criteria.amount * 1000000)) throw createError.Unauthorized('Invalid Quantity')
