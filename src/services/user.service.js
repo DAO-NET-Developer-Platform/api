@@ -1,4 +1,3 @@
-const db = require('../connectors/knex')
 const randomstring = require("randomstring")
 const createError = require('http-errors')
 const User = require('../models/User')

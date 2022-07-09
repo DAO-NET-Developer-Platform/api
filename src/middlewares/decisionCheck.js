@@ -1,6 +1,5 @@
 const Language = require('../models/Language')
 const createError = require('http-errors')
-const db = require('../connectors/knex')
 const Option = require('../models/Option')
 const Organization = require('../models/Organization')
 const Vote = require('../models/Vote')
