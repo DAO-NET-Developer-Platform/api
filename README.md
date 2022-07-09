@@ -14,7 +14,7 @@ If you dont't have an existing server; You could get $100 in credit over 60 days
 
 `touch .env`
 
-You will need to have [Mongodb](https://docs.mongodb.com/manual/installation/) and [Redis](https://redis.io/download) installed on your system to use both connectors. Update the `.env` file.
+You will need to have [Mongodb](https://docs.mongodb.com/manual/installation/) installed on your system to use the mongoDB connector. Update the `.env` file.
 
 ```javascript
 DB_URL=mongodb://localhost:27017/my_database
@@ -23,4 +23,5 @@ PORT=3000
 ```
 
 Start your server with `npm start` and you are ready to start building
+Start the Websocket with `npm run socket`.
 
